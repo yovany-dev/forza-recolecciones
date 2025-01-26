@@ -1,19 +1,45 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import LogoForzaDeliveryWhite from "@/public/logo-forza-delivery-white.svg";
+import { loginSchema, loginSchemaType } from "@/lib/zod/auth";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<loginSchemaType>({ resolver: zodResolver(loginSchema) });
+
+  const onSubmit: SubmitHandler<loginSchemaType> = async (data) => {
+    const res = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+    if (res?.error) {
+      setError(res.error);
+    } else {
+      router.push("/dashboard");
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="">
@@ -29,7 +55,7 @@ export function LoginForm({
           </p>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-6">
               <div className="grid gap-6">
                 <div className="grid gap-2">
@@ -38,15 +64,35 @@ export function LoginForm({
                     id="email"
                     type="email"
                     placeholder="user@forzadelivery.com"
-                    required
+                    {...register("email")}
                   />
+                  {errors.email && (
+                    <p className="text-xs text-red-500">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
                     <Label htmlFor="password">Contraseña</Label>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="******"
+                    {...register("password")}
+                  />
+                  {errors.password && (
+                    <p className="text-xs text-red-500">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
+                {error && (
+                  <div className="bg-red-500 px-3 py-2 text-sm rounded-md">
+                    <p>{error}</p>
+                  </div>
+                )}
                 <Button type="submit" className="w-full">
                   Iniciar sesion
                 </Button>
