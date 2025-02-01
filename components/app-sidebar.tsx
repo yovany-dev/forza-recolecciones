@@ -8,6 +8,7 @@ import {
   Settings,
   Truck,
   UserCog,
+  LayoutDashboard,
 } from "lucide-react";
 
 import { NavGeneral } from "@/components/nav-general";
@@ -31,6 +32,11 @@ const data = {
     logo: ForzaDeliveryIcon,
   },
   navGeneral: [
+    {
+      name: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+    },
     {
       name: "Reporte",
       url: "#",
@@ -71,11 +77,11 @@ const data = {
       items: [
         {
           title: "Pilotos",
-          url: "#",
+          url: "/dashboard/empleados/pilotos",
         },
         {
           title: "Auxiliares",
-          url: "#",
+          url: "/dashboard/empleados/auxiliares",
         },
       ],
     },
