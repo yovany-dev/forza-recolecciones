@@ -19,9 +19,9 @@ const SidebarInsetHead: React.FC<Props> = ({ links, title }) => {
         <Separator orientation="vertical" className="mr-2 h-4" />
         <Breadcrumb>
           <BreadcrumbList>
-            {links.map((link) => {
+            {links.map((link, index) => {
               return (
-                <>
+                <div className="flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5" key={index}>
                   <BreadcrumbItem className="hidden md:block">
                     <Link
                       href={link.url}
@@ -31,7 +31,7 @@ const SidebarInsetHead: React.FC<Props> = ({ links, title }) => {
                     </Link>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block" />
-                </>
+                </div>
               );
             })}
             <BreadcrumbItem>
