@@ -40,7 +40,7 @@ export const authOptions: AuthOptions = {
           id: String(userFound.id),
           name: userFound.name,
           email: userFound.email,
-          image: '',
+          image: userFound.avatar,
         };
       },
     }),
