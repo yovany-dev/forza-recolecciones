@@ -14,6 +14,7 @@ export default async function LoginPage() {
   // const res = await createUser({
   //   name: 'admin',
   //   email: 'admin@forzadelivery.com',
+  //   avatar: 'www.forzadelivery.com/app/uploads/2024/09/cropped-forza-web-icon-150x150.png',
   //   password: '551172',
   //   role: 'admin',
   // });
