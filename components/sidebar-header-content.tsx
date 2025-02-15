@@ -16,7 +16,7 @@ const SidebarHeaderContent = ({
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <Image src={headers.logo} alt="Forza Delivery Express" />
+            <Image src={headers.logo} className="rounded-lg" alt="Forza Delivery Express" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">{headers.title}</span>
