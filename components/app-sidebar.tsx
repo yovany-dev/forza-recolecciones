@@ -24,6 +24,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import ForzaDeliveryIcon from "@/public/forza-delivery-icon.png";
+import { useSession } from "next-auth/react";
+import { useMemo } from "react";
 
 const data = {
   headers: {
@@ -109,14 +111,12 @@ const data = {
       ],
     },
   ],
-  user: {
-    name: "admin",
-    email: "admin@forzadelivery.com",
-    avatar: "https://github.com/midudev.png",
-  },
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session, status } = useSession();
+  const user = useMemo(() => session?.user, [session]);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -128,7 +128,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <DarkMode />
-        <NavUser user={data.user} />
+        {user && <NavUser user={user} />}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
