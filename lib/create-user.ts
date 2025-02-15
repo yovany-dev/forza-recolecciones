@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 interface User {
   name: string;
   email: string;
+  avatar: string;
   password: string;
   role: string;
 }
@@ -20,8 +21,9 @@ const createUser = async (user: User) => {
     data: {
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       password: hashedPassword,
-      role: 'admin',
+      role: user.role,
     },
   });
   return newUser;

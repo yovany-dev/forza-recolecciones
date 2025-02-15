@@ -6,7 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 const bcrypt = require('bcrypt');
 
 export const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -40,7 +40,7 @@ export const authOptions: AuthOptions = {
           id: String(userFound.id),
           name: userFound.name,
           email: userFound.email,
-          image: '',
+          image: userFound.avatar,
         };
       },
     }),
