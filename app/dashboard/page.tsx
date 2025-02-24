@@ -1,6 +1,6 @@
 import { Links } from "@/types/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
-import SidebarInsetHead from "@/components/sidebar-inset-head";
+import { SidebarInsetHead } from "@/components/sidebar-inset-head";
 
 const Page = () => {
   const data: Links[] = [{ name: "inicio", url: "/" }];
