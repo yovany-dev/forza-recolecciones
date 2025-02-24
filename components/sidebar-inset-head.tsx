@@ -44,4 +44,4 @@ const SidebarInsetHead: React.FC<Props> = ({ links, title }) => {
   );
 };
 
-export default SidebarInsetHead;
+export { SidebarInsetHead };
