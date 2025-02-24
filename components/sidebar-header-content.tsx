@@ -20,7 +20,7 @@ const SidebarHeaderContent = ({
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">{headers.title}</span>
-            <span className="truncate text-xs">{headers.subtitle}</span>
+            <span className="truncate text-xs font-semibold text-[#ea5d1d]">{headers.subtitle}</span>
           </div>
         </SidebarMenuButton>
       </SidebarMenuItem>
