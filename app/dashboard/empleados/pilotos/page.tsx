@@ -1,25 +1,30 @@
-import { Links } from "@/types/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
-import SidebarInsetHead from "@/components/sidebar-inset-head";
+import { SidebarInsetHead } from "@/components/sidebar-inset-head";
+import { Links } from "@/types/sidebar";
+import { getData } from "@/lib/get-data";
+import { Header } from "@/components/drivers/header";
+import { Controls } from "@/components/drivers/controls";
+import { Separator } from "@/components/ui/separator";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
-const Page = () => {
-  const data: Links[] = [
+const Page = async () => {
+  const dataLink: Links[] = [
     { name: "dashboard", url: "/dashboard" },
     { name: "empleados", url: "/dashboard/empleados" },
   ];
+  const data = await getData();
 
   return (
     <SidebarInset>
-      <SidebarInsetHead links={data} title="pilotos" />
-      <main>
-        <div className="content p-5 border border-white">
-          <div className="head">
-            <h1 className="scroll-m-20 text-3xl font-bold tracking-tight">Lista de Pilotos</h1>
-            <p className="text-base text-muted-foreground">Agrega, configura y administra la información de los pilotos.</p>
-          </div>
-          <div className="body">
-            <div className="button"></div>
-            <div className="table"></div>
+      <SidebarInsetHead links={dataLink} title="pilotos" />
+      <main className="n-content p-5">
+        <Header />
+        <div className="n-body mt-5">
+          <Controls />
+          <Separator className="my-4" />
+          <div className="n-table container mx-auto py-4">
+            <DataTable columns={columns} data={data} />
           </div>
         </div>
       </main>
