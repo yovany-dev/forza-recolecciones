@@ -2,7 +2,7 @@ import { Links } from "@/types/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
 import { Header } from "@/components/new/header";
-import { TabsDemo } from "@/components/new/actions";
+import { TabsEmployee } from "@/components/new/actions";
 
 const Page = () => {
   const dataLink: Links[] = [
@@ -14,7 +14,9 @@ const Page = () => {
       <SidebarInsetHead links={dataLink} title="nuevo" />
       <main className="n-content p-5">
         <Header />
-        <TabsDemo />
+        <div className="n-body mt-5">
+          <TabsEmployee />
+        </div>
       </main>
     </SidebarInset>
   );
