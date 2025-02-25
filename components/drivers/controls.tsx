@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Columns3 } from "lucide-react";
 import { ListFilter } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
+import Link from "next/link";
 
 const Controls = () => {
   return (
@@ -25,8 +26,11 @@ const Controls = () => {
           <ListFilter />
           <span>Filtros</span>
         </Button>
-        <Button size="sm">
-          <UserRoundPlus /> Agregar Piloto
+        <Button size="sm" asChild>
+          <Link href="/dashboard/empleados/nuevo?defaultValue=piloto">
+            <UserRoundPlus />
+            <span>Agregar Piloto</span>
+          </Link>
         </Button>
       </div>
     </div>
