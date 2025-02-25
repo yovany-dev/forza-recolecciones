@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Pencil } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SheetEditDriver } from "@/components/drivers/edit-driver";
 
 export type Drivers = {
   employeeNumber: number;
@@ -72,9 +72,7 @@ export const columns: ColumnDef<Drivers>[] = [
 
       return (
         <>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <Pencil />
-          </Button>
+          <SheetEditDriver />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
