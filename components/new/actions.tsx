@@ -8,7 +8,6 @@ import { useSearchParams } from "next/navigation";
 export function TabsEmployee() {
   const searchParams = useSearchParams();
   const defaultValue = searchParams.get("defaultValue")!;
-  console.log(defaultValue);
 
   return (
     <Tabs
