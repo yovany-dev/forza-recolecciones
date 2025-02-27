@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,7 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const CreateDriver = () => {
+const CreateDriver = async() => {
+  const res = await fetch('/api/driver');
+  console.log(res);
   return (
     <Card>
       <CardHeader>
@@ -23,22 +27,21 @@ const CreateDriver = () => {
       <CardContent className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
           <Label htmlFor="employeeNumber">No. Gafete</Label>
-          <Input id="employeeNumber" defaultValue="126412" />
+          <Input id="employeeNumber" />
         </div>
         <div className="space-y-1">
           <Label htmlFor="fullname">Nombre Completo</Label>
           <Input
             id="fullname"
-            defaultValue="Bayron Ajanel Garcia"
           />
         </div>
         <div className="space-y-1">
           <Label htmlFor="dpi">Número de Documento (DPI)</Label>
-          <Input id="dpi" defaultValue="5612900834561" />
+          <Input id="dpi" />
         </div>
         <div className="space-y-1">
           <Label htmlFor="schedule">Horario de Entrada</Label>
-          <Input id="schedule" defaultValue="07:30" />
+          <Input id="schedule" />
         </div>
         <div className="space-y-1 col-span-2">
           <Label htmlFor="position">Cargo o Puesto</Label>
