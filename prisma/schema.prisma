@@ -22,3 +22,13 @@ model Users {
   role      String
   createdAt DateTime @default(now())
 }
+
+model Drivers {
+  uuid           String   @id @default(uuid())
+  employeeNumber Int      @unique
+  fullname       String
+  dpi            Int
+  schedule       String
+  position       String
+  createdAt      DateTime @default(now())
+}
