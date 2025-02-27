@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,10 +9,41 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
 
-const CreateDriver = async() => {
-  const res = await fetch('/api/driver');
-  console.log(res);
+interface Driver {
+  employeeNumber: number;
+  fullname: string;
+  dpi: number;
+  schedule: string;
+  position: string;
+}
+
+const CreateDriver = () => {
+  const driver: Driver = {
+    employeeNumber: 111654,
+    fullname: "Denilson Yovany Morales Chivalan",
+    dpi: 123456789,
+    position: "Piloto recolector",
+    schedule: "07:30",
+  };
+
+  const addDriver = async () => {
+    const res = await fetch("/api/driver", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(driver),
+    });
+    const data = await res.json();
+    console.log(data);
+  };
+
+  useEffect(() => {
+    addDriver();
+  }, []);
+
   return (
     <Card>
       <CardHeader>
@@ -31,9 +60,7 @@ const CreateDriver = async() => {
         </div>
         <div className="space-y-1">
           <Label htmlFor="fullname">Nombre Completo</Label>
-          <Input
-            id="fullname"
-          />
+          <Input id="fullname" />
         </div>
         <div className="space-y-1">
           <Label htmlFor="dpi">Número de Documento (DPI)</Label>
