@@ -10,14 +10,22 @@ interface Driver {
   position: string;
 }
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const data: Driver = await req.json();
   const prisma = new PrismaClient();
 
+  if (!session || !session.user) {
+    return Response.json({ error: 'unauthorized' }, { status: 401 });
+  }
+  // Validar los campos recibidos....
+
   try {
-    if (!session) {
-      return Response.json({ message: 'Debes iniciar sesión.' });
+    const user = await prisma.users.findUnique({
+      where: { email: session.user.email },
+    });
+    if (!user) {
+      return Response.json({ error: 'user not found' }, { status: 404 });
     }
     const newDriver = await prisma.drivers.create({
       data: {
@@ -26,11 +34,11 @@ export async function POST(req: Request, res: Response) {
         dpi: data.dpi,
         position: data.position,
         schedule: data.schedule,
+        userId: user.id,
       },
     });
-    console.log(newDriver);
-    return Response.json({ message: 'Driver create successfully' });
+    return Response.json(newDriver, { status: 201 });
   } catch (error) {
-    return Response.json({ error: error });
+    return Response.json({ error: 'error creating driver' }, { status: 500 });
   }
 }
