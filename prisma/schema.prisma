@@ -21,6 +21,7 @@ model Users {
   password  String
   role      String
   createdAt DateTime @default(now())
+  drivers Drivers[]
 }
 
 model Drivers {
@@ -31,4 +32,6 @@ model Drivers {
   schedule       String
   position       String
   createdAt      DateTime @default(now())
+  user Users @relation(fields: [userId], references: [id])
+  userId Int
 }
