@@ -14,24 +14,24 @@ datasource db {
 }
 
 model Users {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String    @unique
   avatar    String
   password  String
   role      String
-  createdAt DateTime @default(now())
-  drivers Drivers[]
+  createdAt DateTime  @default(now())
+  drivers   Drivers[]
 }
 
 model Drivers {
   uuid           String   @id @default(uuid())
   employeeNumber Int      @unique
   fullname       String
-  dpi            Int
+  dpi            Int      @unique
   schedule       String
   position       String
   createdAt      DateTime @default(now())
-  user Users @relation(fields: [userId], references: [id])
-  userId Int
+  user           Users    @relation(fields: [userId], references: [id])
+  userId         Int
 }
