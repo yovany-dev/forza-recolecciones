@@ -10,10 +10,10 @@ export async function POST(req: Request) {
   const { success, error, data } = driverSchema.safeParse(body);
 
   if (!session || !session.user) {
-    return Response.json({ errorMessage: 'unauthorized', status: 401 });
+    return Response.json({ errors: 'unauthorized', status: 401 });
   }
   if (!success) {
-    return Response.json({ errorMessage: error.flatten(), status: 400 });
+    return Response.json({ errors: error.flatten(), status: 400 });
   }
   try {
     const user = await prisma.users.findUnique({
