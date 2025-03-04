@@ -26,9 +26,9 @@ model Users {
 
 model Drivers {
   uuid           String   @id @default(uuid())
-  employeeNumber Int      @unique
+  employeeNumber String   @unique @db.VarChar(6)
   fullname       String
-  dpi            Int      @unique
+  dpi            String   @unique @db.VarChar(13)
   schedule       String
   position       String
   createdAt      DateTime @default(now())
