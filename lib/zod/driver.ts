@@ -3,15 +3,18 @@ import { z } from 'zod';
 export const driverSchema = z.object({
   uuid: z.string().uuid().optional(),
   employeeNumber: z
-    .number({ message: 'Ingrese un valor valido.' })
-    .int()
-    .positive(),
+    .string()
+    .nonempty({ message: 'El número de gafete es obligatorio' })
+    .regex(/^\d+$/, { message: 'El campo solo admite números' }),
   fullname: z
     .string()
     .nonempty({ message: 'El nombre es obligatorio.' })
     .min(6, { message: 'Debe tener 6 o más caracteres.' })
     .max(64, { message: 'Debe tener 64 o menos caracteres.' }),
-  dpi: z.number({ message: 'Ingrese un número de dpi valido.' }).positive(),
+  dpi: z
+    .string()
+    .nonempty({ message: 'El número de DPI es obligatorio' })
+    .regex(/^\d+$/, { message: 'El campo solo admite números' }),
   schedule: z.string().nonempty({ message: 'El horario es obligatorio.' }),
   position: z.string().nonempty({ message: 'El cargo es obligatorio.' }),
   createdAt: z.string().datetime().optional(),
