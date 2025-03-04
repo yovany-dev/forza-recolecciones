@@ -13,16 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect } from "react";
 
-interface Driver {
-  employeeNumber: number;
-  fullname: string;
-  dpi: number;
-  schedule: string;
-  position: string;
-}
-
 const CreateDriver = () => {
-  const driver: Driver = {
+  const driver = {
     employeeNumber: 111654,
     fullname: "Denilson Yovany Morales Chivalan",
     dpi: 123456789,

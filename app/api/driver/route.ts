@@ -1,32 +1,39 @@
 import { authOptions } from '../auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { PrismaClient } from '@prisma/client';
-
-interface Driver {
-  employeeNumber: number;
-  fullname: string;
-  dpi: number;
-  schedule: string;
-  position: string;
-}
+import { driverSchema } from '@/lib/zod/driver';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  const data: Driver = await req.json();
+  const body = await req.json();
   const prisma = new PrismaClient();
+  const { success, error, data } = driverSchema.safeParse(body);
 
   if (!session || !session.user) {
     return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
-  // Validar los campos recibidos....
-
+  if (!success) {
+    return Response.json({ error: error.flatten() }, { status: 400 });
+  }
   try {
     const user = await prisma.users.findUnique({
       where: { email: session.user.email },
     });
+    // const driver = await prisma.drivers.findUnique({
+    //   where: {
+    //     employeeNumber_dpi: {
+    //       employeeNumber: data.employeeNumber,
+    //       dpi: data.dpi,
+    //     }
+    //   }
+    // });
+    // console.log(driver)
     if (!user) {
       return Response.json({ error: 'user not found' }, { status: 404 });
     }
+    // if (driver) {
+    //   return Response.json({ message: 'Algunos datos ya existen'}, {status: 200})
+    // }
     const newDriver = await prisma.drivers.create({
       data: {
         employeeNumber: data.employeeNumber,
