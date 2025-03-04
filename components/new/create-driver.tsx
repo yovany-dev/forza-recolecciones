@@ -11,33 +11,29 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
+
+import { driverSchema, driverSchemaType } from "@/lib/zod/driver";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const CreateDriver = () => {
-  const driver = {
-    employeeNumber: 111654,
-    fullname: "Denilson Yovany Morales Chivalan",
-    dpi: 123456789,
-    position: "Piloto recolector",
-    schedule: "07:30",
-  };
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<driverSchemaType>({ resolver: zodResolver(driverSchema) });
 
-  const addDriver = async () => {
+  const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
     const res = await fetch("/api/driver", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(driver),
+      body: JSON.stringify(data),
     });
-    const data = await res.json();
-    console.log(data);
+    const driver = await res.json();
+    console.log(driver);
   };
-
-  useEffect(() => {
-    addDriver();
-  }, []);
-
   return (
     <Card>
       <CardHeader>
@@ -47,34 +43,58 @@ const CreateDriver = () => {
           vacíos.
         </CardDescription>
       </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <Label htmlFor="employeeNumber">No. Gafete</Label>
-          <Input id="employeeNumber" />
-        </div>
-        <div className="space-y-1">
-          <Label htmlFor="fullname">Nombre Completo</Label>
-          <Input id="fullname" />
-        </div>
-        <div className="space-y-1">
-          <Label htmlFor="dpi">Número de Documento (DPI)</Label>
-          <Input id="dpi" />
-        </div>
-        <div className="space-y-1">
-          <Label htmlFor="schedule">Horario de Entrada</Label>
-          <Input id="schedule" />
-        </div>
-        <div className="space-y-1 col-span-2">
-          <Label htmlFor="position">Cargo o Puesto</Label>
-          <Input id="position" defaultValue="Piloto Recolector" disabled />
-        </div>
+      <CardContent>
+        <form
+          className="grid grid-cols-2 gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="space-y-1">
+            <Label htmlFor="employeeNumber">No. Gafete</Label>
+            <Input
+              id="employeeNumber"
+              {...register("employeeNumber")}
+            />
+            <p className="text-xs text-red-500">
+              {errors.employeeNumber?.message}
+            </p>
+            {/* {errors.employeeNumber && (
+              <p className="text-xs text-red-500">
+                {errors.employeeNumber.message}
+              </p>
+            )} */}
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="fullname">Nombre Completo</Label>
+            <Input id="fullname" {...register("fullname")} />
+            <p className="text-xs text-red-500">{errors.fullname?.message}</p>
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="dpi">Número de Documento (DPI)</Label>
+            <Input id="dpi" {...register("dpi")} />
+            <p className="text-xs text-red-500">{errors.dpi?.message}</p>
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="schedule">Horario de Entrada</Label>
+            <Input id="schedule" {...register("schedule")} />
+            <p className="text-xs text-red-500">{errors.schedule?.message}</p>
+          </div>
+          <div className="space-y-1 col-span-2">
+            <Label htmlFor="position">Cargo o Puesto</Label>
+            <Input
+              id="position"
+              {...register("position")}
+              defaultValue="Piloto Recolector"
+              disabled
+            />
+          </div>
+          <div className="col-span-2 flex gap-2">
+            <Button variant="outline" className="border border-[#ea580c]">
+              Cancelar
+            </Button>
+            <Button type="submit">Guardar</Button>
+          </div>
+        </form>
       </CardContent>
-      <CardFooter className="flex gap-2">
-        <Button variant="outline" className="border border-[#ea580c]">
-          Cancelar
-        </Button>
-        <Button>Guardar</Button>
-      </CardFooter>
     </Card>
   );
 };
