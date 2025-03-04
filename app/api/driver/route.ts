@@ -10,30 +10,29 @@ export async function POST(req: Request) {
   const { success, error, data } = driverSchema.safeParse(body);
 
   if (!session || !session.user) {
-    return Response.json({ error: 'unauthorized' }, { status: 401 });
+    return Response.json({ errorMessage: 'unauthorized', status: 401 });
   }
   if (!success) {
-    return Response.json({ error: error.flatten() }, { status: 400 });
+    return Response.json({ errorMessage: error.flatten(), status: 400 });
   }
   try {
     const user = await prisma.users.findUnique({
       where: { email: session.user.email },
     });
-    // const driver = await prisma.drivers.findUnique({
-    //   where: {
-    //     employeeNumber_dpi: {
-    //       employeeNumber: data.employeeNumber,
-    //       dpi: data.dpi,
-    //     }
-    //   }
-    // });
-    // console.log(driver)
+    const driver = await prisma.drivers.findFirst({
+      where: {
+        OR: [{ employeeNumber: data.employeeNumber }, { dpi: data.dpi }],
+      },
+    });
     if (!user) {
-      return Response.json({ error: 'user not found' }, { status: 404 });
+      return Response.json({ errorMessage: 'user not found', status: 404 });
     }
-    // if (driver) {
-    //   return Response.json({ message: 'Algunos datos ya existen'}, {status: 200})
-    // }
+    if (driver) {
+      return Response.json({
+        message: 'Número de gafete o DPI ya existen.',
+        status: 409,
+      });
+    }
     const newDriver = await prisma.drivers.create({
       data: {
         employeeNumber: data.employeeNumber,
@@ -44,8 +43,8 @@ export async function POST(req: Request) {
         userId: user.id,
       },
     });
-    return Response.json(newDriver, { status: 201 });
+    return Response.json({driver: newDriver, status: 201});
   } catch (error) {
-    return Response.json({ error: 'error creating driver' }, { status: 500 });
+    return Response.json({ errorMessage: 'error creating driver', status: 500 });
   }
 }
