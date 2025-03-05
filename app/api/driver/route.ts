@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   const { success, error, data } = driverSchema.safeParse(body);
 
   if (!session || !session.user) {
-    return Response.json({ errors: 'unauthorized', status: 401 });
+    return Response.json({ errorMessage: 'unauthorized', status: 401 });
   }
   if (!success) {
     return Response.json({ errors: error.flatten(), status: 400 });
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     }
     if (driver) {
       return Response.json({
-        message: 'Número de gafete o DPI ya existen.',
+        errorMessage: 'Número de gafete o DPI ya existen.',
         status: 409,
       });
     }
