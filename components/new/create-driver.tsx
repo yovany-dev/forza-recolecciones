@@ -1,8 +1,5 @@
 "use client";
 
-import { Loader } from "lucide-react";
-import { AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,30 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { driverSchema, driverSchemaType } from "@/lib/zod/driver";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const LoaderAnimate = () => {
-  return (
-    <div className="flex items-center gap-1">
-      <Loader className="animate-spin" />
-      <p className="text-sm">Por favor espere...</p>
-    </div>
-  );
-};
-
-const ErrorAlert = () => {
-  return (
-    <Alert variant="destructive">
-      <AlertCircle className="h-4 w-4" />
-      <AlertDescription>Número de gafete o DPI ya existe.</AlertDescription>
-    </Alert>
-  );
-};
+import { LoadingNotification } from "@/components/notifications";
+import { successfulNotification } from "@/components/notifications";
+import { ErrorNotification } from "@/components/notifications";
 
 const CreateDriver = () => {
   const {
@@ -41,8 +24,11 @@ const CreateDriver = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<driverSchemaType>({ resolver: zodResolver(driverSchema) });
+  const [loading, setLoading] = useState<null | boolean>(null);
+  const [errorMessage, setErrorMessage] = useState<null | boolean>(null);
 
   const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
+    setLoading(true);
     const res = await fetch("/api/driver", {
       method: "POST",
       headers: {
@@ -51,9 +37,13 @@ const CreateDriver = () => {
       body: JSON.stringify(data),
     });
     const driver = await res.json();
+
+    setErrorMessage(false);
+    setLoading(false);
     if (driver.status == 201) {
-      console.log("Piloto creado exitosamente.");
+      successfulNotification();
     } else if (driver.status == 409) {
+      setErrorMessage(true);
       console.log(driver.errorMessage);
     }
   };
@@ -103,8 +93,8 @@ const CreateDriver = () => {
             />
           </div>
           <div className="col-span-2 h-[53.6px] flex">
-            {/* <LoaderAnimate /> */}
-            {/* <ErrorAlert /> */}
+            {loading && <LoadingNotification />}
+            {errorMessage && <ErrorNotification />}
           </div>
           <div className="col-span-2 flex gap-2">
             <Button variant="outline" className="border border-[#ea580c]">
