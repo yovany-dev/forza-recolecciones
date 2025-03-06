@@ -17,34 +17,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingNotification } from "@/components/notifications";
 import { successfulNotification } from "@/components/notifications";
 import { ErrorNotification } from "@/components/notifications";
+import { createDriver } from "@/lib/create-driver";
 
+interface errorMessage {
+  status: boolean;
+  message: string;
+}
 const CreateDriver = () => {
   const {
+    reset,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm<driverSchemaType>({ resolver: zodResolver(driverSchema) });
-  const [loading, setLoading] = useState<null | boolean>(null);
-  const [errorMessage, setErrorMessage] = useState<null | boolean>(null);
+  const [errorMessage, setErrorMessage] = useState<null | errorMessage>(null);
 
   const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
-    setLoading(true);
-    const res = await fetch("/api/driver", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const driver = await res.json();
+    setErrorMessage(null);
+    const driver = await createDriver(data);
 
-    setErrorMessage(false);
-    setLoading(false);
     if (driver.status == 201) {
+      reset();
       successfulNotification();
     } else if (driver.status == 409) {
-      setErrorMessage(true);
-      console.log(driver.errorMessage);
+      setErrorMessage({
+        status: true,
+        message: driver.errorMessage,
+      });
+    } else {
+      setErrorMessage({
+        status: true,
+        message: "Error el piloto no se pudo crear.",
+      });
     }
   };
   return (
@@ -93,14 +97,18 @@ const CreateDriver = () => {
             />
           </div>
           <div className="col-span-2 h-[53.6px] flex">
-            {loading && <LoadingNotification />}
-            {errorMessage && <ErrorNotification />}
+            {isSubmitting && <LoadingNotification />}
+            {errorMessage && (
+              <ErrorNotification message={errorMessage.message} />
+            )}
           </div>
           <div className="col-span-2 flex gap-2">
             <Button variant="outline" className="border border-[#ea580c]">
               Cancelar
             </Button>
-            <Button type="submit">Guardar</Button>
+            <Button type="submit" disabled={isSubmitting && true}>
+              Guardar
+            </Button>
           </div>
         </form>
       </CardContent>

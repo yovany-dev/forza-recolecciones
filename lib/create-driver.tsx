@@ -1,9 +1,5 @@
 import { driverSchemaType } from "./zod/driver";
 
-interface DriverResponse {
-  errorMessage: string;
-  status: number;
-}
 const createDriver = async (data: driverSchemaType) => {
   const res = await fetch("/api/driver", {
     method: "POST",
@@ -12,7 +8,7 @@ const createDriver = async (data: driverSchemaType) => {
     },
     body: JSON.stringify(data),
   });
-  const driver: DriverResponse = await res.json();
+  const driver = await res.json();
   return driver;
 };
 

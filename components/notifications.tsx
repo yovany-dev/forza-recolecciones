@@ -1,6 +1,7 @@
+import React from "react";
+import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { AlertCircle } from "lucide-react";
-import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const LoadingNotification = () => {
@@ -12,11 +13,14 @@ export const LoadingNotification = () => {
   );
 };
 
-export const ErrorNotification = () => {
+interface Props {
+  message: string;
+}
+export const ErrorNotification: React.FC<Props> = ({ message }) => {
   return (
     <Alert variant="destructive">
       <AlertCircle className="h-4 w-4" />
-      <AlertDescription>Número de gafete o DPI ya existe.</AlertDescription>
+      <AlertDescription>{message}</AlertDescription>
     </Alert>
   );
 };
@@ -27,5 +31,9 @@ export const successfulNotification = () => {
       label: "Aceptar",
       onClick: () => console.log("Aceptar"),
     },
+    actionButtonStyle: {
+      color: '#fff',
+      background: '#ea580c'
+    }
   });
 };
