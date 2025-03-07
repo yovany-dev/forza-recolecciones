@@ -48,3 +48,18 @@ export async function POST(req: Request) {
     return Response.json({ errorMessage: 'error creating driver', status: 500 });
   }
 }
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  const prisma = new PrismaClient();
+
+  if (!session || !session.user) {
+    return Response.json({ errorMessage: 'unauthorized', status: 401 });
+  }
+  try {
+    const drivers = await prisma.drivers.findMany();
+    return Response.json({data: drivers, status: 200});
+  } catch (error) {
+    return Response.json({error, status: 500})
+  }
+}
