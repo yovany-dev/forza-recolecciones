@@ -1,33 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
 import { Links } from "@/types/sidebar";
-import { getData } from "@/lib/get-data";
 import { Header } from "@/components/drivers/header";
 import { Controls } from "@/components/drivers/controls";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { useEffect, useState } from "react";
-
-export type Drivers = {
-  uuid?: string;
-  employeeNumber: number;
-  fullname: string;
-  dpi: number;
-  position: string;
-  schedule: string;
-  createdAt?: string;
-  id?: number;
-};
+import { driverSchemaType } from "@/lib/zod/driver";
 
 const Page = () => {
   const dataLink: Links[] = [
     { name: "dashboard", url: "/dashboard" },
     { name: "empleados", url: "/dashboard/empleados" },
   ];
-  const [data, setData] = useState<Drivers[] | null>(null);
+  const [data, setData] = useState<driverSchemaType[] | null>(null);
   const getDrivers = async () => {
     const res = await fetch("/api/driver");
     const drivers = await res.json();

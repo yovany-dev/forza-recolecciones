@@ -13,19 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SheetEditDriver } from "@/components/drivers/edit-driver";
+import { driverSchemaType } from "@/lib/zod/driver";
 
-export type Drivers = {
-  uuid?: string;
-  employeeNumber: number;
-  fullname: string;
-  dpi: number;
-  position: string;
-  schedule: string;
-  createdAt?: string;
-  id?: number;
-};
-
-export const columns: ColumnDef<Drivers>[] = [
+export const columns: ColumnDef<driverSchemaType>[] = [
   {
     id: "select",
     header: ({ table }) => (
