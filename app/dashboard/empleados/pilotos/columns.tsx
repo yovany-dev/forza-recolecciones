@@ -15,11 +15,14 @@ import {
 import { SheetEditDriver } from "@/components/drivers/edit-driver";
 
 export type Drivers = {
+  uuid?: string;
   employeeNumber: number;
   fullname: string;
   dpi: number;
   position: string;
   schedule: string;
+  createdAt?: string;
+  id?: number;
 };
 
 export const columns: ColumnDef<Drivers>[] = [

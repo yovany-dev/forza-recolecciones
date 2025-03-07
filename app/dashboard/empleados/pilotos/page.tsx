@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
@@ -9,21 +9,34 @@ import { Controls } from "@/components/drivers/controls";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+export type Drivers = {
+  uuid?: string;
+  employeeNumber: number;
+  fullname: string;
+  dpi: number;
+  position: string;
+  schedule: string;
+  createdAt?: string;
+  id?: number;
+};
 
 const Page = () => {
   const dataLink: Links[] = [
     { name: "dashboard", url: "/dashboard" },
     { name: "empleados", url: "/dashboard/empleados" },
   ];
-  // const data = await getData();
+  const [data, setData] = useState<Drivers[] | null>(null);
   const getDrivers = async () => {
     const res = await fetch("/api/driver");
-    const data = await res.json();
-    console.log(data);
+    const drivers = await res.json();
+    console.log(drivers)
+
+    setData(drivers.data);
   };
   useEffect(() => {
-    getDrivers()
+    getDrivers();
   }, []);
 
   return (
@@ -35,7 +48,7 @@ const Page = () => {
           <Controls />
           <Separator className="my-4" />
           <div className="n-table container mx-auto py-4">
-            {/* <DataTable columns={columns} data={data} /> */}
+            {data && <DataTable columns={columns} data={data} />}
           </div>
         </div>
       </main>
