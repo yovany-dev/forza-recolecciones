@@ -92,12 +92,15 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <div className="text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} de{" "}
           {table.getFilteredRowModel().rows.length} fila(s) seleccionado.
         </div>
-        <div className="space-x-2">
+        <div className="">
+          <p className="text-sm text-muted-foreground">total de pilotos 27</p>
+        </div>
+        <div className="flex items-center">
           <Button
             variant="outline"
             size="sm"
@@ -106,6 +109,7 @@ export function DataTable<TData, TValue>({
           >
             Anterior
           </Button>
+          <p className="text-sm text-muted-foreground">1 de 3</p>
           <Button
             variant="outline"
             size="sm"
