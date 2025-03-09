@@ -18,18 +18,23 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { PaginationType } from "@/types/paginationType";
 import { TableSkeleton } from "@/components/drivers/table-skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | null;
   loading: boolean;
+  paginationData: PaginationType;
+  setPaginationData: (data: PaginationType) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   loading,
+  paginationData,
+  setPaginationData,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const table = useReactTable({
@@ -103,23 +108,40 @@ export function DataTable<TData, TValue>({
           {table.getFilteredRowModel().rows.length} fila(s) seleccionado.
         </div>
         <div className="">
-          <p className="text-sm text-muted-foreground">total de pilotos 27</p>
+          <p className="text-sm text-muted-foreground">
+            total de pilotos {paginationData.total}
+          </p>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() =>
+              setPaginationData({
+                ...paginationData,
+                page: Math.max(paginationData.page - 1, 1),
+              })
+            }
+            disabled={paginationData.page == 1}
           >
             Anterior
           </Button>
-          <p className="text-sm text-muted-foreground">1 de 3</p>
+          <p className="text-sm text-muted-foreground">
+            {paginationData.page} de {paginationData.total_pages}
+          </p>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() =>
+              setPaginationData({
+                ...paginationData,
+                page: Math.min(
+                  paginationData.page + 1,
+                  paginationData.total_pages
+                ),
+              })
+            }
+            disabled={data == null || paginationData.page == paginationData.total_pages}
           >
             Siguiente
           </Button>
