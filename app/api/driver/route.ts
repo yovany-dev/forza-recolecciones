@@ -98,3 +98,49 @@ export async function GET(req: Request) {
     return Response.json({ error, status: 500 });
   }
 }
+
+export async function PATCH(req: Request) {
+  const session = await getServerSession(authOptions);
+  const body = await req.json();
+  const prisma = new PrismaClient();
+  const { success, error, data } = driverSchema.safeParse(body);
+
+  if (!session || !session.user) {
+    return Response.json({ error: 'unauthorized', status: 401 });
+  }
+  if (!success) {
+    return Response.json({ errors: error.flatten(), status: 400 });
+  }
+  try {
+    const existingDriverWithSameValues = await prisma.drivers.findFirst({
+      where: {
+        AND: [
+          {
+            OR: [{ dpi: body.dpi }, { employeeNumber: body.employeeNumber }],
+          },
+          { uuid: { not: data.uuid } },
+        ],
+      },
+    });
+    if (existingDriverWithSameValues) {
+      return Response.json({
+        error: 'El DPI o No. Gafete ya están en uso por otro piloto.',
+        status: 400,
+      });
+    }
+    const updateDriver = await prisma.drivers.update({
+      where: {
+        uuid: data.uuid,
+      },
+      data: {
+        employeeNumber: data.employeeNumber,
+        fullname: data.fullname,
+        dpi: data.dpi,
+        schedule: data.schedule,
+      },
+    });
+    return Response.json({ driver: updateDriver, status: 200 });
+  } catch (error) {
+    return Response.json({ error, status: 500 });
+  }
+}
