@@ -37,7 +37,7 @@ const Page = () => {
           <Controls />
           <Separator className="my-4" />
           <div className="n-table container mx-auto py-4">
-            {data && <DataTable columns={columns} data={data} />}
+            <DataTable columns={columns} data={data} loading={data === null} />
           </div>
         </div>
       </main>

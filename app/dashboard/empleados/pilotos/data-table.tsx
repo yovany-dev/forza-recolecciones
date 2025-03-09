@@ -18,19 +18,22 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { TableSkeleton } from "@/components/drivers/table-skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData[] | null;
+  loading: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  loading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const table = useReactTable({
-    data,
+    data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -63,7 +66,9 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {loading ? (
+              <TableSkeleton />
+            ) : data && data.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
