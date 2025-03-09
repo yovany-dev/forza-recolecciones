@@ -124,8 +124,8 @@ export async function PATCH(req: Request) {
     });
     if (existingDriverWithSameValues) {
       return Response.json({
-        error: 'El DPI o No. Gafete ya están en uso por otro piloto.',
-        status: 400,
+        errorMessage: 'Número de gafete o DPI ya existen.',
+        status: 409,
       });
     }
     const updateDriver = await prisma.drivers.update({
