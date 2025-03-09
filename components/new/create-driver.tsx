@@ -38,7 +38,7 @@ const CreateDriver = () => {
 
     if (driver.status == 201) {
       reset();
-      successfulNotification();
+      successfulNotification("Piloto creado exitosamente.");
     } else if (driver.status == 409) {
       setErrorMessage({
         status: true,

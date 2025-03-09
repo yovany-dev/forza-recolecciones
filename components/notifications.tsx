@@ -25,8 +25,8 @@ export const ErrorNotification: React.FC<Props> = ({ message }) => {
   );
 };
 
-export const successfulNotification = () => {
-  return toast("Piloto creado exitosamente.", {
+export const successfulNotification = (message: string) => {
+  return toast(message, {
     action: {
       label: "Aceptar",
       onClick: () => console.log("Aceptar"),
