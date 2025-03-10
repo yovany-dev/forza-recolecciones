@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,8 +13,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SheetEditDriver } from "@/components/drivers/edit-driver";
 import { driverSchemaType } from "@/lib/zod/driver";
+import { SheetEditDriver } from "@/components/drivers/edit-driver";
+import { DialogDeleteDriver } from "@/components/drivers/delete-driver";
 
 export const columns: ColumnDef<driverSchemaType>[] = [
   {
@@ -62,11 +64,18 @@ export const columns: ColumnDef<driverSchemaType>[] = [
     id: "actions",
     cell: ({ row }) => {
       const driver = row.original;
+      const [isDialogOpen, setIsDialogOpen] = useState(false);
+      const [isMenuOpen, setIsMenuOpen] = useState(false);
 
       return (
         <>
           <SheetEditDriver driver={driver} />
-          <DropdownMenu>
+          <DialogDeleteDriver
+            uuid={driver.uuid}
+            isOpen={isDialogOpen}
+            setIsOpen={setIsDialogOpen}
+          />
+          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <span className="sr-only">Abrir menu</span>
@@ -76,7 +85,15 @@ export const columns: ColumnDef<driverSchemaType>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
               <DropdownMenuItem>Editar piloto</DropdownMenuItem>
-              <DropdownMenuItem>Eliminar piloto</DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setIsMenuOpen(false);
+                  setIsDialogOpen(true);
+                }}
+              >
+                Eliminar piloto
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
