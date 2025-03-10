@@ -65,11 +65,16 @@ export const columns: ColumnDef<driverSchemaType>[] = [
     cell: ({ row }) => {
       const driver = row.original;
       const [isDialogOpen, setIsDialogOpen] = useState(false);
+      const [isSheetOpen, setIsSheetOpen] = useState(false);
       const [isMenuOpen, setIsMenuOpen] = useState(false);
 
       return (
         <>
-          <SheetEditDriver driver={driver} />
+          <SheetEditDriver
+            driver={driver}
+            isOpen={isSheetOpen}
+            setIsOpen={setIsSheetOpen}
+          />
           <DialogDeleteDriver
             uuid={driver.uuid}
             isOpen={isDialogOpen}
@@ -84,7 +89,15 @@ export const columns: ColumnDef<driverSchemaType>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem>Editar piloto</DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setIsMenuOpen(false);
+                  setIsSheetOpen(true);
+                }}
+              >
+                Editar piloto
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={(e) => {
                   e.preventDefault();

@@ -26,15 +26,16 @@ interface errorMessage {
 }
 interface Props {
   driver: driverSchemaType;
+  isOpen: boolean;
+  setIsOpen: (data: boolean) => void;
 }
-const SheetEditDriver: React.FC<Props> = ({ driver }) => {
+const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm<driverSchemaType>({ resolver: zodResolver(driverSchema) });
   const [errorMessage, setErrorMessage] = useState<null | errorMessage>(null);
-  const [sheetOpen, setSheetOpen] = useState(false);
   const { updateDriver } = useDriverStore();
 
   const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
@@ -45,7 +46,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver }) => {
     });
 
     if (resUpdateDriver.status == 200) {
-      setSheetOpen(false);
+      setIsOpen(false);
       updateDriver(driver.uuid, resUpdateDriver.driver);
       successfulNotification("Piloto actualizado exitosamente.");
     } else if (resUpdateDriver.status == 409) {
@@ -62,7 +63,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver }) => {
   };
 
   return (
-    <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0">
           <Pencil />
