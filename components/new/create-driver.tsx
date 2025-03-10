@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,30 +63,30 @@ const CreateDriver = () => {
       </CardHeader>
       <CardContent>
         <form
-          className="grid grid-cols-2 gap-4"
+          className="grid grid-cols-2 gap-x-4"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="space-y-1">
             <Label htmlFor="employeeNumber">No. Gafete</Label>
             <Input id="employeeNumber" {...register("employeeNumber")} />
-            <p className="text-xs text-red-500">
+            <p className="h-6 text-xs text-red-500">
               {errors.employeeNumber?.message}
             </p>
           </div>
           <div className="space-y-1">
             <Label htmlFor="fullname">Nombre Completo</Label>
             <Input id="fullname" {...register("fullname")} />
-            <p className="text-xs text-red-500">{errors.fullname?.message}</p>
+            <p className="h-6 text-xs text-red-500">{errors.fullname?.message}</p>
           </div>
           <div className="space-y-1">
             <Label htmlFor="dpi">Número de Documento (DPI)</Label>
             <Input id="dpi" {...register("dpi")} />
-            <p className="text-xs text-red-500">{errors.dpi?.message}</p>
+            <p className="h-6 text-xs text-red-500">{errors.dpi?.message}</p>
           </div>
           <div className="space-y-1">
             <Label htmlFor="schedule">Horario de Entrada</Label>
             <Input id="schedule" {...register("schedule")} />
-            <p className="text-xs text-red-500">{errors.schedule?.message}</p>
+            <p className="h-6 text-xs text-red-500">{errors.schedule?.message}</p>
           </div>
           <div className="space-y-1 col-span-2">
             <Label htmlFor="position">Cargo o Puesto</Label>
@@ -96,15 +97,15 @@ const CreateDriver = () => {
               disabled
             />
           </div>
-          <div className="col-span-2 h-[53.6px] flex">
+          <div className="col-span-2 h-[53.6px] my-4 flex">
             {isSubmitting && <LoadingNotification />}
             {errorMessage && (
               <ErrorNotification message={errorMessage.message} />
             )}
           </div>
           <div className="col-span-2 flex gap-2">
-            <Button variant="outline" className="border border-[#ea580c]">
-              Cancelar
+            <Button variant="outline" className="border border-[#ea580c]" asChild>
+              <Link href='/dashboard/empleados/pilotos'>Regresar</Link>
             </Button>
             <Button type="submit" disabled={isSubmitting && true}>
               Guardar
