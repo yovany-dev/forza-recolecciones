@@ -65,7 +65,7 @@ export const columns: ColumnDef<driverSchemaType>[] = [
 
       return (
         <>
-          <SheetEditDriver />
+          <SheetEditDriver driver={driver} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
