@@ -17,7 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingNotification } from "@/components/notifications";
 import { successfulNotification } from "@/components/notifications";
 import { ErrorNotification } from "@/components/notifications";
-import { updateDriver } from "@/lib/update-driver";
+import { updateDriverAPI } from "@/lib/update-driver";
+import { useDriverStore } from "@/lib/store/useDriverStore";
 
 interface errorMessage {
   status: boolean;
@@ -34,16 +35,18 @@ const SheetEditDriver: React.FC<Props> = ({ driver }) => {
   } = useForm<driverSchemaType>({ resolver: zodResolver(driverSchema) });
   const [errorMessage, setErrorMessage] = useState<null | errorMessage>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const { updateDriver } = useDriverStore();
 
   const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
     setErrorMessage(null);
-    const resUpdateDriver = await updateDriver({
+    const resUpdateDriver = await updateDriverAPI({
       ...data,
       uuid: driver.uuid,
     });
 
     if (resUpdateDriver.status == 200) {
       setSheetOpen(false);
+      updateDriver(driver.uuid, resUpdateDriver.driver);
       successfulNotification("Piloto actualizado exitosamente.");
     } else if (resUpdateDriver.status == 409) {
       setErrorMessage({

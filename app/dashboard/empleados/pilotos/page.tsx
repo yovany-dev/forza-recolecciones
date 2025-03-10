@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Links } from "@/types/sidebar";
-import { driverSchemaType } from "@/lib/zod/driver";
 import { PaginationType } from "@/types/paginationType";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
@@ -11,6 +10,7 @@ import { Controls } from "@/components/drivers/controls";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/app/dashboard/empleados/pilotos/data-table";
 import { columns } from "@/app/dashboard/empleados/pilotos/columns";
+import { useDriverStore } from "@/lib/store/useDriverStore";
 import { getDriversData } from "@/lib/get-drivers";
 
 const Page = () => {
@@ -24,14 +24,14 @@ const Page = () => {
     total: 0,
     total_pages: 0,
   };
-  const [data, setData] = useState<driverSchemaType[] | null>(null);
+  const { drivers, setDrivers } = useDriverStore();
   const [paginationData, setPaginationData] =
     useState<PaginationType>(dataFooter);
 
   const getDrivers = async () => {
     const drivers = await getDriversData(paginationData.page);
 
-    setData(drivers.data);
+    setDrivers(drivers.data);
     setPaginationData({
       page: drivers.page,
       per_page: drivers.per_page,
@@ -54,8 +54,8 @@ const Page = () => {
           <div className="n-table container mx-auto py-4">
             <DataTable
               columns={columns}
-              data={data}
-              loading={data === null}
+              data={drivers}
+              loading={drivers === null}
               paginationData={paginationData}
               setPaginationData={setPaginationData}
             />

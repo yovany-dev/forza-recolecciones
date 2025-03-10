@@ -1,6 +1,6 @@
 import { driverSchemaType } from "./zod/driver";
 
-const updateDriver = async (data: driverSchemaType) => {
+const updateDriverAPI = async (data: driverSchemaType) => {
   const res = await fetch("/api/driver", {
     method: "PATCH",
     headers: {
@@ -12,4 +12,4 @@ const updateDriver = async (data: driverSchemaType) => {
   return driver;
 };
 
-export { updateDriver };
+export { updateDriverAPI };
