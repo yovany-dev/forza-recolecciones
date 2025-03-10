@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import LogoForzaDeliveryWhite from "@/public/logo-forza-delivery-white.svg";
+import LogoForzaDeliveryBlack from "@/public/logo-forza-delivery-black.svg";
 import { loginSchema, loginSchemaType } from "@/lib/zod/auth";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 export function LoginForm({
   className,
@@ -20,6 +22,7 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { theme } = useTheme();
 
   const {
     register,
@@ -45,13 +48,17 @@ export function LoginForm({
       <Card className="">
         <CardHeader className="flex flex-col gap-5 items-center">
           <Image
-            src={LogoForzaDeliveryWhite}
+            src={
+              theme == "light" ? LogoForzaDeliveryBlack : LogoForzaDeliveryWhite
+            }
             alt="Logo Forza Delivery Express"
             width={250}
           />
           <p className="tracking-tight text-base sm:text-xl">
             Ingresar a{" "}
-            <span className="font-semibold text-[#ea5d1d]">Time Tracking</span>
+            <span className="font-semibold text-[#ea5d1d]">
+              Control Horario Recos
+            </span>
           </p>
         </CardHeader>
         <CardContent>

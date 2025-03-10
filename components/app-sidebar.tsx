@@ -30,7 +30,7 @@ import { useMemo } from "react";
 const data = {
   headers: {
     title: "Forza Delivery Express",
-    subtitle: "Time Tracking",
+    subtitle: "Control Horario Recos",
     logo: ForzaDeliveryIcon,
   },
   navGeneral: [

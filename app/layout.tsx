@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Forza Time Tracking",
+  title: "Control Horario Recos",
   description: "Sistema de control horario",
 };
 
