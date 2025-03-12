@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Ellipsis } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -22,10 +23,10 @@ export const columns: ColumnDef<driverSchemaType>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
+        // checked={
+        //   table.getIsAllPageRowsSelected() ||
+        //   (table.getIsSomePageRowsSelected() && "indeterminate")
+        // }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
@@ -46,7 +47,18 @@ export const columns: ColumnDef<driverSchemaType>[] = [
   },
   {
     accessorKey: "fullname",
-    header: "Nombre completo",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="p-0 hover:bg-transparent"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nombre completo
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "dpi",
@@ -58,7 +70,18 @@ export const columns: ColumnDef<driverSchemaType>[] = [
   },
   {
     accessorKey: "schedule",
-    header: "Horario",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="p-0 hover:bg-transparent"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Horario
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     id: "actions",
