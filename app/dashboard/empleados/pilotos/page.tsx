@@ -6,8 +6,6 @@ import { PaginationType } from "@/types/paginationType";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
 import { Header } from "@/components/drivers/header";
-import { Controls } from "@/components/drivers/controls";
-import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/app/dashboard/empleados/pilotos/data-table";
 import { columns } from "@/app/dashboard/empleados/pilotos/columns";
 import { useDriverStore } from "@/lib/store/useDriverStore";
@@ -49,17 +47,13 @@ const Page = () => {
       <main className="n-content p-5">
         <Header />
         <div className="n-body mt-5">
-          <Controls />
-          <Separator className="my-4" />
-          <div className="n-table container mx-auto py-4">
-            <DataTable
-              columns={columns}
-              data={drivers}
-              loading={drivers === null}
-              paginationData={paginationData}
-              setPaginationData={setPaginationData}
-            />
-          </div>
+          <DataTable
+            columns={columns}
+            data={drivers}
+            loading={drivers === null}
+            paginationData={paginationData}
+            setPaginationData={setPaginationData}
+          />
         </div>
       </main>
     </SidebarInset>

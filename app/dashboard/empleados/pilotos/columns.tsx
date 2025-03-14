@@ -54,7 +54,7 @@ export const columns: ColumnDef<driverSchemaType>[] = [
           className="p-0 hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nombre completo
+          Nombre Completo
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

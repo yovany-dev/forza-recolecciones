@@ -22,6 +22,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PaginationType } from "@/types/paginationType";
 import { TableSkeleton } from "@/components/drivers/table-skeleton";
+import { Controls } from "@/components/drivers/controls";
+import { Separator } from "@/components/ui/separator";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,6 +58,8 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <Controls table={table} />
+      <Separator className="my-4" />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

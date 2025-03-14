@@ -1,12 +1,32 @@
+import React from "react";
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Columns3 } from "lucide-react";
 import { ListFilter } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
-import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Table } from "@tanstack/react-table";
 
-const Controls = () => {
+type GenericObject = { [key: string]: string };
+interface Props<TData> {
+  table: Table<TData>;
+}
+const Controls = <TData,>({ table }: Props<TData>) => {
+  const headers: GenericObject = {
+    employeeNumber: "No. Gafete",
+    fullname: "Nombre Completo",
+    dpi: "DPI",
+    position: "Cargo",
+    schedule: "Horario",
+    actions: "Acciones",
+  };
   return (
     <div className="flex justify-between">
       <div className="relative flex items-center">
@@ -18,10 +38,34 @@ const Controls = () => {
         />
       </div>
       <div className="flex gap-2">
-        <Button variant="outline" size="sm">
-          <Columns3 />
-          <span>Columnas</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <Columns3 />
+              <span>Columnas</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                console.log(column.id);
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {headers[column.id]}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button variant="outline" size="sm">
           <ListFilter />
           <span>Filtros</span>
