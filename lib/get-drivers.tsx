@@ -5,8 +5,8 @@ interface DriversResponse extends PaginationType {
   data: driverSchemaType[];
 }
 
-export async function getDriversData(page: number): Promise<DriversResponse> {
-  const res = await fetch(`/api/driver?page=${page}`);
+export async function getDriversData(page: number, search: string): Promise<DriversResponse> {
+  const res = await fetch(`/api/driver?page=${page}&search=${search}`);
   const drivers = await res.json();
 
   return drivers;

@@ -10,6 +10,8 @@ import { DataTable } from "@/app/dashboard/empleados/pilotos/data-table";
 import { columns } from "@/app/dashboard/empleados/pilotos/columns";
 import { useDriverStore } from "@/lib/store/useDriverStore";
 import { getDriversData } from "@/lib/get-drivers";
+import { useDebounce } from "use-debounce";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Page = () => {
   const dataLink: Links[] = [
@@ -23,12 +25,15 @@ const Page = () => {
     total_pages: 0,
   };
   const { drivers, setDrivers } = useDriverStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [debouncedSearch] = useDebounce(search, 500);
   const [paginationData, setPaginationData] =
     useState<PaginationType>(dataFooter);
 
   const getDrivers = async () => {
-    const drivers = await getDriversData(paginationData.page);
-
+    const drivers = await getDriversData(paginationData.page, search);
     setDrivers(drivers.data);
     setPaginationData({
       page: drivers.page,
@@ -38,8 +43,17 @@ const Page = () => {
     });
   };
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (search) {
+      params.set("search", search);
+    } else {
+      params.delete("search");
+    }
+    router.push(`?${params.toString()}`, { scroll: false });
+  }, [search]);
+  useEffect(() => {
     getDrivers();
-  }, [paginationData.page]);
+  }, [debouncedSearch, paginationData.page]);
 
   return (
     <SidebarInset>
@@ -53,6 +67,8 @@ const Page = () => {
             loading={drivers === null}
             paginationData={paginationData}
             setPaginationData={setPaginationData}
+            search={search}
+            setSearch={setSearch}
           />
         </div>
       </main>

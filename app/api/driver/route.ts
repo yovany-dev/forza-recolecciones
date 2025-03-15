@@ -57,6 +57,7 @@ export async function GET(req: Request) {
   const prisma = new PrismaClient();
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const search = searchParams.get('search');
   const perPage = 10;
 
   if (!session || !session.user) {
@@ -78,7 +79,26 @@ export async function GET(req: Request) {
     const totalPages = Math.ceil(totalDrivers / perPage);
     const remainingItems = totalDrivers - (page - 1) * perPage;
     const currentPageSize = Math.min(perPage, remainingItems);
+
+    const where = {
+      OR: [
+        {
+          employeeNumber: {
+            contains: search as string,
+            mode: 'insensitive' as 'insensitive',
+          },
+        },
+        {
+          fullname: {
+            contains: search as string,
+            mode: 'insensitive' as 'insensitive',
+          },
+        },
+      ],
+    };
+
     const drivers = await prisma.drivers.findMany({
+      where: search ? where : {},
       skip: (page - 1) * perPage,
       take: currentPageSize,
       orderBy: { createdAt: 'desc' },

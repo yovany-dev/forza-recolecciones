@@ -17,8 +17,10 @@ import { Table } from "@tanstack/react-table";
 type GenericObject = { [key: string]: string };
 interface Props<TData> {
   table: Table<TData>;
+  search: string;
+  setSearch: (data: string) => void;
 }
-const Controls = <TData,>({ table }: Props<TData>) => {
+const Controls = <TData,>({ table, search, setSearch }: Props<TData>) => {
   const headers: GenericObject = {
     employeeNumber: "No. Gafete",
     fullname: "Nombre Completo",
@@ -35,6 +37,8 @@ const Controls = <TData,>({ table }: Props<TData>) => {
           type="text"
           placeholder="Buscar piloto"
           className="w-64 h-9 pl-8"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </div>
       <div className="flex gap-2">
@@ -50,7 +54,6 @@ const Controls = <TData,>({ table }: Props<TData>) => {
               .getAllColumns()
               .filter((column) => column.getCanHide())
               .map((column) => {
-                console.log(column.id);
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}

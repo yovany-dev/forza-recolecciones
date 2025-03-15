@@ -31,6 +31,8 @@ interface DataTableProps<TData, TValue> {
   loading: boolean;
   paginationData: PaginationType;
   setPaginationData: (data: PaginationType) => void;
+  search: string;
+  setSearch: (data: string) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,9 +41,12 @@ export function DataTable<TData, TValue>({
   loading,
   paginationData,
   setPaginationData,
+  search,
+  setSearch,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data: data || [],
     columns,
@@ -58,7 +63,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Controls table={table} />
+      <Controls table={table} search={search} setSearch={setSearch} />
       <Separator className="my-4" />
       <div className="rounded-md border">
         <Table>
@@ -105,7 +110,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No hay resultados.
                 </TableCell>
               </TableRow>
             )}
