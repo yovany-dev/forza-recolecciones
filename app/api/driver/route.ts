@@ -79,7 +79,6 @@ export async function GET(req: Request) {
     const totalPages = Math.ceil(totalDrivers / perPage);
     const remainingItems = totalDrivers - (page - 1) * perPage;
     const currentPageSize = Math.min(perPage, remainingItems);
-
     const where = {
       OR: [
         {
@@ -90,6 +89,12 @@ export async function GET(req: Request) {
         },
         {
           fullname: {
+            contains: search as string,
+            mode: 'insensitive' as 'insensitive',
+          },
+        },
+        {
+          dpi: {
             contains: search as string,
             mode: 'insensitive' as 'insensitive',
           },
