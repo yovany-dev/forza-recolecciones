@@ -1,5 +1,5 @@
-import React from "react";
 import Link from "next/link";
+import React, { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ const Controls = <TData,>({ table, search, setSearch }: Props<TData>) => {
     schedule: "Horario",
     actions: "Acciones",
   };
+  const [schedule, setSchedule] = useState(false);
   return (
     <div className="flex justify-between">
       <div className="relative flex items-center">
@@ -69,10 +70,23 @@ const Controls = <TData,>({ table, search, setSearch }: Props<TData>) => {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="outline" size="sm">
-          <ListFilter />
-          <span>Filtros</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <ListFilter />
+              <span>Filtros</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuCheckboxItem
+              className="capitalize"
+              checked={schedule}
+              onCheckedChange={setSchedule}
+            >
+              Horarios
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button size="sm" asChild>
           <Link href="/dashboard/empleados/nuevo?defaultValue=piloto">
             <UserRoundPlus />

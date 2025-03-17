@@ -24,6 +24,7 @@ import { PaginationType } from "@/types/paginationType";
 import { TableSkeleton } from "@/components/drivers/table-skeleton";
 import { Controls } from "@/components/drivers/controls";
 import { Separator } from "@/components/ui/separator";
+import { Filters } from "@/components/drivers/filters";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,7 +65,8 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <Controls table={table} search={search} setSearch={setSearch} />
-      <Separator className="my-4" />
+      <Separator className="mt-4" />
+      <Filters />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
