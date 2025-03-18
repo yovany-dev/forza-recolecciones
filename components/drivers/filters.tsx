@@ -19,7 +19,9 @@ interface Props {
   setTimeFilter: (data: boolean) => void;
 }
 const Filters: React.FC<Props> = ({ timeFilter, setTimeFilter }) => {
-  const [first, setFirst] = useState<Checked>(false);
+  const [firstSchedule, setFirstSchedule] = useState<Checked>(false);
+  const [secondSchedule, setSecondSchedule] = useState<Checked>(false);
+
   return timeFilter ? (
     <div className="w-full flex justify-between my-2">
       <div className="relative flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md">
@@ -34,12 +36,12 @@ const Filters: React.FC<Props> = ({ timeFilter, setTimeFilter }) => {
             <DropdownMenuItem>
               <div className="flex items-center space-x-2">
                 <Checkbox
-                  id="checkInFirst"
-                  checked={first}
-                  onCheckedChange={setFirst}
+                  id="firstSchedule"
+                  checked={firstSchedule}
+                  onCheckedChange={setFirstSchedule}
                 />
                 <label
-                  htmlFor="checkInFirst"
+                  htmlFor="firstSchedule"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   07:30
@@ -48,9 +50,13 @@ const Filters: React.FC<Props> = ({ timeFilter, setTimeFilter }) => {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <div className="flex items-center space-x-2">
-                <Checkbox id="checkInSecound" />
+                <Checkbox
+                  id="secondSchedule"
+                  checked={secondSchedule}
+                  onCheckedChange={setSecondSchedule}
+                />
                 <label
-                  htmlFor="checkInSecound"
+                  htmlFor="secondSchedule"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   08:30
