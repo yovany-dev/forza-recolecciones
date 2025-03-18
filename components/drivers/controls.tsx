@@ -10,9 +10,11 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type GenericObject = { [key: string]: string };
 interface Props<TData> {
@@ -84,14 +86,22 @@ const Controls = <TData,>({
               <span>Filtros</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuCheckboxItem
-              className="capitalize"
-              checked={timeFilter}
-              onCheckedChange={setTimeFilter}
-            >
-              Horario
-            </DropdownMenuCheckboxItem>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="checkInFirst"
+                  checked={timeFilter}
+                  onCheckedChange={setTimeFilter}
+                />
+                <label
+                  htmlFor="checkInFirst"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Horario
+                </label>
+              </div>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <Button size="sm" asChild>
