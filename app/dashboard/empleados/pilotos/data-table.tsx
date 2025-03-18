@@ -47,6 +47,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [timeFilter, setTimeFilter] = useState(false);
 
   const table = useReactTable({
     data: data || [],
@@ -64,9 +65,15 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Controls table={table} search={search} setSearch={setSearch} />
+      <Controls
+        table={table}
+        search={search}
+        setSearch={setSearch}
+        timeFilter={timeFilter}
+        setTimeFilter={setTimeFilter}
+      />
       <Separator className="mt-4" />
-      <Filters />
+      <Filters timeFilter={timeFilter} setTimeFilter={setTimeFilter} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

@@ -19,8 +19,16 @@ interface Props<TData> {
   table: Table<TData>;
   search: string;
   setSearch: (data: string) => void;
+  timeFilter: boolean;
+  setTimeFilter: (data: boolean) => void;
 }
-const Controls = <TData,>({ table, search, setSearch }: Props<TData>) => {
+const Controls = <TData,>({
+  table,
+  search,
+  setSearch,
+  timeFilter,
+  setTimeFilter,
+}: Props<TData>) => {
   const headers: GenericObject = {
     employeeNumber: "No. Gafete",
     fullname: "Nombre Completo",
@@ -29,7 +37,6 @@ const Controls = <TData,>({ table, search, setSearch }: Props<TData>) => {
     schedule: "Horario",
     actions: "Acciones",
   };
-  const [schedule, setSchedule] = useState(false);
   return (
     <div className="flex justify-between">
       <div className="relative flex items-center">
@@ -80,10 +87,10 @@ const Controls = <TData,>({ table, search, setSearch }: Props<TData>) => {
           <DropdownMenuContent align="end">
             <DropdownMenuCheckboxItem
               className="capitalize"
-              checked={schedule}
-              onCheckedChange={setSchedule}
+              checked={timeFilter}
+              onCheckedChange={setTimeFilter}
             >
-              Horarios
+              Horario
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>
