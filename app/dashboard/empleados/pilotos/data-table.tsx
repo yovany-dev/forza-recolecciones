@@ -30,8 +30,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | null;
   loading: boolean;
-  paginationData: PaginationType;
-  setPaginationData: (data: PaginationType) => void;
+  pagination: PaginationType | null;
+  setPagination: (data: PaginationType) => void;
   search: string;
   setSearch: (data: string) => void;
 }
@@ -40,8 +40,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   loading,
-  paginationData,
-  setPaginationData,
+  pagination,
+  setPagination,
   search,
   setSearch,
 }: DataTableProps<TData, TValue>) {
@@ -133,40 +133,40 @@ export function DataTable<TData, TValue>({
         </div>
         <div className="">
           <p className="text-sm text-muted-foreground">
-            total de pilotos {paginationData.total}
+            total de pilotos {pagination?.total}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() =>
-              setPaginationData({
-                ...paginationData,
-                page: Math.max(paginationData.page - 1, 1),
-              })
-            }
-            disabled={paginationData.page == 1}
+            // onClick={() =>
+            //   setPagination({
+            //     ...pagination,
+            //     page: Math.max(pagination?.page - 1, 1) || 1,
+            //   })
+            // }
+            disabled={pagination?.page == 1}
           >
             Anterior
           </Button>
           <p className="text-sm text-muted-foreground">
-            {paginationData.page} de {paginationData.total_pages}
+            {pagination?.page} de {pagination?.total_pages}
           </p>
           <Button
             variant="outline"
             size="sm"
-            onClick={() =>
-              setPaginationData({
-                ...paginationData,
-                page: Math.min(
-                  paginationData.page + 1,
-                  paginationData.total_pages
-                ),
-              })
-            }
+            // onClick={() =>
+            //   setPagination({
+            //     ...pagination,
+            //     page: Math.min(
+            //       pagination.page + 1,
+            //       pagination.total_pages
+            //     ),
+            //   })
+            // }
             disabled={
-              data == null || paginationData.page == paginationData.total_pages
+              data == null || pagination?.page == pagination?.total_pages
             }
           >
             Siguiente

@@ -24,24 +24,24 @@ const Page = () => {
     total: 0,
     total_pages: 0,
   };
-  const { drivers, setDrivers } = useDriverStore();
+  const { drivers, pagination, setPagination, getDrivers } = useDriverStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [debouncedSearch] = useDebounce(search, 500);
-  const [paginationData, setPaginationData] =
-    useState<PaginationType>(dataFooter);
+  // const [paginationData, setPaginationData] =
+  //   useState<PaginationType>(dataFooter);
 
-  const getDrivers = async () => {
-    const drivers = await getDriversData(paginationData.page, search);
-    setDrivers(drivers.data);
-    setPaginationData({
-      page: drivers.page,
-      per_page: drivers.per_page,
-      total: drivers.total,
-      total_pages: drivers.total_pages,
-    });
-  };
+  // const getDrivers = async () => {
+  //   const drivers = await getDriversData(search, paginationData.page);
+  //   setDrivers(drivers.data);
+  //   setPaginationData({
+  //     page: drivers.page,
+  //     per_page: drivers.per_page,
+  //     total: drivers.total,
+  //     total_pages: drivers.total_pages,
+  //   });
+  // };
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (search) {
@@ -53,7 +53,7 @@ const Page = () => {
   }, [search]);
   useEffect(() => {
     getDrivers();
-  }, [debouncedSearch, paginationData.page]);
+  }, [debouncedSearch, pagination?.page]);
 
   return (
     <SidebarInset>
@@ -65,8 +65,8 @@ const Page = () => {
             columns={columns}
             data={drivers}
             loading={drivers === null}
-            paginationData={paginationData}
-            setPaginationData={setPaginationData}
+            paginationData={pagination}
+            setPaginationData={setPagination}
             search={search}
             setSearch={setSearch}
           />
