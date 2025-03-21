@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,21 +15,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useDriverStore } from "@/lib/store/useDriverStore";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type GenericObject = { [key: string]: string };
 interface Props<TData> {
   table: Table<TData>;
-  search: string;
-  setSearch: (data: string) => void;
-  timeFilter: boolean;
-  setTimeFilter: (data: boolean) => void;
 }
 const Controls = <TData,>({
   table,
-  search,
-  setSearch,
-  timeFilter,
-  setTimeFilter,
 }: Props<TData>) => {
   const headers: GenericObject = {
     employeeNumber: "No. Gafete",
@@ -39,6 +33,23 @@ const Controls = <TData,>({
     schedule: "Horario",
     actions: "Acciones",
   };
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { search, setSearch, filter, setFilter } = useDriverStore();
+
+  useEffect(() => {
+    setSearch(searchParams.get("search") || "");
+  }, []);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (search) {
+      params.set("search", search);
+    } else {
+      params.delete("search");
+    }
+    router.push(`?${params.toString()}`, { scroll: false });
+  }, [search]);
+
   return (
     <div className="flex justify-between">
       <div className="relative flex items-center">
@@ -91,8 +102,8 @@ const Controls = <TData,>({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="checkInFirst"
-                  checked={timeFilter}
-                  onCheckedChange={setTimeFilter}
+                  checked={filter}
+                  onCheckedChange={setFilter}
                 />
                 <label
                   htmlFor="checkInFirst"

@@ -20,34 +20,25 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PaginationType } from "@/types/paginationType";
 import { TableSkeleton } from "@/components/drivers/table-skeleton";
 import { Controls } from "@/components/drivers/controls";
 import { Separator } from "@/components/ui/separator";
 import { Filters } from "@/components/drivers/filters";
+import { useDriverStore } from "@/lib/store/useDriverStore";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | null;
   loading: boolean;
-  pagination: PaginationType | null;
-  setPagination: (data: PaginationType) => void;
-  search: string;
-  setSearch: (data: string) => void;
 }
-
 export function DataTable<TData, TValue>({
   columns,
   data,
   loading,
-  pagination,
-  setPagination,
-  search,
-  setSearch,
 }: DataTableProps<TData, TValue>) {
+  const { pagination, setPagination } = useDriverStore();
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [timeFilter, setTimeFilter] = useState(false);
 
   const table = useReactTable({
     data: data || [],
@@ -67,13 +58,9 @@ export function DataTable<TData, TValue>({
     <div>
       <Controls
         table={table}
-        search={search}
-        setSearch={setSearch}
-        timeFilter={timeFilter}
-        setTimeFilter={setTimeFilter}
       />
       <Separator className="mt-4" />
-      <Filters timeFilter={timeFilter} setTimeFilter={setTimeFilter} />
+      <Filters />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -133,41 +120,36 @@ export function DataTable<TData, TValue>({
         </div>
         <div className="">
           <p className="text-sm text-muted-foreground">
-            total de pilotos {pagination?.total}
+            total de pilotos {pagination.total}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            // onClick={() =>
-            //   setPagination({
-            //     ...pagination,
-            //     page: Math.max(pagination?.page - 1, 1) || 1,
-            //   })
-            // }
-            disabled={pagination?.page == 1}
+            onClick={() =>
+              setPagination({
+                ...pagination,
+                page: Math.max(pagination.page - 1, 1) || 1,
+              })
+            }
+            disabled={pagination.page == 1}
           >
             Anterior
           </Button>
           <p className="text-sm text-muted-foreground">
-            {pagination?.page} de {pagination?.total_pages}
+            {pagination.page} de {pagination.total_pages}
           </p>
           <Button
             variant="outline"
             size="sm"
-            // onClick={() =>
-            //   setPagination({
-            //     ...pagination,
-            //     page: Math.min(
-            //       pagination.page + 1,
-            //       pagination.total_pages
-            //     ),
-            //   })
-            // }
-            disabled={
-              data == null || pagination?.page == pagination?.total_pages
+            onClick={() =>
+              setPagination({
+                ...pagination,
+                page: Math.min(pagination.page + 1, pagination.total_pages),
+              })
             }
+            disabled={data == null || pagination.page == pagination.total_pages}
           >
             Siguiente
           </Button>

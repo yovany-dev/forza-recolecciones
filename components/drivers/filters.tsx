@@ -1,10 +1,10 @@
 "use client";
 
+import { X } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronDown } from "lucide-react";
-import { X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,17 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
+import { useDriverStore } from "@/lib/store/useDriverStore";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
-interface Props {
-  timeFilter: boolean;
-  setTimeFilter: (data: boolean) => void;
-}
-const Filters: React.FC<Props> = ({ timeFilter, setTimeFilter }) => {
+const Filters = () => {
+  const { filter, setFilter } = useDriverStore();
   const [firstSchedule, setFirstSchedule] = useState<Checked>(false);
   const [secondSchedule, setSecondSchedule] = useState<Checked>(false);
 
-  return timeFilter ? (
+  return filter ? (
     <div className="w-full flex justify-between my-2">
       <div className="relative flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md">
         <DropdownMenu>
@@ -69,7 +67,7 @@ const Filters: React.FC<Props> = ({ timeFilter, setTimeFilter }) => {
           variant="ghost"
           size="sm"
           className="absolute right-0 hover:bg-transparent"
-          onClick={() => setTimeFilter(false)}
+          onClick={() => setFilter(false)}
         >
           <X />
         </Button>
@@ -78,7 +76,7 @@ const Filters: React.FC<Props> = ({ timeFilter, setTimeFilter }) => {
         variant="outline"
         size="sm"
         className="bg-[#0c0a09]"
-        onClick={() => setTimeFilter(false)}
+        onClick={() => setFilter(false)}
       >
         <span>Limpiar Todo</span>
         <X />

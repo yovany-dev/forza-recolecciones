@@ -1,16 +1,18 @@
 import { create } from 'zustand';
 import { driverSchemaType } from '@/lib/zod/driver';
-import { getDriversData } from '../get-drivers';
 import { PaginationType } from '@/types/paginationType';
+import { getDriversData } from '../get-drivers';
 
 interface DriverStore {
   drivers: driverSchemaType[] | null;
   search: string;
-  pagination: PaginationType | null;
+  pagination: PaginationType;
+  filter: boolean;
   setDrivers: (data: driverSchemaType[]) => void;
   setSearch: (data: string) => void;
   setPagination: (data: PaginationType) => void;
-  getDrivers: () => void,
+  setFilter: (state: boolean) => void;
+  getDrivers: () => void;
   updateDriver: (
     uuid: string | undefined,
     updatedData: Partial<driverSchemaType>
@@ -21,15 +23,23 @@ interface DriverStore {
 export const useDriverStore = create<DriverStore>((set) => ({
   drivers: null,
   search: '',
-  pagination: null,
+  pagination: {
+    page: 1,
+    per_page: 0,
+    total: 0,
+    total_pages: 0,
+  },
+  filter: false,
 
   setDrivers: (data) => set({ drivers: data }),
   setSearch: (newSearch) => set({ search: newSearch }),
   setPagination: (newPagination) => set({ pagination: newPagination }),
+  setFilter: (newState) => set({ filter: newState }),
 
   getDrivers: async () => {
-    const { search, setDrivers, setPagination } = useDriverStore.getState();
-    const res = await getDriversData(search, 1);
+    const { search, pagination, setDrivers, setPagination } =
+      useDriverStore.getState();
+    const res = await getDriversData(search, pagination.page);
     setDrivers(res.data);
     setPagination({
       page: res.page,
