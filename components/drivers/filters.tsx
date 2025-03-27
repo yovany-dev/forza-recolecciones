@@ -16,7 +16,7 @@ import { useDriverStore } from "@/lib/store/useDriverStore";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 const Filters = () => {
-  const { filter, setFilter } = useDriverStore();
+  const { filter, setFilter, filterTime, setFilterTime } = useDriverStore();
   const [firstSchedule, setFirstSchedule] = useState<Checked>(false);
   const [secondSchedule, setSecondSchedule] = useState<Checked>(false);
 
@@ -35,8 +35,8 @@ const Filters = () => {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="firstSchedule"
-                  checked={firstSchedule}
-                  onCheckedChange={setFirstSchedule}
+                  checked={filterTime}
+                  onCheckedChange={setFilterTime}
                 />
                 <label
                   htmlFor="firstSchedule"

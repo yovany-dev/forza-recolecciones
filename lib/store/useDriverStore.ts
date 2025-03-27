@@ -1,17 +1,21 @@
 import { create } from 'zustand';
 import { driverSchemaType } from '@/lib/zod/driver';
-import { PaginationType } from '@/types/paginationType';
+import { PaginationType, FilterTime } from '@/types/driverType';
 import { getDriversData } from '../get-drivers';
+import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
 
+type Checked = DropdownMenuCheckboxItemProps['checked'];
 interface DriverStore {
   drivers: driverSchemaType[] | null;
   search: string;
   pagination: PaginationType;
   filter: boolean;
+  filterTime: boolean;
   setDrivers: (data: driverSchemaType[]) => void;
   setSearch: (data: string) => void;
   setPagination: (data: PaginationType) => void;
   setFilter: (state: boolean) => void;
+  setFilterTime: (checkedState: Checked) => void;
   getDrivers: () => void;
   updateDriver: (
     uuid: string | undefined,
@@ -30,11 +34,14 @@ export const useDriverStore = create<DriverStore>((set) => ({
     total_pages: 0,
   },
   filter: false,
+  filterTime: false,
 
   setDrivers: (data) => set({ drivers: data }),
   setSearch: (newSearch) => set({ search: newSearch }),
   setPagination: (newPagination) => set({ pagination: newPagination }),
   setFilter: (newState) => set({ filter: newState }),
+  setFilterTime: (newCheckedState) =>
+    set({ filterTime: newCheckedState ? true : false }),
 
   getDrivers: async () => {
     const { search, pagination, setDrivers, setPagination } =
