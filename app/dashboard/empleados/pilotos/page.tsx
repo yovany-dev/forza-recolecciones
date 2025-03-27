@@ -15,12 +15,13 @@ const Page = () => {
     { name: "dashboard", url: "/dashboard" },
     { name: "empleados", url: "/dashboard/empleados" },
   ];
-  const { drivers, search, pagination, getDrivers } = useDriverStore();
+  const { drivers, search, pagination, getDrivers, filterTime } = useDriverStore();
   const [debouncedSearch] = useDebounce(search, 500);
 
   useEffect(() => {
     getDrivers();
-  }, [debouncedSearch, pagination.page]);
+    console.log(filterTime.value)
+  }, [debouncedSearch, pagination.page, filterTime.value]);
 
   return (
     <SidebarInset>

@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronDown } from "lucide-react";
@@ -13,12 +13,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { useDriverStore } from "@/lib/store/useDriverStore";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 const Filters = () => {
   const { filter, setFilter, filterTime, setFilterTime } = useDriverStore();
   const [firstSchedule, setFirstSchedule] = useState<Checked>(false);
   const [secondSchedule, setSecondSchedule] = useState<Checked>(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // setSearch(searchParams.get("search") || "");
+    setFilterTime(filterTime.cheked, searchParams.get("fr_horario") || "");
+  }, []);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (filterTime.value) {
+      params.set("fr_horario", filterTime.value);
+    } else {
+      params.delete("fr_horario");
+    }
+    router.push(`?${params.toString()}`, { scroll: false });
+  }, [filterTime.value]);
 
   return filter ? (
     <div className="w-full flex justify-between my-2">
@@ -35,8 +53,8 @@ const Filters = () => {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="firstSchedule"
-                  checked={filterTime}
-                  onCheckedChange={setFilterTime}
+                  checked={filterTime.cheked}
+                  onClick={() => setFilterTime(!filterTime.cheked, "07:30")}
                 />
                 <label
                   htmlFor="firstSchedule"

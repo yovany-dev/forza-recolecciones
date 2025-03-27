@@ -100,11 +100,22 @@ export async function GET(req: Request) {
             mode: 'insensitive' as 'insensitive',
           },
         },
+        {
+          schedule: {
+            contains: filter as string,
+          },
+        },
       ],
     };
 
+    console.log(filter);
     const drivers = await prisma.drivers.findMany({
-      where: search ? where : {},
+      // where: search || filter ? where : {},
+      where: {
+        fullname: {
+          contains: filter as string
+        }
+      },
       skip: (page - 1) * perPage,
       take: currentPageSize,
       orderBy: { createdAt: 'desc' },
