@@ -58,7 +58,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get('page') || '1', 10);
   const search = searchParams.get('search');
-  const filter = searchParams.get('fr_horario');
+  const filter = searchParams.get('fr_horario')?.split(',') || [];
   const perPage = 10;
 
   if (!session || !session.user) {
@@ -100,22 +100,12 @@ export async function GET(req: Request) {
             mode: 'insensitive' as 'insensitive',
           },
         },
-        {
-          schedule: {
-            contains: filter as string,
-          },
-        },
       ],
     };
 
     console.log(filter);
     const drivers = await prisma.drivers.findMany({
-      // where: search || filter ? where : {},
-      where: {
-        fullname: {
-          contains: filter as string
-        }
-      },
+      where: search ? where : {},
       skip: (page - 1) * perPage,
       take: currentPageSize,
       orderBy: { createdAt: 'desc' },

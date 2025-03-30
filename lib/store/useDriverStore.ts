@@ -4,22 +4,19 @@ import { PaginationType } from '@/types/driverType';
 import { getDriversData } from '../get-drivers';
 import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
 
-type Checked = DropdownMenuCheckboxItemProps['checked'];
-type FilterTime = {
-  cheked: boolean;
-  value: string;
-};
 interface DriverStore {
   drivers: driverSchemaType[] | null;
   search: string;
   pagination: PaginationType;
+  availableTimes: string[];
   filter: boolean;
-  filterTime: FilterTime;
+  selectedTimes: string[];
   setDrivers: (data: driverSchemaType[]) => void;
   setSearch: (data: string) => void;
   setPagination: (data: PaginationType) => void;
   setFilter: (state: boolean) => void;
-  setFilterTime: (checkedState: Checked, value: string) => void;
+  setSelectedTimes: (hour: string) => void;
+  initialSchedules: (values: string[]) => void;
   getDrivers: () => void;
   updateDriver: (
     uuid: string | undefined,
@@ -37,23 +34,21 @@ export const useDriverStore = create<DriverStore>((set) => ({
     total: 0,
     total_pages: 0,
   },
+  availableTimes: ['07:30', '08:30'],
   filter: false,
-  filterTime: {
-    cheked: false,
-    value: '',
-  },
+  selectedTimes: [],
 
   setDrivers: (data) => set({ drivers: data }),
   setSearch: (newSearch) => set({ search: newSearch }),
   setPagination: (newPagination) => set({ pagination: newPagination }),
   setFilter: (newState) => set({ filter: newState }),
-  setFilterTime: (newCheckedState, newValue) =>
-    set({
-      filterTime: {
-        cheked: newCheckedState ? true : false,
-        value: newValue,
-      },
-    }),
+  setSelectedTimes: (newHour) =>
+    set((state) => ({
+      selectedTimes: state.selectedTimes.includes(newHour)
+        ? state.selectedTimes.filter((h) => h !== newHour)
+        : [...state.selectedTimes, newHour],
+    })),
+  initialSchedules: (newValues) => set({ selectedTimes: newValues }),
 
   getDrivers: async () => {
     const { search, pagination, setDrivers, setPagination } =
