@@ -58,7 +58,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get('page') || '1', 10);
   const search = searchParams.get('search');
-  const filter = searchParams.get('fr_horario')?.split(',') || [];
+  const filterSchedule = searchParams.get('fr_horario')?.split(',') || [];
   const perPage = 10;
 
   if (!session || !session.user) {
@@ -80,32 +80,47 @@ export async function GET(req: Request) {
     const totalPages = Math.ceil(totalDrivers / perPage);
     const remainingItems = totalDrivers - (page - 1) * perPage;
     const currentPageSize = Math.min(perPage, remainingItems);
+    const availableTimes = ['07:30', '08:30'];
+    const selectedTimes = availableTimes.some((hour) =>
+      filterSchedule.includes(hour)
+    );
     const where = {
-      OR: [
-        {
-          employeeNumber: {
-            contains: search as string,
-            mode: 'insensitive' as 'insensitive',
-          },
-        },
-        {
-          fullname: {
-            contains: search as string,
-            mode: 'insensitive' as 'insensitive',
-          },
-        },
-        {
-          dpi: {
-            contains: search as string,
-            mode: 'insensitive' as 'insensitive',
-          },
-        },
+      AND: [
+        search
+          ? {
+              OR: [
+                {
+                  employeeNumber: {
+                    contains: search as string,
+                    mode: 'insensitive' as 'insensitive',
+                  },
+                },
+                {
+                  fullname: {
+                    contains: search as string,
+                    mode: 'insensitive' as 'insensitive',
+                  },
+                },
+                {
+                  dpi: {
+                    contains: search as string,
+                    mode: 'insensitive' as 'insensitive',
+                  },
+                },
+              ],
+            }
+          : {},
+        selectedTimes
+          ? {
+              schedule: {
+                in: filterSchedule,
+              },
+            }
+          : {},
       ],
     };
-
-    console.log(filter);
     const drivers = await prisma.drivers.findMany({
-      where: search ? where : {},
+      where,
       skip: (page - 1) * perPage,
       take: currentPageSize,
       orderBy: { createdAt: 'desc' },

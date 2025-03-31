@@ -22,9 +22,7 @@ type GenericObject = { [key: string]: string };
 interface Props<TData> {
   table: Table<TData>;
 }
-const Controls = <TData,>({
-  table,
-}: Props<TData>) => {
+const Controls = <TData,>({ table }: Props<TData>) => {
   const headers: GenericObject = {
     employeeNumber: "No. Gafete",
     fullname: "Nombre Completo",
@@ -35,7 +33,8 @@ const Controls = <TData,>({
   };
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { search, setSearch, filter, setFilter } = useDriverStore();
+  const { search, setSearch, filter, setFilter, initialSchedules } =
+    useDriverStore();
 
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
@@ -103,7 +102,10 @@ const Controls = <TData,>({
                 <Checkbox
                   id="checkInFirst"
                   checked={filter}
-                  onCheckedChange={setFilter}
+                  onClick={() => {
+                    setFilter(!filter);
+                    initialSchedules([]);
+                  }}
                 />
                 <label
                   htmlFor="checkInFirst"

@@ -22,21 +22,22 @@ const Filters = () => {
     selectedTimes,
     setSelectedTimes,
     initialSchedules,
+    clearFilterTime,
   } = useDriverStore();
 
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const schedulesParams = searchParams.get("f_horario")?.split(",") || [];
+    const schedulesParams = searchParams.get("fr_horario")?.split(",") || [];
     initialSchedules(schedulesParams);
   }, []);
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
     if (selectedTimes.length > 0) {
-      params.set("f_horario", selectedTimes.join(","));
+      params.set("fr_horario", selectedTimes.join(","));
     } else {
-      params.delete("f_horario");
+      params.delete("fr_horario");
     }
     router.push(`?${params.toString()}`, { scroll: false });
   }, [selectedTimes]);
@@ -75,7 +76,9 @@ const Filters = () => {
           variant="ghost"
           size="sm"
           className="absolute right-0 hover:bg-transparent"
-          onClick={() => setFilter(false)}
+          onClick={() => {
+            clearFilterTime();
+          }}
         >
           <X />
         </Button>
@@ -83,8 +86,9 @@ const Filters = () => {
       <Button
         variant="outline"
         size="sm"
-        className="bg-[#0c0a09]"
-        onClick={() => setFilter(false)}
+        onClick={() => {
+          clearFilterTime();
+        }}
       >
         <span>Limpiar Todo</span>
         <X />

@@ -15,14 +15,13 @@ const Page = () => {
     { name: "dashboard", url: "/dashboard" },
     { name: "empleados", url: "/dashboard/empleados" },
   ];
-  const { drivers, search, pagination, getDrivers } = useDriverStore();
+  const { drivers, search, pagination, getDrivers, selectedTimes } =
+    useDriverStore();
   const [debouncedSearch] = useDebounce(search, 500);
 
   useEffect(() => {
     getDrivers();
-    console.log('Get Drivers')
-  }, [debouncedSearch, pagination.page]);
-  console.log('Se llamno a page pilotos');
+  }, [debouncedSearch, pagination.page, selectedTimes]);
 
   return (
     <SidebarInset>

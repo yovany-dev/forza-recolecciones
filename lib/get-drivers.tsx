@@ -7,9 +7,10 @@ interface DriversResponse extends PaginationType {
 
 export async function getDriversData(
   search: string,
-  page: number
+  page: number,
+  schedules: string,
 ): Promise<DriversResponse> {
-  const res = await fetch(`/api/driver?page=${page}&search=${search}`);
+  const res = await fetch(`/api/driver?page=${page}&search=${search}&fr_horario=${schedules}`);
   const drivers = await res.json();
 
   return drivers;
