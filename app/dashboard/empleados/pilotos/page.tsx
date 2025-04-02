@@ -15,11 +15,19 @@ const Page = () => {
     { name: "dashboard", url: "/dashboard" },
     { name: "empleados", url: "/dashboard/empleados" },
   ];
-  const { drivers, search, pagination, getDrivers, selectedTimes } =
-    useDriverStore();
+  const {
+    drivers,
+    loading,
+    search,
+    pagination,
+    getDrivers,
+    setLoading,
+    selectedTimes,
+  } = useDriverStore();
   const [debouncedSearch] = useDebounce(search, 500);
 
   useEffect(() => {
+    setLoading(true);
     getDrivers();
   }, [debouncedSearch, pagination.page, selectedTimes]);
 
@@ -29,11 +37,7 @@ const Page = () => {
       <main className="n-content p-5">
         <Header />
         <div className="n-body mt-5">
-          <DataTable
-            columns={columns}
-            data={drivers}
-            loading={drivers === null}
-          />
+          <DataTable columns={columns} data={drivers} loading={loading} />
         </div>
       </main>
     </SidebarInset>

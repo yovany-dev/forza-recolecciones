@@ -4,13 +4,15 @@ import { PaginationType } from '@/types/driverType';
 import { getDriversData } from '../get-drivers';
 
 interface DriverStore {
-  drivers: driverSchemaType[] | null;
+  drivers: driverSchemaType[] | [];
+  loading: boolean;
   search: string;
   pagination: PaginationType;
   availableTimes: string[];
   filter: boolean;
   selectedTimes: string[];
   setDrivers: (data: driverSchemaType[]) => void;
+  setLoading: (state: boolean) => void;
   setSearch: (data: string) => void;
   setPagination: (data: PaginationType) => void;
   setFilter: (state: boolean) => void;
@@ -26,7 +28,8 @@ interface DriverStore {
 }
 
 export const useDriverStore = create<DriverStore>((set) => ({
-  drivers: null,
+  drivers: [],
+  loading: false,
   search: '',
   pagination: {
     page: 1,
@@ -39,6 +42,7 @@ export const useDriverStore = create<DriverStore>((set) => ({
   selectedTimes: [],
 
   setDrivers: (data) => set({ drivers: data }),
+  setLoading: (newState) => set({ loading: newState }),
   setSearch: (newSearch) => set({ search: newSearch }),
   setPagination: (newPagination) => set({ pagination: newPagination }),
   setFilter: (newState) => set({ filter: newState }),
@@ -53,8 +57,14 @@ export const useDriverStore = create<DriverStore>((set) => ({
   clearFilterTime: () => set({ filter: false, selectedTimes: [] }),
 
   getDrivers: async () => {
-    const { search, pagination, setDrivers, setPagination, selectedTimes } =
-      useDriverStore.getState();
+    const {
+      search,
+      pagination,
+      setDrivers,
+      setLoading,
+      setPagination,
+      selectedTimes,
+    } = useDriverStore.getState();
     const res = await getDriversData(
       search,
       pagination.page,
@@ -67,6 +77,7 @@ export const useDriverStore = create<DriverStore>((set) => ({
       total: res.total,
       total_pages: res.total_pages,
     });
+    setLoading(false);
   },
   updateDriver: (uuid, updatedData) =>
     set((state) => ({

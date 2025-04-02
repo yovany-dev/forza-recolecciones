@@ -28,7 +28,7 @@ import { useDriverStore } from "@/lib/store/useDriverStore";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[] | null;
+  data: TData[] | [];
   loading: boolean;
 }
 export function DataTable<TData, TValue>({
@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {loading ? (
               <TableSkeleton />
-            ) : data && data.length > 0 ? (
+            ) : data.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
