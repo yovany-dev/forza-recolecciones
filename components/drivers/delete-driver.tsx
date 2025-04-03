@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,11 +8,14 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { deleteDriverAPI } from "@/lib/delete-driver";
-import { successfulNotification } from "../notifications";
+import {
+  LoadingNotification,
+  successfulNotification,
+} from "@/components/notifications";
 import { useDriverStore } from "@/lib/store/useDriverStore";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   uuid: string | undefined;
@@ -21,6 +24,7 @@ interface Props {
 }
 const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
   const { removeDriver } = useDriverStore();
+  const [loading, setLoading] = useState(false);
   const deleteDriver = async (uuid: string | undefined) => {
     const driverRemoved = await deleteDriverAPI(uuid);
     if (driverRemoved.status === 200) {
@@ -29,7 +33,10 @@ const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
     } else {
       successfulNotification(driverRemoved.error);
     }
+    setLoading(false);
+    setIsOpen(false);
   };
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -41,14 +48,20 @@ const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
             Esta acción no se puede deshacer. Eliminará permanentemente al
             piloto de la base de datos.
           </AlertDialogDescription>
+          <div className="h-6">{loading && <LoadingNotification />}</div>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
             Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteDriver(uuid)}>
+          <Button
+            onClick={() => {
+              setLoading(true);
+              deleteDriver(uuid);
+            }}
+          >
             Continuar
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
