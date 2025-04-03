@@ -41,7 +41,7 @@ const data = {
     },
     {
       name: "Reporte",
-      url: "#",
+      url: "/dashboard/reporte",
       icon: Grid2x2Plus,
     },
     {
