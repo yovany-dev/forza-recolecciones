@@ -77,7 +77,6 @@ export async function GET(req: Request) {
   }
   try {
     const totalDrivers = await prisma.drivers.count();
-    const totalPages = Math.ceil(totalDrivers / perPage);
     const remainingItems = totalDrivers - (page - 1) * perPage;
     const currentPageSize = Math.min(perPage, remainingItems);
     const availableTimes = ['07:30', '08:30'];
@@ -125,6 +124,10 @@ export async function GET(req: Request) {
       take: currentPageSize,
       orderBy: { createdAt: 'desc' },
     });
+    const totalDriversWhere = await prisma.drivers.findMany({
+      where,
+    });
+    const totalPages = Math.ceil(totalDriversWhere.length / perPage);
 
     if (remainingItems <= 0) {
       return Response.json({ error: 'Página fuera de rango.', status: 404 });
