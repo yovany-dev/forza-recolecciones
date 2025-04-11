@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {loading ? (
               <TableSkeleton />
-            ) : data.length > 0 ? (
+            ) : data && data.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
