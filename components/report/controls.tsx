@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Columns3 } from "lucide-react";
 import { ListFilter } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
+import { ComboboxDemo } from "@/components/report/combobox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -165,12 +166,13 @@ const Controls = <TData,>({ table }: Props<TData>) => {
             </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button size="sm" asChild>
+        <ComboboxDemo />
+        {/* <Button size="sm" asChild>
           <Link href="/dashboard/empleados/nuevo?defaultValue=piloto">
-            {/* <UserRoundPlus /> */}
+            <UserRoundPlus />
             <span>Nuevo Reporte</span>
           </Link>
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
