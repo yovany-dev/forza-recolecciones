@@ -1,7 +1,7 @@
 import { Links } from "@/types/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
-import { Header } from "@/components/report/header";
+import { Header } from "@/components/common/header/header";
 import { DataTable } from "@/app/dashboard/reporte/data-table";
 import { columns } from "@/app/dashboard/reporte/columns";
 
@@ -38,7 +38,11 @@ const Page = () => {
     <SidebarInset>
       <SidebarInsetHead links={dataLink} title="reporte" />
       <main className="n-content p-5">
-        <Header />
+        <Header
+          title="Reporte"
+          description="Obten un reporte detallado de los horarios de ingreso de pilotos y
+        auxiliares."
+        />
         <div className="n-body mt-5">
           <DataTable columns={columns} data={dataReports} loading={false} />
         </div>
