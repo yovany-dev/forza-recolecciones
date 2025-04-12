@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,10 +11,10 @@ model Users {
   id        Int       @id @default(autoincrement())
   name      String
   email     String    @unique
-  avatar    String
   password  String
   role      String
   createdAt DateTime  @default(now())
+  avatar    String
   drivers   Drivers[]
 }
 
@@ -32,6 +26,6 @@ model Drivers {
   schedule       String
   position       String
   createdAt      DateTime @default(now())
-  user           Users    @relation(fields: [userId], references: [id])
   userId         Int
+  user           Users    @relation(fields: [userId], references: [id])
 }
