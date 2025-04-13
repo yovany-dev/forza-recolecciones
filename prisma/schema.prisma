@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,11 +17,12 @@ model Users {
   id        Int       @id @default(autoincrement())
   name      String
   email     String    @unique
+  avatar    String
   password  String
   role      String
   createdAt DateTime  @default(now())
-  avatar    String
   drivers   Drivers[]
+  report    Report[]
 }
 
 model Drivers {
@@ -26,6 +33,40 @@ model Drivers {
   schedule       String
   position       String
   createdAt      DateTime @default(now())
-  userId         Int
   user           Users    @relation(fields: [userId], references: [id])
+  userId         Int
+}
+
+model Report {
+  uuid           String   @id @default(uuid())
+  employeeNumber String   @unique @db.VarChar(6)
+  fullname       String
+  dpi            String   @unique @db.VarChar(13)
+  schedule       String
+  position       String
+  createdAt      DateTime @default(now())
+  user           Users    @relation(fields: [userId], references: [id])
+  userId         Int
+  checkIn        String
+  location       Location @default(NO_DETECTADA)
+  photo          Photo    @default(NO_CARGADA)
+  state          State    @default(PENDIENTE)
+
+  @@map("reports")
+}
+
+enum Location {
+  DETECTADA
+  NO_DETECTADA @map("NO DETECTADA")
+}
+
+enum Photo {
+  CARGADA
+  NO_CARGADA @map("NO CARGADA")
+}
+
+enum State {
+  INGRESADO
+  PENDIENTE
+  INGRESO_TARDE @map("INGRESO TARDE")
 }
