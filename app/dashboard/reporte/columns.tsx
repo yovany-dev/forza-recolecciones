@@ -118,6 +118,10 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         true: "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
         false: "border-[#f21600] bg-[#f216001e] text-[#f21600]",
       };
+      const states: Record<string, string> = {
+        DETECTADA: "DETECTADA",
+        NO_DETECTADA: "NO DETECTADA",
+      };
       return (
         <Badge
           variant="outline"
@@ -125,7 +129,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
             location == "DETECTADA" ? badgeTheme.true : badgeTheme.false
           )}
         >
-          {location}
+          {states[location]}
         </Badge>
       );
     },
@@ -139,6 +143,10 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         true: "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
         false: "border-[#f21600] bg-[#f216001e] text-[#f21600]",
       };
+      const states: Record<string, string> = {
+        CARGADA: "CARGADA",
+        NO_CARGADA: "NO CARGADA",
+      };
       return (
         <Badge
           variant="outline"
@@ -146,7 +154,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
             photo == "CARGADA" ? badgeTheme.true : badgeTheme.false
           )}
         >
-          {photo}
+          {states[photo]}
         </Badge>
       );
     },
@@ -157,11 +165,16 @@ export const columns: ColumnDef<reportSchemaType>[] = [
     cell: ({ row }) => {
       const state = row.original.state;
       const badgeTheme: Record<string, string> = {
-        "INGRESADO": "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
-        'PENDIENTE': "border-[#ffc000] bg-[#ffc0001e] text-[#ffc000]",
-        "INGRESO TARDE": "border-[#f21600] bg-[#f216001e] text-[#f21600]",
+        INGRESADO: "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
+        PENDIENTE: "border-[#ffc000] bg-[#ffc0001e] text-[#ffc000]",
+        INGRESO_TARDE: "border-[#f21600] bg-[#f216001e] text-[#f21600]",
       };
-      return <Badge className={badgeTheme[state]}>{state}</Badge>;
+      const states: Record<string, string> = {
+        INGRESADO: "INGRESADO",
+        PENDIENTE: "PENDIENTE",
+        INGRESO_TARDE: "INGRESO TARDE",
+      };
+      return <Badge className={badgeTheme[state]}>{states[state]}</Badge>;
     },
   },
   {

@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import { Links } from "@/types/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
@@ -9,30 +12,33 @@ import { reportSchemaType } from "@/lib/zod/report";
 
 const Page = () => {
   const dataLink: Links[] = [{ name: "dashboard", url: "/dashboard" }];
-  const dataReports: reportSchemaType[] = [
-    {
-      employeeNumber: "111654",
-      fullname: "Denilson Yovani Morales Chivalan",
-      dpi: "3270080241402",
-      position: "Auxiliar Recolector",
-      schedule: "07:30",
-      checkIn: "07:10",
-      location: "DETECTADA", // No Detectada
-      photo: "CARGADA", // No Cargada
-      state: "INGRESADO", // Pendiente, Llego tarde
-    },
-    {
-      employeeNumber: "574632",
-      fullname: "Juan Carlos Mateo",
-      dpi: "3270080241402",
-      position: "Piloto Recolector",
-      schedule: "08:30",
-      checkIn: "08:20",
-      location: "NO DETECTADA",
-      photo: "NO CARGADA",
-      state: "PENDIENTE",
-    },
-  ];
+  const dataReports: reportSchemaType[] = [];
+  // const data: reportSchemaType = {
+  //   employeeNumber: "111654",
+  //   fullname: "Denilson Yovani Morales Chivalan",
+  //   dpi: "3270080241402",
+  //   position: "Auxiliar Recolector",
+  //   schedule: "07:30",
+  //   checkIn: "07:10",
+  //   location: "NO_DETECTADA",
+  //   photo: "CARGADA",
+  //   state: "INGRESADO",
+  // };
+  // const addReport = async () => {
+  //   const res = await fetch("/api/report", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(data),
+  //   });
+  //   const report = await res.json();
+  //   console.log(report);
+  // };
+  // useEffect(() => {
+  //   addReport();
+  // }, []);
 
   return (
     <SidebarInset>
