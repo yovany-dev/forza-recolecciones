@@ -122,7 +122,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         <Badge
           variant="outline"
           className={cn(
-            location == "Detectada" ? badgeTheme.true : badgeTheme.false
+            location == "DETECTADA" ? badgeTheme.true : badgeTheme.false
           )}
         >
           {location}
@@ -143,7 +143,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         <Badge
           variant="outline"
           className={cn(
-            photo == "Cargada" ? badgeTheme.true : badgeTheme.false
+            photo == "CARGADA" ? badgeTheme.true : badgeTheme.false
           )}
         >
           {photo}
@@ -157,9 +157,9 @@ export const columns: ColumnDef<reportSchemaType>[] = [
     cell: ({ row }) => {
       const state = row.original.state;
       const badgeTheme: Record<string, string> = {
-        Ingreso: "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
-        Pendiente: "border-[#ffc000] bg-[#ffc0001e] text-[#ffc000]",
-        "Llego tarde": "border-[#f21600] bg-[#f216001e] text-[#f21600]",
+        "INGRESADO": "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
+        'PENDIENTE': "border-[#ffc000] bg-[#ffc0001e] text-[#ffc000]",
+        "INGRESO TARDE": "border-[#f21600] bg-[#f216001e] text-[#f21600]",
       };
       return <Badge className={badgeTheme[state]}>{state}</Badge>;
     },

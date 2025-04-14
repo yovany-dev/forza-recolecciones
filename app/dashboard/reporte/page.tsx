@@ -17,9 +17,9 @@ const Page = () => {
       position: "Auxiliar Recolector",
       schedule: "07:30",
       checkIn: "07:10",
-      location: "Detectada", // No Detectada
-      photo: "Cargada", // No Cargada
-      state: "Ingreso", // Pendiente, Llego tarde
+      location: "DETECTADA", // No Detectada
+      photo: "CARGADA", // No Cargada
+      state: "INGRESADO", // Pendiente, Llego tarde
     },
     {
       employeeNumber: "574632",
@@ -28,9 +28,9 @@ const Page = () => {
       position: "Piloto Recolector",
       schedule: "08:30",
       checkIn: "08:20",
-      location: "No Detectada",
-      photo: "No Cargada",
-      state: "Pendiente",
+      location: "NO DETECTADA",
+      photo: "NO CARGADA",
+      state: "PENDIENTE",
     },
   ];
 

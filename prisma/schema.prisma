@@ -56,16 +56,19 @@ model Report {
 }
 
 enum Location {
+  ADMIN
   DETECTADA
   NO_DETECTADA @map("NO DETECTADA")
 }
 
 enum Photo {
+  ADMIN
   CARGADA
   NO_CARGADA @map("NO CARGADA")
 }
 
 enum State {
+  ADMIN
   INGRESADO
   PENDIENTE
   INGRESO_TARDE @map("INGRESO TARDE")
