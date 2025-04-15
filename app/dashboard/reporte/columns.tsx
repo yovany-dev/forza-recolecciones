@@ -127,7 +127,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         <Badge
           variant="outline"
           className={cn(
-            location == "ADMIN" ? badgeTheme.true : badgeTheme.false ||
+            location == "ADMIN" ? badgeTheme.true : badgeTheme.false &&
             location == "DETECTADA" ? badgeTheme.true : badgeTheme.false
           )}
         >
