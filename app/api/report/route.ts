@@ -55,3 +55,18 @@ export async function POST(req: Request) {
     });
   }
 }
+
+export async function GET(req: Request) {
+  const session = await getServerSession(authOptions);
+  const prisma = new PrismaClient();
+
+  if (!session || !session.user) {
+    return Response.json({ error: 'unauthorized', status: 401 });
+  }
+  try {
+    const reports = await prisma.report.findMany();
+    return Response.json({ data: reports, status: 200 });
+  } catch (error) {
+    return Response.json({ error, status: 500 });
+  }
+}

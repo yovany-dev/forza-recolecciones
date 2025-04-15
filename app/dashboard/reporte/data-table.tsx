@@ -18,13 +18,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useDriverStore } from "@/lib/store/useDriverStore";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { TableSkeleton } from "@/components/drivers/table-skeleton";
 import { Controls } from "@/components/report/controls";
 import { Separator } from "@/components/ui/separator";
-import { Filters } from "@/components/drivers/filters";
-import { useDriverStore } from "@/lib/store/useDriverStore";
+import { TableSkeleton } from "@/components/report/table-skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

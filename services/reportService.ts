@@ -1,0 +1,22 @@
+import { reportSchemaType } from '@/lib/zod/report';
+
+export async function createReportService(report: reportSchemaType) {
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+  const res = await fetch(`${BASE_URL}/api/report`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(report),
+  });
+  const data = await res.json();
+  return data;
+}
+
+export async function getReportService() {
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+  const res = await fetch(`${BASE_URL}/api/report`);
+  const data = await res.json();
+  return data;
+}
