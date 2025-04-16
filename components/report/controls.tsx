@@ -1,178 +1,20 @@
-import Link from "next/link";
-import React, { useEffect } from "react";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Columns3 } from "lucide-react";
-import { ListFilter } from "lucide-react";
-import { UserRoundPlus } from "lucide-react";
-import { ComboboxDemo } from "@/components/report/combobox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useDriverStore } from "@/lib/store/useDriverStore";
-import { useRouter, useSearchParams } from "next/navigation";
+import { InputTable } from "@/components/report/inputTable";
+import { ColumnsTable } from "@/components/report/columnsTable";
+import { FiltersTable } from "@/components/report/filtersTable";
+import { ComboboxNewReport } from "@/components/report/comboboxTable";
 
-type GenericObject = { [key: string]: string };
 interface Props<TData> {
   table: Table<TData>;
 }
 const Controls = <TData,>({ table }: Props<TData>) => {
-  const headers: GenericObject = {
-    employeeNumber: "No. Gafete",
-    fullname: "Nombre Completo",
-    dpi: "DPI",
-    position: "Cargo",
-    schedule: "Horario",
-    checkIn: "H. Entrada",
-    location: "Ubicación",
-    photo: "Foto",
-    state: "Estado",
-    actions: "Acciones",
-  };
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const { search, setSearch, filter, setFilter, initialSchedules } =
-  //   useDriverStore();
-
-  // useEffect(() => {
-  //   setSearch(searchParams.get("search") || "");
-  // }, []);
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   if (search) {
-  //     params.set("search", search);
-  //   } else {
-  //     params.delete("search");
-  //   }
-  //   router.push(`?${params.toString()}`, { scroll: false });
-  // }, [search]);
-
   return (
     <div className="flex justify-between">
-      <div className="relative flex items-center">
-        <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
-        <Input
-          type="text"
-          placeholder="Buscar piloto o auxiliar"
-          className="w-64 h-9 pl-8"
-          // value={search}
-          // onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <InputTable />
       <div className="flex gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Columns3 />
-              <span>Columnas</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {headers[column.id]}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <ListFilter />
-              <span>Filtros</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="schedule" />
-                <label
-                  htmlFor="schedule"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Horario
-                </label>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="location" />
-                <label
-                  htmlFor="location"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Ubicación
-                </label>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="photo" />
-                <label
-                  htmlFor="photo"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Foto
-                </label>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="state" />
-                <label
-                  htmlFor="state"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Estado
-                </label>
-              </div>
-            </DropdownMenuItem>
-            {/* <DropdownMenuItem>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="checkInFirst"
-                  checked={filter}
-                  onClick={() => {
-                    setFilter(!filter);
-                    initialSchedules([]);
-                  }}
-                />
-                <label
-                  htmlFor="checkInFirst"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Horario
-                </label>
-              </div>
-            </DropdownMenuItem> */}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <ComboboxDemo />
-        {/* <Button size="sm" asChild>
-          <Link href="/dashboard/empleados/nuevo?defaultValue=piloto">
-            <UserRoundPlus />
-            <span>Nuevo Reporte</span>
-          </Link>
-        </Button> */}
+        <ColumnsTable table={table} />
+        <FiltersTable />
+        <ComboboxNewReport />
       </div>
     </div>
   );

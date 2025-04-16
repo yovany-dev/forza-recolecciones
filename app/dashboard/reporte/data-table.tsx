@@ -18,7 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useDriverStore } from "@/lib/store/useDriverStore";
 import { useState } from "react";
 import { Controls } from "@/components/report/controls";
 import { Separator } from "@/components/ui/separator";
@@ -34,7 +33,6 @@ export function DataTable<TData, TValue>({
   data,
   loading,
 }: DataTableProps<TData, TValue>) {
-  const { pagination, setPagination } = useDriverStore();
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -80,7 +78,7 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {loading ? (
               <TableSkeleton />
-            ) : data.length > 0 ? (
+            ) : data && data.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -114,42 +112,9 @@ export function DataTable<TData, TValue>({
           {table.getFilteredSelectedRowModel().rows.length} de{" "}
           {table.getFilteredRowModel().rows.length} fila(s) seleccionado.
         </div>
-        <div className="">
-          <p className="text-sm text-muted-foreground">
-            total de reportes {pagination.total}
-          </p>
+        <div>
+          <p className="text-sm text-muted-foreground">total de reportes 0</p>
         </div>
-        {/* <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              setPagination({
-                ...pagination,
-                page: Math.max(pagination.page - 1, 1) || 1,
-              })
-            }
-            disabled={pagination.page == 1}
-          >
-            Anterior
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            {pagination.page} de {pagination.total_pages}
-          </p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              setPagination({
-                ...pagination,
-                page: Math.min(pagination.page + 1, pagination.total_pages),
-              })
-            }
-            disabled={data == null || pagination.page == pagination.total_pages}
-          >
-            Siguiente
-          </Button>
-        </div> */}
       </div>
     </div>
   );
