@@ -1,17 +1,17 @@
 import { create } from 'zustand';
-import { driverSchemaType } from '@/lib/zod/driver';
+import { employeeSchemaType } from '@/lib/zod/employee';
 import { PaginationType } from '@/types/driverType';
-import { getDriversData } from '../get-drivers';
+import { getDriverService } from '@/services/driverService';
 
 interface DriverStore {
-  drivers: driverSchemaType[] | [];
+  drivers: employeeSchemaType[] | [];
   loading: boolean;
   search: string;
   pagination: PaginationType;
   availableTimes: string[];
   filter: boolean;
   selectedTimes: string[];
-  setDrivers: (data: driverSchemaType[]) => void;
+  setDrivers: (data: employeeSchemaType[]) => void;
   setLoading: (state: boolean) => void;
   setSearch: (data: string) => void;
   setPagination: (data: PaginationType) => void;
@@ -22,7 +22,7 @@ interface DriverStore {
   getDrivers: () => void;
   updateDriver: (
     uuid: string | undefined,
-    updatedData: Partial<driverSchemaType>
+    updatedData: Partial<employeeSchemaType>
   ) => void;
   removeDriver: (uuid: string | undefined) => void;
 }
@@ -65,7 +65,7 @@ export const useDriverStore = create<DriverStore>((set) => ({
       setPagination,
       selectedTimes,
     } = useDriverStore.getState();
-    const res = await getDriversData(
+    const res = await getDriverService(
       search,
       pagination.page,
       selectedTimes.join(',')

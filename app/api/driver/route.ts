@@ -1,13 +1,13 @@
 import { authOptions } from '../auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { PrismaClient } from '@prisma/client';
-import { driverSchema } from '@/lib/zod/driver';
+import { employeeSchema } from '@/lib/zod/employee';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   const prisma = new PrismaClient();
-  const { success, error, data } = driverSchema.safeParse(body);
+  const { success, error, data } = employeeSchema.safeParse(body);
 
   if (!session || !session.user) {
     return Response.json({ errorMessage: 'unauthorized', status: 401 });
@@ -148,7 +148,7 @@ export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   const prisma = new PrismaClient();
-  const { success, error, data } = driverSchema.safeParse(body);
+  const { success, error, data } = employeeSchema.safeParse(body);
 
   if (!session || !session.user) {
     return Response.json({ error: 'unauthorized', status: 401 });

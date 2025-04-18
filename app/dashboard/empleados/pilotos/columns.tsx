@@ -14,11 +14,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { driverSchemaType } from "@/lib/zod/driver";
+import { employeeSchemaType } from "@/lib/zod/employee";
 import { SheetEditDriver } from "@/components/drivers/edit-driver";
 import { DialogDeleteDriver } from "@/components/drivers/delete-driver";
 
-export const columns: ColumnDef<driverSchemaType>[] = [
+export const columns: ColumnDef<employeeSchemaType>[] = [
   {
     id: "select",
     header: ({ table }) => (

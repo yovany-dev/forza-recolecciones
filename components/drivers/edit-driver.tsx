@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import React, { useState } from "react";
-import { driverSchema, driverSchemaType } from "@/lib/zod/driver";
+import { employeeSchema, employeeSchemaType } from "@/lib/zod/employee";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingNotification } from "@/components/notifications";
@@ -25,7 +25,7 @@ interface errorMessage {
   message: string;
 }
 interface Props {
-  driver: driverSchemaType;
+  driver: employeeSchemaType;
   isOpen: boolean;
   setIsOpen: (data: boolean) => void;
 }
@@ -34,11 +34,11 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
-  } = useForm<driverSchemaType>({ resolver: zodResolver(driverSchema) });
+  } = useForm<employeeSchemaType>({ resolver: zodResolver(employeeSchema) });
   const [errorMessage, setErrorMessage] = useState<null | errorMessage>(null);
   const { updateDriver } = useDriverStore();
 
-  const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
+  const onSubmit: SubmitHandler<employeeSchemaType> = async (data) => {
     setErrorMessage(null);
     const resUpdateDriver = await updateDriverService({
       ...data,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const driverSchema = z.object({
+export const employeeSchema = z.object({
   uuid: z.string().uuid().optional(),
   employeeNumber: z
     .string()
@@ -28,4 +28,4 @@ export const driverSchema = z.object({
   userId: z.number().int().positive().optional(),
 });
 
-export type driverSchemaType = z.infer<typeof driverSchema>;
+export type employeeSchemaType = z.infer<typeof employeeSchema>;

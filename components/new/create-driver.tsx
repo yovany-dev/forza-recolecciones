@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { driverSchema, driverSchemaType } from "@/lib/zod/driver";
+import { employeeSchema, employeeSchemaType } from "@/lib/zod/employee";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingNotification } from "@/components/notifications";
@@ -30,10 +30,10 @@ const CreateDriver = () => {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
-  } = useForm<driverSchemaType>({ resolver: zodResolver(driverSchema) });
+  } = useForm<employeeSchemaType>({ resolver: zodResolver(employeeSchema) });
   const [errorMessage, setErrorMessage] = useState<null | errorMessage>(null);
 
-  const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
+  const onSubmit: SubmitHandler<employeeSchemaType> = async (data) => {
     setErrorMessage(null);
     const driver = await createDriverService(data);
 

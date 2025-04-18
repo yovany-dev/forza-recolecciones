@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { driverSchema } from '@/lib/zod/driver';
+import { employeeSchema } from '@/lib/zod/employee';
 
-export const reportSchema = driverSchema.extend({
+export const reportSchema = employeeSchema.extend({
   checkIn: z
     .string()
     .nonempty({ message: 'La hora de entrada es obligatorio.' }),

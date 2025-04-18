@@ -1,11 +1,11 @@
-import { driverSchemaType } from '@/lib/zod/driver';
+import { employeeSchemaType } from '@/lib/zod/employee';
 import { PaginationType } from '@/types/driverType';
 
 interface DriversResponse extends PaginationType {
-  data: driverSchemaType[];
+  data: employeeSchemaType[];
 }
 
-export async function createDriverService(data: driverSchemaType) {
+export async function createDriverService(data: employeeSchemaType) {
   const res = await fetch('/api/driver', {
     method: 'POST',
     headers: {
@@ -29,7 +29,7 @@ export async function getDriverService(
   return drivers;
 }
 
-export async function updateDriverService(data: driverSchemaType) {
+export async function updateDriverService(data: employeeSchemaType) {
   const res = await fetch('/api/driver', {
     method: 'PATCH',
     headers: {
