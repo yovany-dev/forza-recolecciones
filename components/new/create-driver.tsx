@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingNotification } from "@/components/notifications";
 import { successfulNotification } from "@/components/notifications";
 import { ErrorNotification } from "@/components/notifications";
-import { createDriver } from "@/lib/create-driver";
+import { createDriverService } from "@/services/driverService";
 
 interface errorMessage {
   status: boolean;
@@ -35,7 +35,7 @@ const CreateDriver = () => {
 
   const onSubmit: SubmitHandler<driverSchemaType> = async (data) => {
     setErrorMessage(null);
-    const driver = await createDriver(data);
+    const driver = await createDriverService(data);
 
     if (driver.status == 201) {
       reset();
@@ -76,7 +76,9 @@ const CreateDriver = () => {
           <div className="space-y-1">
             <Label htmlFor="fullname">Nombre Completo</Label>
             <Input id="fullname" {...register("fullname")} />
-            <p className="h-6 text-xs text-red-500">{errors.fullname?.message}</p>
+            <p className="h-6 text-xs text-red-500">
+              {errors.fullname?.message}
+            </p>
           </div>
           <div className="space-y-1">
             <Label htmlFor="dpi">Número de Documento (DPI)</Label>
@@ -86,7 +88,9 @@ const CreateDriver = () => {
           <div className="space-y-1">
             <Label htmlFor="schedule">Horario de Entrada</Label>
             <Input id="schedule" {...register("schedule")} />
-            <p className="h-6 text-xs text-red-500">{errors.schedule?.message}</p>
+            <p className="h-6 text-xs text-red-500">
+              {errors.schedule?.message}
+            </p>
           </div>
           <div className="space-y-1 col-span-2">
             <Label htmlFor="position">Cargo o Puesto</Label>
@@ -104,8 +108,12 @@ const CreateDriver = () => {
             )}
           </div>
           <div className="col-span-2 flex gap-2">
-            <Button variant="outline" className="border border-[#ea580c]" asChild>
-              <Link href='/dashboard/empleados/pilotos'>Regresar</Link>
+            <Button
+              variant="outline"
+              className="border border-[#ea580c]"
+              asChild
+            >
+              <Link href="/dashboard/empleados/pilotos">Regresar</Link>
             </Button>
             <Button type="submit" disabled={isSubmitting && true}>
               Guardar

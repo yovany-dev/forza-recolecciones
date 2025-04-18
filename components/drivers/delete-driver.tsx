@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteDriverAPI } from "@/lib/delete-driver";
+import { deleteDriverService } from "@/services/driverService";
 import {
   LoadingNotification,
   successfulNotification,
@@ -26,7 +26,7 @@ const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
   const { removeDriver } = useDriverStore();
   const [loading, setLoading] = useState(false);
   const deleteDriver = async (uuid: string | undefined) => {
-    const driverRemoved = await deleteDriverAPI(uuid);
+    const driverRemoved = await deleteDriverService(uuid);
     if (driverRemoved.status === 200) {
       successfulNotification(driverRemoved.message);
       removeDriver(uuid);
