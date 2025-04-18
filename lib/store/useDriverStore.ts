@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { employeeSchemaType } from '@/lib/zod/employee';
-import { PaginationType } from '@/types/driverType';
-import { getDriverService } from '@/services/driverService';
+import { PaginationType } from '@/types/employeeType';
+import { getEmployeeService } from '@/services/employeeService';
 
 interface DriverStore {
   drivers: employeeSchemaType[] | [];
@@ -65,7 +65,8 @@ export const useDriverStore = create<DriverStore>((set) => ({
       setPagination,
       selectedTimes,
     } = useDriverStore.getState();
-    const res = await getDriverService(
+    const res = await getEmployeeService(
+      'driver',
       search,
       pagination.page,
       selectedTimes.join(',')

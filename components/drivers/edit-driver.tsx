@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingNotification } from "@/components/notifications";
 import { successfulNotification } from "@/components/notifications";
 import { ErrorNotification } from "@/components/notifications";
-import { updateDriverService } from "@/services/driverService";
+import { updateEmployeeService } from "@/services/employeeService";
 import { useDriverStore } from "@/lib/store/useDriverStore";
 
 interface errorMessage {
@@ -40,7 +40,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
 
   const onSubmit: SubmitHandler<employeeSchemaType> = async (data) => {
     setErrorMessage(null);
-    const resUpdateDriver = await updateDriverService({
+    const resUpdateDriver = await updateEmployeeService('driver', {
       ...data,
       uuid: driver.uuid,
     });

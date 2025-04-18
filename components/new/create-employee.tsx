@@ -7,24 +7,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { useState } from "react";
+import {
+  LoadingNotification,
+  successfulNotification,
+  ErrorNotification,
+} from "@/components/notifications";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { employeeSchema, employeeSchemaType } from "@/lib/zod/employee";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LoadingNotification } from "@/components/notifications";
-import { successfulNotification } from "@/components/notifications";
-import { ErrorNotification } from "@/components/notifications";
-import { createDriverService } from "@/services/driverService";
 
+import Link from "next/link";
+import React, { useState } from "react";
+import { EmployeeType } from "@/types/employeeType";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { employeeSchema, employeeSchemaType } from "@/lib/zod/employee";
+import { createEmployeeService } from "@/services/employeeService";
+
+const formattedType: Record<string, EmployeeType> = {
+  piloto: "driver",
+  auxiliar: "copilot",
+};
 interface errorMessage {
   status: boolean;
   message: string;
 }
-const CreateAssistant = () => {
+interface Props {
+  type: string;
+}
+const CreateEmployee: React.FC<Props> = ({ type }) => {
   const {
     reset,
     register,
@@ -35,30 +46,33 @@ const CreateAssistant = () => {
 
   const onSubmit: SubmitHandler<employeeSchemaType> = async (data) => {
     setErrorMessage(null);
-    const driver = await createDriverService(data);
+    const employee = await createEmployeeService(
+      formattedType[type.toLowerCase()],
+      data
+    );
 
-    if (driver.status == 201) {
+    if (employee.status == 201) {
       reset();
-      successfulNotification("Piloto creado exitosamente.");
-    } else if (driver.status == 409) {
+      successfulNotification(`${type} creado exitosamente.`);
+    } else if (employee.status == 409) {
       setErrorMessage({
         status: true,
-        message: driver.errorMessage,
+        message: "Número de gafete o DPI ya existen.",
       });
     } else {
       setErrorMessage({
         status: true,
-        message: "Error el piloto no se pudo crear.",
+        message: `Error el ${type.toLowerCase()} no se pudo crear.`,
       });
     }
   };
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Piloto</CardTitle>
+        <CardTitle>{type}</CardTitle>
         <CardDescription>
-          Complete la información del nuevo piloto. Por favor, no deje campos
-          vacíos.
+          Complete la información del nuevo {type.toLowerCase()}. Por favor, no
+          deje campos vacíos.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -97,7 +111,7 @@ const CreateAssistant = () => {
             <Input
               id="position"
               {...register("position")}
-              defaultValue="AUXILIAR RECOLECTOR"
+              defaultValue={`${type} Recolector`}
               disabled
             />
           </div>
@@ -125,4 +139,4 @@ const CreateAssistant = () => {
   );
 };
 
-export { CreateAssistant };
+export { CreateEmployee };

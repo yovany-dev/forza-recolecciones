@@ -1,9 +1,8 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CreateDriver } from "@/components/new/create-driver";
-import { CreateAssistant } from "./create-assistant";
 import { useSearchParams } from "next/navigation";
+import { CreateEmployee } from "@/components/new/create-employee";
 
 export function TabsEmployee() {
   const searchParams = useSearchParams();
@@ -19,10 +18,10 @@ export function TabsEmployee() {
         <TabsTrigger value="auxiliar">Auxiliar</TabsTrigger>
       </TabsList>
       <TabsContent value="piloto">
-        <CreateDriver />
+        <CreateEmployee type="Piloto" />
       </TabsContent>
       <TabsContent value="auxiliar">
-        <CreateAssistant />
+        <CreateEmployee type="Auxiliar" />
       </TabsContent>
     </Tabs>
   );
