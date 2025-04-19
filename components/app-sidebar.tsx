@@ -78,6 +78,10 @@ const data = {
       icon: Truck,
       items: [
         {
+          title: "Nuevo",
+          url: "/dashboard/empleados/nuevo",
+        },
+        {
           title: "Pilotos",
           url: "/dashboard/empleados/pilotos",
         },

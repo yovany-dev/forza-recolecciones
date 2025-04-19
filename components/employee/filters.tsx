@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDriverStore } from "@/lib/store/useDriverStore";
+import { useEmployeeStore } from "@/lib/store/useEmployeeStore";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const Filters = () => {
@@ -23,7 +23,7 @@ const Filters = () => {
     setSelectedTimes,
     initialSchedules,
     clearFilterTime,
-  } = useDriverStore();
+  } = useEmployeeStore();
 
   const router = useRouter();
   const searchParams = useSearchParams();

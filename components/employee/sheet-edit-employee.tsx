@@ -11,53 +11,60 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import React, { useState } from "react";
+import { EmployeeType } from "@/types/employeeType";
 import { employeeSchema, employeeSchemaType } from "@/lib/zod/employee";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoadingNotification } from "@/components/notifications";
-import { successfulNotification } from "@/components/notifications";
-import { ErrorNotification } from "@/components/notifications";
+import {
+  LoadingNotification,
+  successfulNotification,
+  ErrorNotification,
+} from "@/components/notifications";
 import { updateEmployeeService } from "@/services/employeeService";
-import { useDriverStore } from "@/lib/store/useDriverStore";
+import { useEmployeeStore } from "@/lib/store/useEmployeeStore";
 
+const formattedType: Record<string, string> = {
+  driver: "Piloto",
+  copilot: "Auxiliar",
+};
 interface errorMessage {
   status: boolean;
   message: string;
 }
 interface Props {
-  driver: employeeSchemaType;
+  employee: employeeSchemaType;
   isOpen: boolean;
   setIsOpen: (data: boolean) => void;
 }
-const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
+const SheetEditEmployee: React.FC<Props> = ({ employee, isOpen, setIsOpen }) => {
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm<employeeSchemaType>({ resolver: zodResolver(employeeSchema) });
   const [errorMessage, setErrorMessage] = useState<null | errorMessage>(null);
-  const { updateDriver } = useDriverStore();
+  const { employeeType, updateEmployee } = useEmployeeStore();
 
   const onSubmit: SubmitHandler<employeeSchemaType> = async (data) => {
     setErrorMessage(null);
-    const resUpdateDriver = await updateEmployeeService('driver', {
+    const resUpdateEmployee = await updateEmployeeService(employeeType as EmployeeType, {
       ...data,
-      uuid: driver.uuid,
+      uuid: employee.uuid,
     });
 
-    if (resUpdateDriver.status == 200) {
+    if (resUpdateEmployee.status == 200) {
       setIsOpen(false);
-      updateDriver(driver.uuid, resUpdateDriver.driver);
-      successfulNotification("Piloto actualizado exitosamente.");
-    } else if (resUpdateDriver.status == 409) {
+      updateEmployee(employee.uuid, resUpdateEmployee[employeeType]);
+      successfulNotification(`${formattedType[employeeType]} actualizado exitosamente.`);
+    } else if (resUpdateEmployee.status == 409) {
       setErrorMessage({
         status: true,
-        message: resUpdateDriver.errorMessage,
+        message: resUpdateEmployee.errorMessage,
       });
     } else {
       setErrorMessage({
         status: true,
-        message: "Error el piloto no se pudo actualizar.",
+        message: `Error el ${formattedType[employeeType]} no se pudo actualizar.`,
       });
     }
   };
@@ -71,9 +78,9 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Editar piloto</SheetTitle>
+          <SheetTitle>Editar {formattedType[employeeType].toLowerCase()}</SheetTitle>
           <SheetDescription>
-            Realice los cambios del piloto aquí. Haga clic en guardar cuando
+            Realice los cambios del {formattedType[employeeType].toLowerCase()} aquí. Haga clic en guardar cuando
             haya terminado.
           </SheetDescription>
         </SheetHeader>
@@ -83,7 +90,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
             <Input
               id="employeeNumber"
               {...register("employeeNumber")}
-              defaultValue={driver.employeeNumber}
+              defaultValue={employee.employeeNumber}
             />
             <p className="h-6 text-xs text-red-500">
               {errors.employeeNumber?.message}
@@ -94,7 +101,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
             <Input
               id="fullname"
               {...register("fullname")}
-              defaultValue={driver.fullname}
+              defaultValue={employee.fullname}
             />
             <p className="h-6 text-xs text-red-500">
               {errors.fullname?.message}
@@ -102,7 +109,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
           </div>
           <div className="space-y-1">
             <Label htmlFor="dpi">Número de Documento (DPI)</Label>
-            <Input id="dpi" {...register("dpi")} defaultValue={driver.dpi} />
+            <Input id="dpi" {...register("dpi")} defaultValue={employee.dpi} />
             <p className="h-6 text-xs text-red-500">{errors.dpi?.message}</p>
           </div>
           <div className="space-y-1">
@@ -110,7 +117,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
             <Input
               id="schedule"
               {...register("schedule")}
-              defaultValue={driver.schedule}
+              defaultValue={employee.schedule}
             />
             <p className="h-6 text-xs text-red-500">
               {errors.schedule?.message}
@@ -121,7 +128,7 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
             <Input
               id="position"
               {...register("position")}
-              defaultValue="Piloto Recolector"
+              defaultValue={`${formattedType[employeeType]} Recolector`}
               disabled
             />
           </div>
@@ -142,4 +149,4 @@ const SheetEditDriver: React.FC<Props> = ({ driver, isOpen, setIsOpen }) => {
   );
 };
 
-export { SheetEditDriver };
+export { SheetEditEmployee };

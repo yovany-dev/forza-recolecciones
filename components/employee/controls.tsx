@@ -15,9 +15,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useDriverStore } from "@/lib/store/useDriverStore";
+import { useEmployeeStore } from "@/lib/store/useEmployeeStore";
 import { useRouter, useSearchParams } from "next/navigation";
 
+const formattedType: Record<string, string> = {
+  driver: "Piloto",
+  copilot: "Auxiliar",
+  "": "",
+};
 type GenericObject = { [key: string]: string };
 interface Props<TData> {
   table: Table<TData>;
@@ -33,8 +38,14 @@ const Controls = <TData,>({ table }: Props<TData>) => {
   };
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { search, setSearch, filter, setFilter, initialSchedules } =
-    useDriverStore();
+  const {
+    employeeType,
+    search,
+    setSearch,
+    filter,
+    setFilter,
+    initialSchedules,
+  } = useEmployeeStore();
 
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
@@ -55,7 +66,7 @@ const Controls = <TData,>({ table }: Props<TData>) => {
         <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Buscar piloto"
+          placeholder={`Buscar ${formattedType[employeeType].toLowerCase()}`}
           className="w-64 h-9 pl-8"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -118,9 +129,13 @@ const Controls = <TData,>({ table }: Props<TData>) => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Button size="sm" asChild>
-          <Link href="/dashboard/empleados/nuevo?defaultValue=piloto">
+          <Link
+            href={`/dashboard/empleados/nuevo?defaultValue=${formattedType[
+              employeeType
+            ].toLowerCase()}`}
+          >
             <UserRoundPlus />
-            <span>Agregar Piloto</span>
+            <span>Agregar {formattedType[employeeType]}</span>
           </Link>
         </Button>
       </div>

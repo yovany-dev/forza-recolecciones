@@ -5,9 +5,9 @@ import { Links } from "@/types/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarInsetHead } from "@/components/sidebar-inset-head";
 import { Header } from "@/components/common/header/header";
-import { DataTable } from "@/app/dashboard/empleados/pilotos/data-table";
-import { columns } from "@/app/dashboard/empleados/pilotos/columns";
-import { useDriverStore } from "@/lib/store/useDriverStore";
+import { DataTable } from "@/components/employee/data-table";
+import { columns } from "@/components/employee/columns";
+import { useEmployeeStore } from "@/lib/store/useEmployeeStore";
 import { useDebounce } from "use-debounce";
 
 const Page = () => {
@@ -16,19 +16,25 @@ const Page = () => {
     { name: "empleados", url: "/dashboard/empleados" },
   ];
   const {
-    drivers,
+    employees,
     loading,
     search,
     pagination,
-    getDrivers,
+    getEmployee,
+    setEmployeeType,
     setLoading,
+    setFilter,
     selectedTimes,
-  } = useDriverStore();
+  } = useEmployeeStore();
   const [debouncedSearch] = useDebounce(search, 500);
 
   useEffect(() => {
+    setEmployeeType("driver");
+    setFilter(false);
+  }, []);
+  useEffect(() => {
     setLoading(true);
-    getDrivers();
+    getEmployee();
   }, [debouncedSearch, pagination.page, selectedTimes]);
 
   return (
@@ -40,7 +46,7 @@ const Page = () => {
           description="Agrega, configura y administra la información de los pilotos."
         />
         <div className="n-body mt-5">
-          <DataTable columns={columns} data={drivers} loading={loading} />
+          <DataTable columns={columns} data={employees} loading={loading} />
         </div>
       </main>
     </SidebarInset>

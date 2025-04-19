@@ -1,17 +1,19 @@
 import { create } from 'zustand';
 import { employeeSchemaType } from '@/lib/zod/employee';
-import { PaginationType } from '@/types/employeeType';
+import { EmployeeType, PaginationType } from '@/types/employeeType';
 import { getEmployeeService } from '@/services/employeeService';
 
-interface DriverStore {
-  drivers: employeeSchemaType[] | [];
+interface EmployeeStore {
+  employeeType: string;
+  employees: employeeSchemaType[] | [];
   loading: boolean;
   search: string;
   pagination: PaginationType;
   availableTimes: string[];
   filter: boolean;
   selectedTimes: string[];
-  setDrivers: (data: employeeSchemaType[]) => void;
+  setEmployeeType: (type: EmployeeType) => void;
+  setEmployee: (data: employeeSchemaType[]) => void;
   setLoading: (state: boolean) => void;
   setSearch: (data: string) => void;
   setPagination: (data: PaginationType) => void;
@@ -19,16 +21,17 @@ interface DriverStore {
   setSelectedTimes: (hour: string) => void;
   initialSchedules: (values: string[]) => void;
   clearFilterTime: () => void;
-  getDrivers: () => void;
-  updateDriver: (
+  getEmployee: () => void;
+  updateEmployee: (
     uuid: string | undefined,
     updatedData: Partial<employeeSchemaType>
   ) => void;
-  removeDriver: (uuid: string | undefined) => void;
+  removeEmployee: (uuid: string | undefined) => void;
 }
 
-export const useDriverStore = create<DriverStore>((set) => ({
-  drivers: [],
+export const useEmployeeStore = create<EmployeeStore>((set) => ({
+  employeeType: '',
+  employees: [],
   loading: false,
   search: '',
   pagination: {
@@ -41,7 +44,8 @@ export const useDriverStore = create<DriverStore>((set) => ({
   filter: false,
   selectedTimes: [],
 
-  setDrivers: (data) => set({ drivers: data }),
+  setEmployeeType: (newEmployeeType) => set({ employeeType: newEmployeeType }),
+  setEmployee: (data) => set({ employees: data }),
   setLoading: (newState) => set({ loading: newState }),
   setSearch: (newSearch) => set({ search: newSearch }),
   setPagination: (newPagination) => set({ pagination: newPagination }),
@@ -56,22 +60,23 @@ export const useDriverStore = create<DriverStore>((set) => ({
   initialSchedules: (newValues) => set({ selectedTimes: newValues }),
   clearFilterTime: () => set({ filter: false, selectedTimes: [] }),
 
-  getDrivers: async () => {
+  getEmployee: async () => {
     const {
+      employeeType,
       search,
       pagination,
-      setDrivers,
+      setEmployee,
       setLoading,
       setPagination,
       selectedTimes,
-    } = useDriverStore.getState();
+    } = useEmployeeStore.getState();
     const res = await getEmployeeService(
-      'driver',
+      employeeType as EmployeeType,
       search,
       pagination.page,
       selectedTimes.join(',')
     );
-    setDrivers(res.data);
+    setEmployee(res.data);
     setPagination({
       page: res.page,
       per_page: res.per_page,
@@ -80,15 +85,16 @@ export const useDriverStore = create<DriverStore>((set) => ({
     });
     setLoading(false);
   },
-  updateDriver: (uuid, updatedData) =>
+  updateEmployee: (uuid, updatedData) =>
     set((state) => ({
-      drivers:
-        state.drivers?.map((driver) =>
-          driver.uuid === uuid ? { ...driver, ...updatedData } : driver
+      employees:
+        state.employees?.map((employee) =>
+          employee.uuid === uuid ? { ...employee, ...updatedData } : employee
         ) || [],
     })),
-  removeDriver: (uuid) =>
+  removeEmployee: (uuid) =>
     set((state) => ({
-      drivers: state.drivers?.filter((driver) => driver.uuid !== uuid) || [],
+      employees:
+        state.employees?.filter((employee) => employee.uuid !== uuid) || [],
     })),
 }));

@@ -14,24 +14,29 @@ import {
   LoadingNotification,
   successfulNotification,
 } from "@/components/notifications";
-import { useDriverStore } from "@/lib/store/useDriverStore";
+import { useEmployeeStore } from "@/lib/store/useEmployeeStore";
 import { Button } from "@/components/ui/button";
+import { EmployeeType } from "@/types/employeeType";
 
+const formattedType: Record<string, string> = {
+  driver: "Piloto",
+  copilot: "Auxiliar",
+};
 interface Props {
   uuid: string | undefined;
   isOpen: boolean;
   setIsOpen: (data: boolean) => void;
 }
-const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
-  const { removeDriver } = useDriverStore();
+const DialogDeleteEmployee: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
+  const { employeeType, removeEmployee } = useEmployeeStore();
   const [loading, setLoading] = useState(false);
-  const deleteDriver = async (uuid: string | undefined) => {
-    const driverRemoved = await deleteEmployeeService('driver', uuid);
-    if (driverRemoved.status === 200) {
-      successfulNotification(driverRemoved.message);
-      removeDriver(uuid);
+  const deleteEmployee = async (uuid: string | undefined) => {
+    const employeeRemoved = await deleteEmployeeService(employeeType as EmployeeType, uuid);
+    if (employeeRemoved.status === 200) {
+      successfulNotification(employeeRemoved.message);
+      removeEmployee(uuid);
     } else {
-      successfulNotification(driverRemoved.error);
+      successfulNotification(employeeRemoved.error);
     }
     setLoading(false);
     setIsOpen(false);
@@ -42,11 +47,11 @@ const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            ¿Estás seguro de eliminar este piloto?
+            ¿Estás seguro de eliminar este {formattedType[employeeType].toLowerCase()}?
           </AlertDialogTitle>
           <AlertDialogDescription>
             Esta acción no se puede deshacer. Eliminará permanentemente al
-            piloto de la base de datos.
+            {" " + formattedType[employeeType].toLowerCase()} de la base de datos.
           </AlertDialogDescription>
           <div className="h-6">{loading && <LoadingNotification />}</div>
         </AlertDialogHeader>
@@ -57,7 +62,7 @@ const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
           <Button
             onClick={() => {
               setLoading(true);
-              deleteDriver(uuid);
+              deleteEmployee(uuid);
             }}
           >
             Continuar
@@ -68,4 +73,4 @@ const DialogDeleteDriver: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
   );
 };
 
-export { DialogDeleteDriver };
+export { DialogDeleteEmployee };
