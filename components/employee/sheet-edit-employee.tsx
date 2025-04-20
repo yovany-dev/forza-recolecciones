@@ -128,7 +128,7 @@ const SheetEditEmployee: React.FC<Props> = ({ employee, isOpen, setIsOpen }) => 
             <Input
               id="position"
               {...register("position")}
-              defaultValue={`${formattedType[employeeType]} Recolector`}
+              defaultValue={`${formattedType[employeeType].toUpperCase()} RECOLECTOR`}
               disabled
             />
           </div>
