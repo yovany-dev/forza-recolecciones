@@ -1,13 +1,13 @@
 import { authOptions } from '../auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { PrismaClient } from '@prisma/client';
-import { reportSchema } from '@/lib/zod/report';
+import { createReportSchema } from '@/lib/zod/report';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   const prisma = new PrismaClient();
-  const { success, error, data } = reportSchema.safeParse(body);
+  const { success, error, data } = createReportSchema.safeParse(body);
 
   if (!session || !session.user) {
     return Response.json({ errorMessage: 'unauthorized', status: 401 });
@@ -24,6 +24,23 @@ export async function POST(req: Request) {
       where: { dpi: data.dpi },
     });
 
+    let employee;
+    if (data.type === 'driver') {
+      const driver = await prisma.drivers.findUnique({
+        where: {
+          dpi: data.dpi,
+        },
+      });
+      employee = driver;
+    } else {
+      const copilot = await prisma.copilot.findUnique({
+        where: {
+          dpi: data.dpi,
+        },
+      });
+      employee = copilot;
+    }
+
     if (!user) {
       return Response.json({ errorMessage: 'user not found', status: 404 });
     }
@@ -33,15 +50,21 @@ export async function POST(req: Request) {
         status: 409,
       });
     }
+    if (!employee) {
+      return Response.json({
+        errorMessage: `${data.type} not found`,
+        status: 404,
+      });
+    }
     const newReport = await prisma.report.create({
       data: {
-        employeeNumber: data.employeeNumber,
-        fullname: data.fullname,
-        dpi: data.dpi,
-        position: data.position,
-        schedule: data.schedule,
+        employeeNumber: employee.employeeNumber,
+        fullname: employee.fullname,
+        dpi: employee.dpi,
+        position: employee.position,
+        schedule: employee.schedule,
         userId: user.id,
-        checkIn: data.checkIn,
+        checkIn: 'db-checkIn',
         location: data.location,
         photo: data.photo,
         state: data.state,

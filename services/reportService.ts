@@ -1,6 +1,6 @@
-import { reportSchemaType } from '@/lib/zod/report';
+import { createReportSchemaType } from '@/lib/zod/report';
 
-export async function createReportService(report: reportSchemaType) {
+export async function createReportService(data: createReportSchemaType) {
   const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
   const res = await fetch(`${BASE_URL}/api/report`, {
     method: 'POST',
@@ -8,10 +8,10 @@ export async function createReportService(report: reportSchemaType) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(report),
+    body: JSON.stringify(data),
   });
-  const data = await res.json();
-  return data;
+  const dataRes = await res.json();
+  return dataRes;
 }
 
 export async function getReportService() {

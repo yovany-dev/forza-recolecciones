@@ -18,8 +18,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { reportSchemaType } from "@/lib/zod/report";
-import { SheetEditDriver } from "@/components/drivers/edit-driver";
-import { DialogDeleteDriver } from "@/components/drivers/delete-driver";
+// import { SheetEditDriver } from "@/components/drivers/edit-driver";
+// import { DialogDeleteDriver } from "@/components/drivers/delete-driver";
 
 export const columns: ColumnDef<reportSchemaType>[] = [
   {
@@ -80,7 +80,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         <Badge
           variant="outline"
           className={cn(
-            position == "Piloto Recolector"
+            position == "PILOTO RECOLECTOR"
               ? badgeTheme.driver
               : badgeTheme.copilot
           )}
@@ -127,8 +127,11 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         <Badge
           variant="outline"
           className={cn(
-            location == "ADMIN" ? badgeTheme.true : badgeTheme.false &&
-            location == "DETECTADA" ? badgeTheme.true : badgeTheme.false
+            location == "ADMIN"
+              ? badgeTheme.true
+              : badgeTheme.false && location == "DETECTADA"
+              ? badgeTheme.true
+              : badgeTheme.false
           )}
         >
           {states[location]}

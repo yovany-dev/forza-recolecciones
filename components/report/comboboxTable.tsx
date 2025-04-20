@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { Grid2X2Plus } from "lucide-react"
+import * as React from "react";
+import { ChevronsUpDown, Grid2X2Plus } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -13,54 +12,39 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+} from "@/components/ui/popover";
+import { useReportStore } from "@/lib/store/useReportStore";
 
 export function ComboboxNewReport() {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const { availableReports, createReport } = useReportStore();
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+
+  const employees = availableReports.map((employee) => {
+    return {
+      dpi: employee.dpi,
+      position: employee.position,
+      value: employee.fullname,
+      label: employee.fullname,
+    };
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          // variant="outline"
-          size='sm'
+          size="sm"
           role="combobox"
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
           <Grid2X2Plus />
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Nuevo reporte"}
+          Nuevo Reporte
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -70,22 +54,20 @@ export function ComboboxNewReport() {
           <CommandList>
             <CommandEmpty>No encontrado.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {employees.map((employee) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={employee.value}
+                  value={employee.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
+                    if (currentValue !== value) {
+                      createReport(employee.dpi, employee.position);
+                    }
+                    setValue(currentValue === value ? "" : currentValue);
+                    setOpen(false);
                   }}
                 >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {framework.label}
+                  <Checkbox checked={value == employee.value} aria-label="" />
+                  {employee.label}
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -93,5 +75,5 @@ export function ComboboxNewReport() {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

@@ -1,0 +1,4 @@
+export const reportPositionConstant = {
+  PILOTO_RECOLECTOR: 'PILOTO RECOLECTOR',
+  AUXILIAR_RECOLECTOR: 'AUXILIAR RECOLECTOR',
+};
