@@ -8,6 +8,7 @@ import {
 } from '@/services/reportService';
 import { EmployeeType } from '@/types/employeeType';
 import { employeeSchemaType } from '@/lib/zod/employee';
+import { successfulNotification } from '@/components/notifications';
 
 const employeeType: Record<EmployeeType, string> = {
   driver: reportPositionConstant.PILOTO_RECOLECTOR,
@@ -17,10 +18,14 @@ interface ReportStore {
   reports: reportSchemaType[] | [];
   availableReports: employeeSchemaType[] | [];
   loading: boolean;
+  newReportLoading: boolean;
+  availableReportLoading: boolean;
 
   setReports: (data: reportSchemaType[]) => void;
   setAvailableReports: (data: employeeSchemaType[]) => void;
   setLoading: (state: boolean) => void;
+  setNewReportLoading: (state: boolean) => void;
+  setAvailableReportLoading: (state: boolean) => void;
 
   createReport: (dpi: string, position: string) => void;
 
@@ -35,14 +40,24 @@ export const useReportStore = create<ReportStore>((set) => ({
   reports: [],
   availableReports: [],
   loading: false,
+  newReportLoading: false,
+  availableReportLoading: false,
 
   setReports: (reports) => set({ reports }),
   setAvailableReports: (availableReports) => set({ availableReports }),
   setLoading: (newState) => set({ loading: newState }),
+  setNewReportLoading: (newState) => set({ newReportLoading: newState }),
+  setAvailableReportLoading: (newState) =>
+    set({ availableReportLoading: newState }),
 
   createReport: async (dpi, position) => {
-    const { reports, setReports, availableReports, setAvailableReports } =
-      useReportStore.getState();
+    const {
+      reports,
+      setReports,
+      availableReports,
+      setAvailableReports,
+      setNewReportLoading,
+    } = useReportStore.getState();
     const data: createReportSchemaType = {
       dpi,
       type:
@@ -54,7 +69,14 @@ export const useReportStore = create<ReportStore>((set) => ({
       state: 'ADMIN',
     };
     const res = await createReportService(data);
+
+    if (res.status !== 201) {
+      successfulNotification(res.errorMessage);
+      return;
+    }
+    setNewReportLoading(false);
     setReports([...reports, res.report]);
+    successfulNotification('Reporte creado exitosamente.');
 
     const filteredReports = availableReports.filter(
       (report) => report.dpi !== res.report.dpi
@@ -81,12 +103,17 @@ export const useReportStore = create<ReportStore>((set) => ({
     return employeeNumbers;
   },
   getAvailableReports: async () => {
-    const { reports, getEmployeeNumber, setAvailableReports } =
-      useReportStore.getState();
+    const {
+      reports,
+      getEmployeeNumber,
+      setAvailableReports,
+      setAvailableReportLoading,
+    } = useReportStore.getState();
     const drivers = getEmployeeNumber(reports, 'driver');
     const copilots = getEmployeeNumber(reports, 'copilot');
 
     const res = await getNewReportService(drivers, copilots);
     setAvailableReports(res.data);
+    setAvailableReportLoading(false);
   },
 }));

@@ -11,10 +11,17 @@ import { columns } from "@/app/dashboard/reporte/columns";
 
 const Page = () => {
   const dataLink: Links[] = [{ name: "dashboard", url: "/dashboard" }];
-  const { reports, getReports, loading, setLoading } = useReportStore();
+  const {
+    reports,
+    getReports,
+    loading,
+    setLoading,
+    setAvailableReportLoading,
+  } = useReportStore();
 
   useEffect(() => {
     setLoading(true);
+    setAvailableReportLoading(true);
     getReports();
   }, []);
 
