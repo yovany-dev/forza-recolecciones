@@ -111,7 +111,7 @@ const CreateEmployee: React.FC<Props> = ({ type }) => {
             <Input
               id="position"
               {...register("position")}
-              defaultValue={`${type} Recolector`}
+              defaultValue={`${type.toUpperCase()} RECOLECTOR`}
               disabled
             />
           </div>
