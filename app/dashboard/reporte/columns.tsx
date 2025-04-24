@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { reportSchemaType } from "@/lib/zod/report";
 // import { SheetEditDriver } from "@/components/drivers/edit-driver";
-// import { DialogDeleteDriver } from "@/components/drivers/delete-driver";
+import { DialogDeleteReport } from "@/components/report/dialog-delete-report";
 
 export const columns: ColumnDef<reportSchemaType>[] = [
   {
@@ -192,7 +192,8 @@ export const columns: ColumnDef<reportSchemaType>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const driver = row.original;
+      const report = row.original;
+      report.uuid
       const [isDialogOpen, setIsDialogOpen] = useState(false);
       const [isSheetOpen, setIsSheetOpen] = useState(false);
       const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -203,12 +204,12 @@ export const columns: ColumnDef<reportSchemaType>[] = [
             driver={driver}
             isOpen={isSheetOpen}
             setIsOpen={setIsSheetOpen}
-          />
-          <DialogDeleteDriver
-            uuid={driver.uuid}
+          /> */}
+          <DialogDeleteReport
+            uuid={report.uuid as string}
             isOpen={isDialogOpen}
             setIsOpen={setIsDialogOpen}
-          /> */}
+          />
           <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -239,7 +240,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
-                  navigator.clipboard.writeText(String(driver.dpi))
+                  navigator.clipboard.writeText(String(report.dpi))
                 }
               >
                 Copiar número de DPI

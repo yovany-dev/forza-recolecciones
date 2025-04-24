@@ -21,7 +21,7 @@ const Page = () => {
 
   useEffect(() => {
     setLoading(true);
-    setAvailableReportLoading(true);
+    // setAvailableReportLoading(true);
     getReports();
   }, []);
 
