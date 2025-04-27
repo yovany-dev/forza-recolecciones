@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { reportSchemaType } from "@/lib/zod/report";
-// import { SheetEditDriver } from "@/components/drivers/edit-driver";
+import { SheetEditReport } from "@/components/report/sheet-edit-report";
 import { DialogDeleteReport } from "@/components/report/dialog-delete-report";
 
 export const columns: ColumnDef<reportSchemaType>[] = [
@@ -193,18 +193,17 @@ export const columns: ColumnDef<reportSchemaType>[] = [
     id: "actions",
     cell: ({ row }) => {
       const report = row.original;
-      report.uuid
       const [isDialogOpen, setIsDialogOpen] = useState(false);
       const [isSheetOpen, setIsSheetOpen] = useState(false);
       const [isMenuOpen, setIsMenuOpen] = useState(false);
 
       return (
         <>
-          {/* <SheetEditDriver
-            driver={driver}
+          <SheetEditReport
+            report={report}
             isOpen={isSheetOpen}
             setIsOpen={setIsSheetOpen}
-          /> */}
+          />
           <DialogDeleteReport
             uuid={report.uuid as string}
             isOpen={isDialogOpen}

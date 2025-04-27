@@ -35,7 +35,10 @@ interface ReportStore {
     employee: EmployeeType
   ) => string[];
   getAvailableReports: () => void;
-
+  updateReport: (
+    uuid: string | undefined,
+    updatedData: Partial<reportSchemaType>
+  ) => void;
   removeReport: (uuid: string) => void;
 }
 export const useReportStore = create<ReportStore>((set) => ({
@@ -118,7 +121,13 @@ export const useReportStore = create<ReportStore>((set) => ({
     setAvailableReports(res.data);
     setAvailableReportLoading(false);
   },
-
+  updateReport: (uuid, updatedData) =>
+    set((state) => ({
+      reports:
+        state.reports?.map((report) =>
+          report.uuid === uuid ? { ...report, ...updatedData } : report
+        ) || [],
+    })),
   removeReport: (uuid) => {
     set((state) => ({
       reports: state.reports.filter((report) => report.uuid !== uuid) || [],

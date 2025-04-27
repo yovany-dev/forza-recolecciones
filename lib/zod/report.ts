@@ -30,5 +30,12 @@ export const createReportSchema = reportStateSchema.extend({
     }),
   type: z.enum([employeeType.driver, employeeType.copilot]),
 });
-
 export type createReportSchemaType = z.infer<typeof createReportSchema>;
+
+export const updateReportSchema = createReportSchema.extend({
+  uuid: z
+    .string()
+    .uuid()
+    .nonempty({ message: 'El uuid del report es obligatorio.' }),
+});
+export type updateReportSchemaType = z.infer<typeof updateReportSchema>;

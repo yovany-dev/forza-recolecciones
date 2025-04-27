@@ -1,4 +1,7 @@
-import { createReportSchemaType } from '@/lib/zod/report';
+import {
+  createReportSchemaType,
+  updateReportSchemaType,
+} from '@/lib/zod/report';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
@@ -30,6 +33,18 @@ export async function getNewReportService(
   );
   const data = await res.json();
   return data;
+}
+
+export async function updateReportService(data: updateReportSchemaType) {
+  const res = await fetch(`${BASE_URL}/api/report`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const dataRes = await res.json();
+  return dataRes;
 }
 
 export async function deleteReportService(uuid: string) {
