@@ -186,7 +186,11 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         PENDIENTE: "PENDIENTE",
         INGRESO_TARDE: "INGRESO TARDE",
       };
-      return <Badge className={badgeTheme[state]}>{states[state]}</Badge>;
+      return (
+        <Badge variant="outline" className={badgeTheme[state]}>
+          {states[state]}
+        </Badge>
+      );
     },
   },
   {
