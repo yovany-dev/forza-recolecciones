@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controls } from "@/components/report/controls";
 import { Separator } from "@/components/ui/separator";
 import { TableSkeleton } from "@/components/report/table-skeleton";
@@ -49,6 +49,13 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+  useEffect(() => {
+    table.getAllColumns().map((column) => {
+      if (column.id === "dpi") {
+        column.toggleVisibility(false);
+      }
+    });
+  }, []);
 
   return (
     <div>
