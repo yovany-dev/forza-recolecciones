@@ -146,7 +146,11 @@ export async function PATCH(req: Request) {
         uuid: data.uuid,
       },
       data: {
-        ...employee,
+        employeeNumber: employee.employeeNumber,
+        fullname: employee.fullname,
+        dpi: employee.dpi,
+        schedule: employee.schedule,
+        position: employee.position,
         uuid: data.uuid,
         checkIn: data.checkIn,
         location: data.location,
