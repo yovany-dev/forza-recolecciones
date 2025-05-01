@@ -56,6 +56,10 @@ export async function POST(req: Request) {
         status: 404,
       });
     }
+    const result = await prisma.$queryRawUnsafe<{ current_time: string }[]>(`
+      SELECT to_char(CURRENT_TIME(0)::time, 'HH24:MI') as current_time
+    `);
+    const currentTime = result[0].current_time;
     const newReport = await prisma.report.create({
       data: {
         employeeNumber: employee.employeeNumber,
@@ -64,7 +68,7 @@ export async function POST(req: Request) {
         position: employee.position,
         schedule: employee.schedule,
         userId: user.id,
-        checkIn: 'db-checkIn',
+        checkIn: currentTime,
         location: data.location,
         photo: data.photo,
         state: data.state,

@@ -7,11 +7,16 @@ const employeeType: Record<EmployeeType, EmployeeType> = {
   copilot: 'copilot',
 };
 
+export const timeStringSchema = z
+  .string()
+  .regex(
+    /^([01]\d|2[0-3]):([0-5]\d)$/,
+    'Debe ser una hora válida en formato HH:MM (ej. 09:15, 23:59)'
+  )
+  .optional();
+
 export const reportStateSchema = z.object({
-  checkIn: z
-    .string()
-    .nonempty({ message: 'La hora de entrada es obligatorio.' })
-    .optional(),
+  checkIn: timeStringSchema,
   location: z.enum(['ADMIN', 'DETECTADA', 'NO_DETECTADA']),
   photo: z.enum(['ADMIN', 'CARGADA', 'NO_CARGADA']),
   state: z.enum(['ADMIN', 'INGRESADO', 'PENDIENTE', 'INGRESO_TARDE']),
