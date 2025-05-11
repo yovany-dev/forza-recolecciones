@@ -195,7 +195,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: function Cell({ row }) {
       const report = row.original;
       const [isDialogOpen, setIsDialogOpen] = useState(false);
       const [isSheetOpen, setIsSheetOpen] = useState(false);

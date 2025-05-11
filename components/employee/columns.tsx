@@ -85,7 +85,7 @@ export const columns: ColumnDef<employeeSchemaType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: function Cell({ row }) {
       const employee = row.original;
       const employeePosition = employee.position.split(" ")[0];
       const [isDialogOpen, setIsDialogOpen] = useState(false);

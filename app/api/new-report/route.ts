@@ -1,6 +1,7 @@
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { getServerSession } from 'next-auth';
 import { PrismaClient } from '@prisma/client';
+import { employeeSchemaType } from '@/lib/zod/employee';
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -13,8 +14,8 @@ export async function GET(req: Request) {
     return Response.json({ error: 'unauthorized', status: 401 });
   }
   try {
-    let filteredDrivers: any[] = [];
-    let filteredCopilots: any[] = [];
+    let filteredDrivers: employeeSchemaType[] = [];
+    let filteredCopilots: employeeSchemaType[] = [];
     if (drivers.length > 0) {
       const driverRes = await prisma.drivers.findMany({
         where: {

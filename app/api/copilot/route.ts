@@ -1,6 +1,6 @@
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { getServerSession } from 'next-auth';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { employeeSchema } from '@/lib/zod/employee';
 
 export async function POST(req: Request) {
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
   } catch (error) {
     return Response.json({
       errorMessage: 'error creating copilot',
+      errorServer: error,
       status: 500,
     });
   }
@@ -90,20 +91,20 @@ export async function GET(req: Request) {
               OR: [
                 {
                   employeeNumber: {
-                    contains: search as string,
-                    mode: 'insensitive' as 'insensitive',
+                    contains: search,
+                    mode: Prisma.QueryMode.insensitive,
                   },
                 },
                 {
                   fullname: {
-                    contains: search as string,
-                    mode: 'insensitive' as 'insensitive',
+                    contains: search,
+                    mode: Prisma.QueryMode.insensitive,
                   },
                 },
                 {
                   dpi: {
-                    contains: search as string,
-                    mode: 'insensitive' as 'insensitive',
+                    contains: search,
+                    mode: Prisma.QueryMode.insensitive,
                   },
                 },
               ],

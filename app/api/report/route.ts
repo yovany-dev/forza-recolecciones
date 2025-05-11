@@ -1,4 +1,4 @@
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { getServerSession } from 'next-auth';
 import { PrismaClient } from '@prisma/client';
 import { createReportSchema, updateReportSchema } from '@/lib/zod/report';
@@ -87,12 +87,13 @@ export async function POST(req: Request) {
   } catch (error) {
     return Response.json({
       errorMessage: 'error creating report',
+      errorServer: error,
       status: 500,
     });
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   const session = await getServerSession(authOptions);
   const prisma = new PrismaClient();
   const startOfToday = now().startOf('day').toDate();

@@ -23,7 +23,7 @@ export const employeeSchema = z.object({
   .regex(/^\d+$/, { message: 'El campo debe ser un valor numérico'}),
   schedule: z.string().nonempty({ message: 'El horario es obligatorio.' }),
   position: z.string().nonempty({ message: 'El cargo es obligatorio.' }),
-  createdAt: z.string().datetime().optional(),
+  createdAt: z.date().optional(),
   user: z.unknown().optional(),
   userId: z.number().int().positive().optional(),
 });

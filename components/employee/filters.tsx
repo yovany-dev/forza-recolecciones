@@ -17,7 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 const Filters = () => {
   const {
     filter,
-    setFilter,
+    // setFilter,
     availableTimes,
     selectedTimes,
     setSelectedTimes,
