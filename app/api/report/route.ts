@@ -2,12 +2,15 @@ import { authOptions } from '../auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { PrismaClient } from '@prisma/client';
 import { createReportSchema, updateReportSchema } from '@/lib/zod/report';
+import { now } from '@/lib/utils';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const body = await req.json();
   const prisma = new PrismaClient();
   const { success, error, data } = createReportSchema.safeParse(body);
+  const startOfToday = now().startOf('day').toDate();
+  const endOfToday = now().endOf('day').toDate();
 
   if (!session || !session.user) {
     return Response.json({ errorMessage: 'unauthorized', status: 401 });
@@ -21,7 +24,13 @@ export async function POST(req: Request) {
       where: { email: session.user.email },
     });
     const report = await prisma.report.findFirst({
-      where: { dpi: data.dpi },
+      where: {
+        dpi: data.dpi,
+        createdAt: {
+          gte: startOfToday,
+          lt: endOfToday,
+        },
+      },
     });
 
     let employee;
@@ -86,13 +95,28 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   const prisma = new PrismaClient();
+  const startOfToday = now().startOf('day').toDate();
+  const endOfToday = now().endOf('day').toDate();
 
   if (!session || !session.user) {
     return Response.json({ error: 'unauthorized', status: 401 });
   }
   try {
-    const reports = await prisma.report.findMany();
-    return Response.json({ data: reports, status: 200 });
+    const reports = await prisma.report.findMany({
+      where: {
+        createdAt: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+    return Response.json({
+      data: reports,
+      status: 200,
+    });
   } catch (error) {
     return Response.json({ error, status: 500 });
   }
