@@ -55,7 +55,7 @@ export function LoginForm({
             width={250}
           />
           <p className="tracking-tight text-base sm:text-xl">
-            Ingresar a{" "}
+            {/* Ingresar a{" "} */}
             <span className="font-semibold text-[#ea5d1d]">
               Control Horario Recos
             </span>
