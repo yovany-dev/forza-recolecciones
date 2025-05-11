@@ -52,9 +52,9 @@ model Copilot {
 
 model Report {
   uuid           String   @id @default(uuid())
-  employeeNumber String   @unique @db.VarChar(6)
+  employeeNumber String   @db.VarChar(6)
   fullname       String
-  dpi            String   @unique @db.VarChar(13)
+  dpi            String   @db.VarChar(13)
   schedule       String
   position       String
   createdAt      DateTime @default(now()) @db.Timestamptz(3)
