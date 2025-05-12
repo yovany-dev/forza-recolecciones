@@ -20,15 +20,16 @@ interface ReportStore {
   loading: boolean;
   newReportLoading: boolean;
   availableReportLoading: boolean;
+  search: string;
 
   setReports: (data: reportSchemaType[]) => void;
   setAvailableReports: (data: employeeSchemaType[]) => void;
   setLoading: (state: boolean) => void;
   setNewReportLoading: (state: boolean) => void;
   setAvailableReportLoading: (state: boolean) => void;
+  setSearch: (value: string) => void;
 
   createReport: (dpi: string, position: string) => void;
-
   getReports: () => void;
   getEmployeeNumber: (
     data: reportSchemaType[],
@@ -47,6 +48,7 @@ export const useReportStore = create<ReportStore>((set) => ({
   loading: false,
   newReportLoading: false,
   availableReportLoading: false,
+  search: '',
 
   setReports: (reports) => set({ reports }),
   setAvailableReports: (availableReports) => set({ availableReports }),
@@ -54,6 +56,7 @@ export const useReportStore = create<ReportStore>((set) => ({
   setNewReportLoading: (newState) => set({ newReportLoading: newState }),
   setAvailableReportLoading: (newState) =>
     set({ availableReportLoading: newState }),
+  setSearch: (newSearch) => set({ search: newSearch }),
 
   createReport: async (dpi, position) => {
     const {
@@ -88,11 +91,10 @@ export const useReportStore = create<ReportStore>((set) => ({
     );
     setAvailableReports(filteredReports);
   },
-
   getReports: async () => {
-    const { setReports, setLoading, availableReports, getAvailableReports } =
+    const { setReports, setLoading, availableReports, getAvailableReports, search } =
       useReportStore.getState();
-    const data = await getReportService();
+    const data = await getReportService(search);
 
     setReports(data.data);
     setLoading(false);

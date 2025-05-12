@@ -8,6 +8,7 @@ import { Header } from "@/components/common/header/header";
 import { useReportStore } from "@/lib/store/useReportStore";
 import { DataTable } from "@/app/dashboard/reporte/data-table";
 import { columns } from "@/app/dashboard/reporte/columns";
+import { useDebounce } from "use-debounce";
 
 const Page = () => {
   const dataLink: Links[] = [{ name: "dashboard", url: "/dashboard" }];
@@ -16,14 +17,16 @@ const Page = () => {
     getReports,
     loading,
     setLoading,
+    search,
     // setAvailableReportLoading,
   } = useReportStore();
+  const [debouncedSearch] = useDebounce(search, 500);
 
   useEffect(() => {
     setLoading(true);
     // setAvailableReportLoading(true);
     getReports();
-  }, []);
+  }, [debouncedSearch]);
 
   return (
     <SidebarInset>
