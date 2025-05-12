@@ -1,22 +1,16 @@
-"use client";
-
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 // import { createUser } from "@/lib/create-user";
 import { LoginForm } from "@/components/login-form";
 import { authOptions } from "@/lib/authOptions";
-import { useEffect } from "react";
 
 export default async function LoginPage() {
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
 
-  if (session) {
-    redirect("/dashboard");
-  }
+  // if (session) {
+  //   redirect("/dashboard");
+  // }
   console.log("Me renderizo...");
-  useEffect(() => {
-    console.log("useEffct: Me renderizo...");
-  }, []);
   // const res = await createUser({
   //   name: 'admin',
   //   email: 'admin@forzadelivery.com',
