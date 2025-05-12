@@ -100,6 +100,13 @@ export async function GET(req: Request) {
   const search = searchParams.get('search');
   const startOfToday = now().startOf('day').toDate();
   const endOfToday = now().endOf('day').toDate();
+  const startOfTodayTime = now().startOf('day');
+  const endOfTodayTime = now().endOf('day');
+  const currentTime = now();
+
+  console.log('Comienzo de hoy: ', startOfTodayTime.format('YYYY-MM-DD HH:mm'));
+  console.log('Fin de hoy: ', endOfTodayTime.format('YYYY-MM-DD HH:mm'));
+  console.log('Hora en Guatemala: ', currentTime.format('DD/MM/YYYY hh:mm'));
 
   if (!session || !session.user) {
     return Response.json({ error: 'unauthorized', status: 401 });
