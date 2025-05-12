@@ -29,6 +29,7 @@ export function LoginForm({
     formState: { errors },
     handleSubmit,
   } = useForm<loginSchemaType>({ resolver: zodResolver(loginSchema) });
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
   const onSubmit: SubmitHandler<loginSchemaType> = async (data) => {
     const res = await signIn("credentials", {
@@ -39,7 +40,7 @@ export function LoginForm({
     if (res?.error) {
       setError(res.error);
     } else {
-      router.push("https://google.com");
+      router.push(`${BASE_URL}/dashboard`);
     }
   };
 
