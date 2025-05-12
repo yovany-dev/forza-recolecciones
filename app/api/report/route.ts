@@ -154,6 +154,11 @@ export async function GET(req: Request) {
     return Response.json({
       data: reports,
       status: 200,
+      date: {
+        startOfTodayTime: `${startOfTodayTime}`,
+        endOfTodayTime: `${endOfTodayTime}`,
+        currentTime: `${currentTime}`,
+      },
     });
   } catch (error) {
     return Response.json({ error, status: 500 });

@@ -95,6 +95,7 @@ export const useReportStore = create<ReportStore>((set) => ({
     const { setReports, setLoading, availableReports, getAvailableReports, search } =
       useReportStore.getState();
     const data = await getReportService(search);
+    console.log(data);
 
     setReports(data.data);
     setLoading(false);
