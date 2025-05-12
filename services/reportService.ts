@@ -19,7 +19,9 @@ export async function createReportService(data: createReportSchemaType) {
 }
 
 export async function getReportService(search: string) {
-  const res = await fetch(`${BASE_URL}/api/report?search=${search}`);
+  const res = await fetch(`${BASE_URL}/api/report?search=${search}`, {
+    cache: 'no-store',
+  });
   const data = await res.json();
   return data;
 }

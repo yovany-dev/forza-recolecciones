@@ -4,6 +4,8 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { createReportSchema, updateReportSchema } from '@/lib/zod/report';
 import { now } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const body = await req.json();
