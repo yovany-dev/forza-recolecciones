@@ -155,9 +155,9 @@ export async function GET(req: Request) {
       data: reports,
       status: 200,
       date: {
-        startOfTodayTime: `${startOfTodayTime}`,
-        endOfTodayTime: `${endOfTodayTime}`,
-        currentTime: `${currentTime}`,
+        startOfTodayTime: startOfTodayTime.format('YYYY-MM-DD HH:mm'),
+        endOfTodayTime: endOfTodayTime.format('YYYY-MM-DD HH:mm'),
+        currentTime: currentTime.format('DD/MM/YYYY hh:mm'),
       },
     });
   } catch (error) {
