@@ -1,24 +1,15 @@
-// import { redirect } from "next/navigation";
-// import { getServerSession } from "next-auth";
-// import { createUser } from "@/lib/create-user";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import { useRouter } from "next/navigation";
 import { LoginForm } from "@/components/login-form";
-// import { authOptions } from "@/lib/authOptions";
 
 export default async function LoginPage() {
-  // const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
+  const router = useRouter();
 
-  // if (session) {
-  //   redirect("/dashboard");
-  // }
-  console.log("Me renderizo...");
-  // const res = await createUser({
-  //   name: 'admin',
-  //   email: 'admin@forzadelivery.com',
-  //   avatar: 'https://www.forzadelivery.com/app/uploads/2024/09/cropped-forza-web-icon-150x150.png',
-  //   password: '551172',
-  //   role: 'admin',
-  // });
-  // console.log(res);
+  if (session) {
+    router.push("/dashboard");
+  }
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
       <div className="flex w-full max-w-[400px] flex-col gap-6">
