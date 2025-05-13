@@ -13,7 +13,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
 export function LoginForm({
@@ -21,7 +20,6 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const { theme } = useTheme();
 
   const {
