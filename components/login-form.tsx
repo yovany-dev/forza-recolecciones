@@ -29,18 +29,15 @@ export function LoginForm({
     formState: { errors },
     handleSubmit,
   } = useForm<loginSchemaType>({ resolver: zodResolver(loginSchema) });
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
   const onSubmit: SubmitHandler<loginSchemaType> = async (data) => {
     const res = await signIn("credentials", {
       email: data.email,
       password: data.password,
-      redirect: false,
+      callbackUrl: "/dashboard",
     });
     if (res?.error) {
       setError(res.error);
-    } else {
-      router.push(`${BASE_URL}/dashboard`);
     }
   };
 
