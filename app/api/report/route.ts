@@ -1,8 +1,12 @@
+import { now } from '@/lib/utils';
 import { authOptions } from '@/lib/authOptions';
 import { getServerSession } from 'next-auth';
-import { Prisma, PrismaClient } from '@prisma/client';
-import { createReportSchema, updateReportSchema } from '@/lib/zod/report';
-import { now } from '@/lib/utils';
+import { Prisma, PrismaClient, Location, Photo, State } from '@prisma/client';
+import {
+  createReportSchema,
+  reportStateSchema,
+  updateReportSchema,
+} from '@/lib/zod/report';
 
 export const dynamic = 'force-dynamic';
 
@@ -100,20 +104,35 @@ export async function GET(req: Request) {
   const prisma = new PrismaClient();
   const { searchParams } = new URL(req.url);
   const search = searchParams.get('search');
-  const startOfToday = now().startOf('day').toDate();
-  const endOfToday = now().endOf('day').toDate();
-  const startOfTodayTime = now().startOf('day');
-  const endOfTodayTime = now().endOf('day');
-  const currentTime = now();
 
-  console.log('Comienzo de hoy: ', startOfTodayTime.format('YYYY-MM-DD HH:mm'));
-  console.log('Fin de hoy: ', endOfTodayTime.format('YYYY-MM-DD HH:mm'));
-  console.log('Hora en Guatemala: ', currentTime.format('DD/MM/YYYY hh:mm'));
+  const getArrayParam = (key: string) =>
+    (searchParams.get(key) || '').split(',').filter((v) => v);
+
+  const scheduleRaw = getArrayParam('fr_horario');
+  const locationRaw = getArrayParam('fr_ubicación');
+  const photoRaw = getArrayParam('fr_foto');
+  const stateRaw = getArrayParam('fr_estado');
+
+  const locationEnum = reportStateSchema.shape.location;
+  const photoEnum = reportStateSchema.shape.photo;
+  const stateEnum = reportStateSchema.shape.state;
+
+  const filterLocation = locationRaw.filter((v) =>
+    locationEnum.options.includes(v as Location)
+  );
+  const filterPhoto = photoRaw.filter((v) =>
+    photoEnum.options.includes(v as Photo)
+  );
+  const filterState = stateRaw.filter((v) =>
+    stateEnum.options.includes(v as State)
+  );
 
   if (!session || !session.user) {
     return Response.json({ error: 'unauthorized', status: 401 });
   }
   try {
+    const startOfToday = now().startOf('day').toDate();
+    const endOfToday = now().endOf('day').toDate();
     const reports = await prisma.report.findMany({
       where: {
         AND: [
@@ -141,6 +160,26 @@ export async function GET(req: Request) {
                 ],
               }
             : {},
+          scheduleRaw.length
+            ? {
+                schedule: { in: scheduleRaw },
+              }
+            : {},
+          filterLocation.length
+            ? {
+                location: { in: filterLocation as Location[] },
+              }
+            : {},
+          filterPhoto.length
+            ? {
+                photo: { in: filterPhoto as Photo[] },
+              }
+            : {},
+          filterState.length
+            ? {
+                state: { in: filterState as State[] },
+              }
+            : {},
           {
             createdAt: {
               gte: startOfToday,
@@ -156,11 +195,6 @@ export async function GET(req: Request) {
     return Response.json({
       data: reports,
       status: 200,
-      date: {
-        startOfTodayTime: startOfTodayTime.format('YYYY-MM-DD HH:mm'),
-        endOfTodayTime: endOfTodayTime.format('YYYY-MM-DD HH:mm'),
-        currentTime: currentTime.format('DD/MM/YYYY hh:mm'),
-      },
     });
   } catch (error) {
     return Response.json({ error, status: 500 });

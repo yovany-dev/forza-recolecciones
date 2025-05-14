@@ -18,10 +18,19 @@ export async function createReportService(data: createReportSchemaType) {
   return dataRes;
 }
 
-export async function getReportService(search: string) {
-  const res = await fetch(`${BASE_URL}/api/report?search=${search}`, {
-    cache: 'no-store',
-  });
+export async function getReportService(
+  search: string,
+  schedule: string,
+  location: string,
+  photo: string,
+  state: string
+) {
+  const res = await fetch(
+    `${BASE_URL}/api/report?search=${search}&fr_horario=${schedule}&fr_ubicación=${location}&fr_foto=${photo}&fr_estado=${state}`,
+    {
+      cache: 'no-store',
+    }
+  );
   const data = await res.json();
   return data;
 }

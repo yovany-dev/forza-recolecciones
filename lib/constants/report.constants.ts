@@ -2,3 +2,16 @@ export const reportPositionConstant = {
   PILOTO_RECOLECTOR: 'PILOTO RECOLECTOR',
   AUXILIAR_RECOLECTOR: 'AUXILIAR RECOLECTOR',
 };
+
+export const reportStatesConstant: Record<string, string> = {
+  '07:30': '07:30',
+  '08:30': '08:30',
+  ADMIN: 'ADMIN',
+  DETECTADA: 'DETECTADA',
+  NO_DETECTADA: 'NO DETECTADA',
+  CARGADA: 'CARGADA',
+  NO_CARGADA: 'NO CARGADA',
+  INGRESADO: 'INGRESADO',
+  PENDIENTE: 'PENDIENTE',
+  INGRESO_TARDE: 'INGRESO TARDE',
+};

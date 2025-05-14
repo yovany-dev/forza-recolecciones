@@ -9,6 +9,7 @@ import {
 import { EmployeeType } from '@/types/employeeType';
 import { employeeSchemaType } from '@/lib/zod/employee';
 import { successfulNotification } from '@/components/notifications';
+import { FilterType } from '@/types/reportType';
 
 const employeeType: Record<EmployeeType, string> = {
   driver: reportPositionConstant.PILOTO_RECOLECTOR,
@@ -21,6 +22,7 @@ interface ReportStore {
   newReportLoading: boolean;
   availableReportLoading: boolean;
   search: string;
+  filters: FilterType[];
 
   setReports: (data: reportSchemaType[]) => void;
   setAvailableReports: (data: employeeSchemaType[]) => void;
@@ -28,6 +30,7 @@ interface ReportStore {
   setNewReportLoading: (state: boolean) => void;
   setAvailableReportLoading: (state: boolean) => void;
   setSearch: (value: string) => void;
+  setFilters: (data: FilterType) => void;
 
   createReport: (dpi: string, position: string) => void;
   getReports: () => void;
@@ -49,6 +52,32 @@ export const useReportStore = create<ReportStore>((set) => ({
   newReportLoading: false,
   availableReportLoading: false,
   search: '',
+  filters: [
+    {
+      title: 'Horario',
+      states: ['07:30', '08:30'],
+      values: [],
+      active: false,
+    },
+    {
+      title: 'Ubicación',
+      states: ['ADMIN', 'DETECTADA', 'NO_DETECTADA'],
+      values: [],
+      active: false,
+    },
+    {
+      title: 'Foto',
+      states: ['ADMIN', 'CARGADA', 'NO_CARGADA'],
+      values: [],
+      active: false,
+    },
+    {
+      title: 'Estado',
+      states: ['ADMIN', 'INGRESADO', 'PENDIENTE', 'INGRESO_TARDE'],
+      values: [],
+      active: false,
+    },
+  ],
 
   setReports: (reports) => set({ reports }),
   setAvailableReports: (availableReports) => set({ availableReports }),
@@ -57,6 +86,13 @@ export const useReportStore = create<ReportStore>((set) => ({
   setAvailableReportLoading: (newState) =>
     set({ availableReportLoading: newState }),
   setSearch: (newSearch) => set({ search: newSearch }),
+  setFilters: (updateData) => {
+    set((state) => ({
+      filters: state.filters.map((filter) =>
+        filter.title === updateData.title ? { ...updateData } : filter
+      ),
+    }));
+  },
 
   createReport: async (dpi, position) => {
     const {
@@ -92,9 +128,21 @@ export const useReportStore = create<ReportStore>((set) => ({
     setAvailableReports(filteredReports);
   },
   getReports: async () => {
-    const { setReports, setLoading, availableReports, getAvailableReports, search } =
-      useReportStore.getState();
-    const data = await getReportService(search);
+    const {
+      setReports,
+      setLoading,
+      availableReports,
+      getAvailableReports,
+      search,
+      filters,
+    } = useReportStore.getState();
+    const data = await getReportService(
+      search,
+      filters[0].values.join(','),
+      filters[1].values.join(','),
+      filters[2].values.join(','),
+      filters[3].values.join(',')
+    );
     console.log(data);
 
     setReports(data.data);

@@ -18,6 +18,7 @@ const Page = () => {
     loading,
     setLoading,
     search,
+    filters,
     // setAvailableReportLoading,
   } = useReportStore();
   const [debouncedSearch] = useDebounce(search, 500);
@@ -26,7 +27,13 @@ const Page = () => {
     setLoading(true);
     // setAvailableReportLoading(true);
     getReports();
-  }, [debouncedSearch]);
+  }, [
+    debouncedSearch,
+    filters[0].values.length,
+    filters[1].values.length,
+    filters[2].values.length,
+    filters[3].values.length,
+  ]);
 
   return (
     <SidebarInset>
