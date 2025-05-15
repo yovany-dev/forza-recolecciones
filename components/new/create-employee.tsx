@@ -24,9 +24,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { employeeSchema, employeeSchemaType } from "@/lib/zod/employee";
 import { createEmployeeService } from "@/services/employeeService";
 
-const formattedType: Record<string, EmployeeType> = {
-  piloto: "driver",
-  auxiliar: "copilot",
+const formatTypeEn: Record<string, EmployeeType> = {
+  Piloto: "driver",
+  Auxiliar: "copilot",
+};
+const formatTypeEs: Record<string, string> = {
+  Piloto: "pilotos",
+  Auxiliar: "auxiliares",
 };
 interface errorMessage {
   status: boolean;
@@ -46,13 +50,12 @@ const CreateEmployee: React.FC<Props> = ({ type }) => {
 
   const onSubmit: SubmitHandler<employeeSchemaType> = async (data) => {
     setErrorMessage(null);
-    const employee = await createEmployeeService(
-      formattedType[type.toLowerCase()],
-      data
-    );
+    const employee = await createEmployeeService(formatTypeEn[type], data);
 
     if (employee.status == 201) {
-      reset();
+      reset({
+        position: `${type.toUpperCase()} RECOLECTOR`,
+      });
       successfulNotification(`${type} creado exitosamente.`);
     } else if (employee.status == 409) {
       setErrorMessage({
@@ -127,7 +130,9 @@ const CreateEmployee: React.FC<Props> = ({ type }) => {
               className="border border-[#ea580c]"
               asChild
             >
-              <Link href="/dashboard/empleados/pilotos">Regresar</Link>
+              <Link href={`/dashboard/empleados/${formatTypeEs[type]}`}>
+                Regresar
+              </Link>
             </Button>
             <Button type="submit" disabled={isSubmitting && true}>
               Guardar
