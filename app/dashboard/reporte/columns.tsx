@@ -69,7 +69,18 @@ export const columns: ColumnDef<reportSchemaType>[] = [
   },
   {
     accessorKey: "position",
-    header: "Cargo",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="p-0 hover:bg-transparent"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Cargo
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const position = row.original.position;
       const badgeTheme = {
@@ -107,7 +118,20 @@ export const columns: ColumnDef<reportSchemaType>[] = [
   },
   {
     accessorKey: "checkIn",
-    header: "H. Entrada",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="p-0 hover:bg-transparent"
+          onClick={() =>
+            column.toggleSorting(!(column.getIsSorted() === "desc"))
+          }
+        >
+          H. Entrada
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "location",
