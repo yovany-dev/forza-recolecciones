@@ -1,9 +1,11 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Ellipsis } from "lucide-react";
 import { ArrowUpDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -67,6 +69,25 @@ export const columns: ColumnDef<employeeSchemaType>[] = [
   {
     accessorKey: "position",
     header: "Cargo",
+    cell: ({ row }) => {
+      const position = row.original.position;
+      const badgeTheme = {
+        driver: "border-[#ff1010] bg-[#ff10101e] text-[#ff1010]",
+        copilot: "border-[#ea5d1d] bg-[#ea5e1d1e] text-[#ea5d1d]",
+      };
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            position == "PILOTO RECOLECTOR"
+              ? badgeTheme.driver
+              : badgeTheme.copilot
+          )}
+        >
+          {position}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "schedule",
