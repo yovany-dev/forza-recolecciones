@@ -14,6 +14,7 @@ const Page = () => {
   const dataLink: Links[] = [{ name: "dashboard", url: "/dashboard" }];
   const {
     reports,
+    totalReports,
     getReports,
     loading,
     setLoading,
@@ -45,7 +46,7 @@ const Page = () => {
         auxiliares."
         />
         <div className="n-body mt-5">
-          <DataTable columns={columns} data={reports} loading={loading} />
+          <DataTable columns={columns} data={reports} totalReports={totalReports} loading={loading} />
         </div>
       </main>
     </SidebarInset>

@@ -14,9 +14,6 @@ const TableSkeleton = () => {
         <Skeleton className="h-5 w-32" />
       </TableCell>
       <TableCell>
-        <Skeleton className="h-5 w-40" />
-      </TableCell>
-      <TableCell>
         <Skeleton className="h-5 w-24" />
       </TableCell>
       <TableCell>

@@ -22,7 +22,7 @@ interface Props {
   setIsOpen: (data: boolean) => void;
 }
 const DialogDeleteReport: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
-  const { removeReport } = useReportStore();
+  const { removeReport, totalReports, setTotalReports } = useReportStore();
   const [loading, setLoading] = useState(false);
 
   const deleteEmployee = async () => {
@@ -31,6 +31,7 @@ const DialogDeleteReport: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
     if (reportRemoved.status === 200) {
       successfulNotification(reportRemoved.message);
       removeReport(uuid);
+      setTotalReports(totalReports - 1);
     } else {
       successfulNotification(reportRemoved.error);
     }

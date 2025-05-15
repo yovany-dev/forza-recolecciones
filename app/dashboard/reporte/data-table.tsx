@@ -27,11 +27,13 @@ import { TableSkeleton } from "@/components/report/table-skeleton";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | [];
+  totalReports: number,
   loading: boolean;
 }
 export function DataTable<TData, TValue>({
   columns,
   data,
+  totalReports,
   loading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
@@ -121,7 +123,7 @@ export function DataTable<TData, TValue>({
           {table.getFilteredRowModel().rows.length} fila(s) seleccionado.
         </div>
         <div>
-          <p className="text-sm text-muted-foreground">total de reportes 0</p>
+          <p className="text-sm text-muted-foreground">total de reportes {totalReports}</p>
         </div>
       </div>
     </div>

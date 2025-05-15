@@ -17,6 +17,7 @@ const employeeType: Record<EmployeeType, string> = {
 };
 interface ReportStore {
   reports: reportSchemaType[] | [];
+  totalReports: number;
   availableReports: employeeSchemaType[] | [];
   loading: boolean;
   newReportLoading: boolean;
@@ -25,6 +26,7 @@ interface ReportStore {
   filters: FilterType[];
 
   setReports: (data: reportSchemaType[]) => void;
+  setTotalReports: (data: number) => void;
   setAvailableReports: (data: employeeSchemaType[]) => void;
   setLoading: (state: boolean) => void;
   setNewReportLoading: (state: boolean) => void;
@@ -47,6 +49,7 @@ interface ReportStore {
 }
 export const useReportStore = create<ReportStore>((set) => ({
   reports: [],
+  totalReports: 0,
   availableReports: [],
   loading: false,
   newReportLoading: false,
@@ -80,6 +83,7 @@ export const useReportStore = create<ReportStore>((set) => ({
   ],
 
   setReports: (reports) => set({ reports }),
+  setTotalReports: (number) => set({ totalReports: number }),
   setAvailableReports: (availableReports) => set({ availableReports }),
   setLoading: (newState) => set({ loading: newState }),
   setNewReportLoading: (newState) => set({ newReportLoading: newState }),
@@ -98,6 +102,8 @@ export const useReportStore = create<ReportStore>((set) => ({
     const {
       reports,
       setReports,
+      totalReports,
+      setTotalReports,
       availableReports,
       setAvailableReports,
       setNewReportLoading,
@@ -120,6 +126,7 @@ export const useReportStore = create<ReportStore>((set) => ({
     }
     setNewReportLoading(false);
     setReports([...reports, res.report]);
+    setTotalReports(totalReports + 1);
     successfulNotification('Reporte creado exitosamente.');
 
     const filteredReports = availableReports.filter(
@@ -130,6 +137,7 @@ export const useReportStore = create<ReportStore>((set) => ({
   getReports: async () => {
     const {
       setReports,
+      setTotalReports,
       setLoading,
       availableReports,
       getAvailableReports,
@@ -143,9 +151,9 @@ export const useReportStore = create<ReportStore>((set) => ({
       filters[2].values.join(','),
       filters[3].values.join(',')
     );
-    console.log(data);
 
     setReports(data.data);
+    setTotalReports(data.total);
     setLoading(false);
     if (availableReports.length === 0) {
       getAvailableReports();

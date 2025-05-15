@@ -133,6 +133,14 @@ export async function GET(req: Request) {
   try {
     const startOfToday = now().startOf('day').toDate();
     const endOfToday = now().endOf('day').toDate();
+    const totalReports = await prisma.report.count({
+      where: {
+        createdAt: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+      },
+    });
     const reports = await prisma.report.findMany({
       where: {
         AND: [
@@ -194,6 +202,7 @@ export async function GET(req: Request) {
     });
     return Response.json({
       data: reports,
+      total: totalReports,
       status: 200,
     });
   } catch (error) {
