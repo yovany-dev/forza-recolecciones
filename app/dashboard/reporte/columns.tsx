@@ -204,7 +204,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
       return (
         <>
           <SheetEditReport
-            report={report}
+            report={{ ...report, createdAt: new Date() }}
             isOpen={isSheetOpen}
             setIsOpen={setIsSheetOpen}
           />
