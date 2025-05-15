@@ -27,13 +27,23 @@ interface Props {
   setIsOpen: (data: boolean) => void;
 }
 const DialogDeleteEmployee: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
-  const { employeeType, removeEmployee } = useEmployeeStore();
+  const { employeeType, removeEmployee, pagination, setPagination } =
+    useEmployeeStore();
   const [loading, setLoading] = useState(false);
   const deleteEmployee = async (uuid: string | undefined) => {
-    const employeeRemoved = await deleteEmployeeService(employeeType as EmployeeType, uuid);
+    const employeeRemoved = await deleteEmployeeService(
+      employeeType as EmployeeType,
+      uuid
+    );
     if (employeeRemoved.status === 200) {
       successfulNotification(employeeRemoved.message);
       removeEmployee(uuid);
+      setPagination({
+        ...pagination,
+        total: pagination.total - 1,
+        total_pages:
+          pagination.total_pages !== 1 ? pagination.total_pages - 1 : 1,
+      });
     } else {
       successfulNotification(employeeRemoved.error);
     }
@@ -46,11 +56,13 @@ const DialogDeleteEmployee: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            ¿Estás seguro de eliminar este {formattedType[employeeType].toLowerCase()}?
+            ¿Estás seguro de eliminar este{" "}
+            {formattedType[employeeType].toLowerCase()}?
           </AlertDialogTitle>
           <AlertDialogDescription>
             Esta acción no se puede deshacer. Eliminará permanentemente al
-            {" " + formattedType[employeeType].toLowerCase()} de la base de datos.
+            {" " + formattedType[employeeType].toLowerCase()} de la base de
+            datos.
           </AlertDialogDescription>
           <div className="h-6">{loading && <LoadingNotification />}</div>
         </AlertDialogHeader>
