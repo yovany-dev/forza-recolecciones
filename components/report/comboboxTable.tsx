@@ -59,7 +59,7 @@ export function ComboboxNewReport() {
           className="w-[200px] justify-between"
         >
           <Grid2X2Plus />
-          {newReportLoading ? <NewReportHeader /> : "Nuevo Report"}
+          {newReportLoading ? <NewReportHeader /> : "Nuevo Reporte"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
