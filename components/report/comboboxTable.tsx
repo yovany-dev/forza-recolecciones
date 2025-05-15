@@ -38,7 +38,6 @@ export function ComboboxNewReport() {
     availableReportLoading,
   } = useReportStore();
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   const employees = availableReports.map((employee) => {
     return {
@@ -78,17 +77,13 @@ export function ComboboxNewReport() {
                 employees.map((employee) => (
                   <CommandItem
                     key={employee.value}
-                    value={employee.value}
-                    onSelect={(currentValue) => {
-                      if (currentValue !== value) {
-                        setNewReportLoading(true);
-                        createReport(employee.dpi, employee.position);
-                      }
-                      setValue(currentValue === value ? "" : currentValue);
+                    onSelect={() => {
+                      setNewReportLoading(true);
+                      createReport(employee.dpi, employee.position);
                       setOpen(false);
                     }}
                   >
-                    <Checkbox checked={value == employee.value} aria-label="" />
+                    <Checkbox aria-label="checkbox" />
                     {employee.label}
                   </CommandItem>
                 ))

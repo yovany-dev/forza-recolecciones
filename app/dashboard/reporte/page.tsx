@@ -20,13 +20,11 @@ const Page = () => {
     setLoading,
     search,
     filters,
-    // setAvailableReportLoading,
   } = useReportStore();
   const [debouncedSearch] = useDebounce(search, 500);
 
   useEffect(() => {
     setLoading(true);
-    // setAvailableReportLoading(true);
     getReports();
   }, [
     debouncedSearch,

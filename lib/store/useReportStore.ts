@@ -53,7 +53,7 @@ export const useReportStore = create<ReportStore>((set) => ({
   availableReports: [],
   loading: false,
   newReportLoading: false,
-  availableReportLoading: false,
+  availableReportLoading: true,
   search: '',
   filters: [
     {
@@ -120,11 +120,11 @@ export const useReportStore = create<ReportStore>((set) => ({
     };
     const res = await createReportService(data);
 
+    setNewReportLoading(false);
     if (res.status !== 201) {
-      successfulNotification(res.errorMessage);
+      successfulNotification('Error: no se pudo crear el reporte.');
       return;
     }
-    setNewReportLoading(false);
     setReports([...reports, res.report]);
     setTotalReports(totalReports + 1);
     successfulNotification('Reporte creado exitosamente.');

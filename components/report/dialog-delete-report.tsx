@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useReportStore } from "@/lib/store/useReportStore";
 import { deleteReportService } from "@/services/reportService";
+import { employeeSchemaType } from "@/lib/zod/employee";
 
 interface Props {
   uuid: string;
@@ -22,16 +23,34 @@ interface Props {
   setIsOpen: (data: boolean) => void;
 }
 const DialogDeleteReport: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
-  const { removeReport, totalReports, setTotalReports } = useReportStore();
+  const {
+    removeReport,
+    totalReports,
+    setTotalReports,
+    availableReports,
+    setAvailableReports,
+  } = useReportStore();
   const [loading, setLoading] = useState(false);
 
   const deleteEmployee = async () => {
     const reportRemoved = await deleteReportService(uuid);
+    const employee: employeeSchemaType = reportRemoved.report;
 
     if (reportRemoved.status === 200) {
       successfulNotification(reportRemoved.message);
       removeReport(uuid);
       setTotalReports(totalReports - 1);
+      setAvailableReports([
+        ...availableReports,
+        {
+          uuid: employee.uuid,
+          employeeNumber: employee.employeeNumber,
+          fullname: employee.fullname,
+          dpi: employee.dpi,
+          position: employee.position,
+          schedule: employee.schedule,
+        },
+      ]);
     } else {
       successfulNotification(reportRemoved.error);
     }
