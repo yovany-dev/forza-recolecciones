@@ -40,7 +40,9 @@ export function LoginForm({
     if (res?.error) {
       setError(res.error);
     } else {
-      router.push("/dashboard");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 500)
     }
   };
 
