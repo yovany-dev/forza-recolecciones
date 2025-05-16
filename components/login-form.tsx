@@ -14,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -22,7 +21,6 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [error, setError] = useState<string | null>(null);
   const { theme } = useTheme();
-  const router = useRouter();
 
   const {
     register,
@@ -31,18 +29,24 @@ export function LoginForm({
   } = useForm<loginSchemaType>({ resolver: zodResolver(loginSchema) });
 
   const onSubmit: SubmitHandler<loginSchemaType> = async (data) => {
-    const res = await signIn("credentials", {
-      redirect: false,
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+    if (result.status === 401) {
+      setError(result.error);
+      return;
+    }
+
+    const signInRes = await signIn("credentials", {
       email: data.email,
       password: data.password,
       callbackUrl: "/dashboard",
     });
-    if (res?.error) {
-      setError(res.error);
-    } else {
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 500)
+    if (signInRes?.error) {
+      setError(signInRes.error);
     }
   };
 
