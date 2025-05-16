@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -21,6 +22,7 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [error, setError] = useState<string | null>(null);
   const { theme } = useTheme();
+  const router = useRouter();
 
   const {
     register,
@@ -30,12 +32,15 @@ export function LoginForm({
 
   const onSubmit: SubmitHandler<loginSchemaType> = async (data) => {
     const res = await signIn("credentials", {
+      redirect: false,
       email: data.email,
       password: data.password,
       callbackUrl: "/dashboard",
     });
     if (res?.error) {
       setError(res.error);
+    } else {
+      router.push("/dashboard");
     }
   };
 
