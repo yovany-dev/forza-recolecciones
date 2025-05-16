@@ -59,3 +59,9 @@ export async function deleteEmployeeService(
   const deleteEmployee = await res.json();
   return deleteEmployee;
 }
+
+export async function findEmployeeService(type: string, dpi: string) {
+  const res = await fetch(`${BASE_URL}/api/employee?type=${type}&dpi=${dpi}`);
+  const data = await res.json();
+  return data;
+}

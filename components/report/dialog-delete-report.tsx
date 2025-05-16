@@ -29,6 +29,7 @@ const DialogDeleteReport: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
     setTotalReports,
     availableReports,
     setAvailableReports,
+    getAvailableEmployee,
   } = useReportStore();
   const [loading, setLoading] = useState(false);
 
@@ -40,17 +41,21 @@ const DialogDeleteReport: React.FC<Props> = ({ uuid, isOpen, setIsOpen }) => {
       successfulNotification(reportRemoved.message);
       removeReport(uuid);
       setTotalReports(totalReports - 1);
-      setAvailableReports([
-        ...availableReports,
-        {
-          uuid: employee.uuid,
-          employeeNumber: employee.employeeNumber,
-          fullname: employee.fullname,
-          dpi: employee.dpi,
-          position: employee.position,
-          schedule: employee.schedule,
-        },
-      ]);
+
+      const existEmployee = await getAvailableEmployee(employee);
+      const availableEmployee: employeeSchemaType = {
+        uuid: employee.uuid,
+        employeeNumber: employee.employeeNumber,
+        fullname: employee.fullname,
+        dpi: employee.dpi,
+        position: employee.position,
+        schedule: employee.schedule,
+      };
+      setAvailableReports(
+        existEmployee
+          ? [...availableReports, availableEmployee]
+          : [...availableReports]
+      );
     } else {
       successfulNotification(reportRemoved.error);
     }

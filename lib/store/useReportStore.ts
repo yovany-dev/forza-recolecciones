@@ -6,14 +6,19 @@ import {
   getReportService,
   getNewReportService,
 } from '@/services/reportService';
+import { FilterType } from '@/types/reportType';
 import { EmployeeType } from '@/types/employeeType';
 import { employeeSchemaType } from '@/lib/zod/employee';
+import { findEmployeeService } from '@/services/employeeService';
 import { successfulNotification } from '@/components/notifications';
-import { FilterType } from '@/types/reportType';
 
 const employeeType: Record<EmployeeType, string> = {
   driver: reportPositionConstant.PILOTO_RECOLECTOR,
   copilot: reportPositionConstant.AUXILIAR_RECOLECTOR,
+};
+const employeeTypeEn: Record<string, EmployeeType> = {
+  'PILOTO RECOLECTOR': 'driver',
+  'AUXILIAR RECOLECTOR': 'copilot',
 };
 interface ReportStore {
   reports: reportSchemaType[] | [];
@@ -41,6 +46,7 @@ interface ReportStore {
     employee: EmployeeType
   ) => string[];
   getAvailableReports: () => void;
+  getAvailableEmployee: (employee: employeeSchemaType) => Promise<boolean>;
   updateReport: (
     uuid: string | undefined,
     updatedData: Partial<reportSchemaType>
@@ -179,6 +185,17 @@ export const useReportStore = create<ReportStore>((set) => ({
     const res = await getNewReportService(drivers, copilots);
     setAvailableReports(res.data);
     setAvailableReportLoading(false);
+  },
+  getAvailableEmployee: async (employee) => {
+    const res = await findEmployeeService(
+      employeeTypeEn[employee.position],
+      employee.dpi
+    );
+    let result = false;
+    if (res.status === 200) {
+      result = true;
+    }
+    return result;
   },
   updateReport: (uuid, updatedData) =>
     set((state) => ({
