@@ -51,7 +51,7 @@ const data = {
     },
     {
       name: "Historial de horarios",
-      url: "#",
+      url: "/dashboard/historial-horarios",
       icon: History,
     },
   ],
