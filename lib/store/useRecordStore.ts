@@ -64,7 +64,7 @@ export const useRecordStore = create<RecordStore>((set) => ({
     },
   ],
   dateRange: undefined,
-  singleDate: undefined,
+  singleDate: new Date(),
   periods: ['Últimos 7 días', 'Últimos 30 días', 'Este mes', 'Mes pasado'],
   selectedPeriod: '',
   ranges: {
