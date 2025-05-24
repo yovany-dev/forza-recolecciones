@@ -8,7 +8,7 @@ import { Header } from "@/components/common/header/header";
 import { useRecordStore } from "@/lib/store/useRecordStore";
 import { DataTable } from "@/app/dashboard/historial-horarios/data-table";
 import { columns } from "@/app/dashboard/historial-horarios/columns";
-// import { useDebounce } from "use-debounce";
+import { useDebounce } from "use-debounce";
 
 const Page = () => {
   const dataLink: Links[] = [{ name: "dashboard", url: "/dashboard" }];
@@ -17,18 +17,18 @@ const Page = () => {
     getReports,
     loading,
     setLoading,
-    // search,
+    search,
     // filters,
     dateRange,
     singleDate,
   } = useRecordStore();
-  // const [debouncedSearch] = useDebounce(search, 500);
+  const [debouncedSearch] = useDebounce(search, 500);
 
   useEffect(() => {
     setLoading(true);
     getReports();
   }, [
-    // debouncedSearch,
+    debouncedSearch,
     // filters[0].values.length,
     // filters[1].values.length,
     // filters[2].values.length,
@@ -46,11 +46,7 @@ const Page = () => {
           description="Obtén un historial detallado acerca del ingreso de los empleados, aplica búsquedas por día, semanas, y meses."
         />
         <div className="n-body mt-5">
-          <DataTable
-            columns={columns}
-            data={reports}
-            loading={loading}
-          />
+          <DataTable columns={columns} data={reports} loading={loading} />
         </div>
       </main>
     </SidebarInset>
