@@ -15,6 +15,7 @@ type GenericObject = { [key: string]: string };
 
 const ColumnsTable = <TData,>({ table }: Props<TData>) => {
   const headers: GenericObject = {
+    createdAt: "Fecha",
     employeeNumber: "No. Gafete",
     fullname: "Nombre Completo",
     dpi: "DPI",

@@ -1,25 +1,15 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-
-import { useState } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { ColumnDef } from "@tanstack/react-table";
-import { Ellipsis } from "lucide-react";
+import { reportSchemaType } from "@/lib/zod/report";
+
 import { ArrowUpDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { reportSchemaType } from "@/lib/zod/report";
-import { SheetEditReport } from "@/components/report/sheet-edit-report";
-import { DialogDeleteReport } from "@/components/report/dialog-delete-report";
 
 export const columns: ColumnDef<reportSchemaType>[] = [
   {
@@ -43,6 +33,18 @@ export const columns: ColumnDef<reportSchemaType>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Fecha",
+    cell: ({ row }) => {
+      const dateISO = row.original.createdAt!;
+      const formattedDate = format(new Date(dateISO), "dd/MM/yyyy", {
+        locale: es,
+      });
+
+      return <span>{formattedDate}</span>;
+    },
   },
   {
     accessorKey: "employeeNumber",
@@ -214,67 +216,6 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         <Badge variant="outline" className={badgeTheme[state]}>
           {states[state]}
         </Badge>
-      );
-    },
-  },
-  {
-    id: "actions",
-    cell: function Cell({ row }) {
-      const report = row.original;
-      const [isDialogOpen, setIsDialogOpen] = useState(false);
-      const [isSheetOpen, setIsSheetOpen] = useState(false);
-      const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-      return (
-        <>
-          <SheetEditReport
-            report={{ ...report, createdAt: new Date() }}
-            isOpen={isSheetOpen}
-            setIsOpen={setIsSheetOpen}
-          />
-          <DialogDeleteReport
-            uuid={report.uuid as string}
-            isOpen={isDialogOpen}
-            setIsOpen={setIsDialogOpen}
-          />
-          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Abrir menu</span>
-                <Ellipsis className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault();
-                  setIsMenuOpen(false);
-                  setIsSheetOpen(true);
-                }}
-              >
-                Editar reporte
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault();
-                  setIsMenuOpen(false);
-                  setIsDialogOpen(true);
-                }}
-              >
-                Eliminar reporte
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(String(report.dpi))
-                }
-              >
-                Copiar número de DPI
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </>
       );
     },
   },

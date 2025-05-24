@@ -22,18 +22,16 @@ import { useEffect, useState } from "react";
 import { Controls } from "@/components/historial-horarios/controls";
 import { Separator } from "@/components/ui/separator";
 // import { Filters } from "@/components/report/filters";
-import { TableSkeleton } from "@/components/report/table-skeleton";
+import { TableSkeleton } from "@/components/historial-horarios/table-skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | [];
-  totalReports: number;
   loading: boolean;
 }
 export function DataTable<TData, TValue>({
   columns,
   data,
-  totalReports,
   loading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
@@ -54,7 +52,7 @@ export function DataTable<TData, TValue>({
   });
   useEffect(() => {
     table.getAllColumns().map((column) => {
-      if (column.id === "dpi") {
+      if (column.id === "dpi" || column.id === "employeeNumber") {
         column.toggleVisibility(false);
       }
     });
@@ -124,7 +122,7 @@ export function DataTable<TData, TValue>({
         </div>
         <div>
           <p className="text-sm text-muted-foreground">
-            total de reportes {totalReports}
+            total de reportes {data.length}
           </p>
         </div>
       </div>

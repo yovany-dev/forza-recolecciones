@@ -1,18 +1,20 @@
 "use client";
 
-import * as React from "react";
-import { es } from "date-fns/locale";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import * as React from "react";
+import { es } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { useRecordStore } from "@/lib/store/useRecordStore";
 
 const ButtonCalendar = () => {
-  const [date, setDate] = React.useState<Date>();
+  const { singleDate, setSingleDate, setSelectedPeriod, setDateRange } =
+    useRecordStore();
 
   return (
     <Popover>
@@ -26,8 +28,12 @@ const ButtonCalendar = () => {
         <Calendar
           locale={es}
           mode="single"
-          selected={date}
-          onSelect={setDate}
+          selected={singleDate}
+          onSelect={(date) => {
+            setSelectedPeriod("");
+            setDateRange(undefined);
+            setSingleDate(date);
+          }}
           initialFocus
         />
       </PopoverContent>

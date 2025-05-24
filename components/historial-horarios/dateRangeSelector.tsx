@@ -9,23 +9,23 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon, ChevronDown, Clock4 } from "lucide-react";
 import { Command, CommandItem, CommandList } from "@/components/ui/command";
+import { useRecordStore } from "@/lib/store/useRecordStore";
 
 const DateRangeSelector = () => {
+  const {
+    selectedPeriod,
+    setSelectedPeriod,
+    dateRange,
+    setDateRange,
+    setSingleDate,
+    periods,
+    ranges,
+  } = useRecordStore();
   const [openCombo, setOpenCombo] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState("");
-  const [date, setDate] = useState<DateRange | undefined>();
-
-  const periods = [
-    "Últimos 7 días",
-    "Últimos 30 días",
-    "Este mes",
-    "Mes pasado",
-  ];
 
   return (
     <div className="flex items-center">
@@ -55,6 +55,8 @@ const DateRangeSelector = () => {
                 <CommandItem
                   key={period}
                   onSelect={() => {
+                    setSingleDate(undefined);
+                    setDateRange(ranges[period]);
                     setSelectedPeriod(period);
                     setOpenCombo(false);
                   }}
@@ -78,18 +80,18 @@ const DateRangeSelector = () => {
             variant={"outline"}
             className={cn(
               "w-[300px] justify-start text-left font-normal rounded-l-none",
-              !date && "text-muted-foreground"
+              !dateRange && "text-muted-foreground"
             )}
           >
             <CalendarIcon />
-            {date?.from ? (
-              date.to ? (
+            {dateRange?.from ? (
+              dateRange.to ? (
                 <>
-                  {format(date.from, "d 'de' LLLL, yyyy", { locale: es })} -{" "}
-                  {format(date.to, "d 'de' LLLL, yyyy", { locale: es })}
+                  {format(dateRange.from, "d 'de' LLLL, yyyy", { locale: es })}{" "}
+                  - {format(dateRange.to, "d 'de' LLLL, yyyy", { locale: es })}
                 </>
               ) : (
-                format(date.from, "d 'de' LLLL, yyyy", { locale: es })
+                format(dateRange.from, "d 'de' LLLL, yyyy", { locale: es })
               )
             ) : (
               <span>Seleccionar rango de fechas</span>
@@ -101,9 +103,13 @@ const DateRangeSelector = () => {
             locale={es}
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
+            defaultMonth={dateRange?.from}
+            selected={dateRange}
+            onSelect={(date) => {
+              setSelectedPeriod("");
+              setSingleDate(undefined);
+              setDateRange(date);
+            }}
           />
         </PopoverContent>
       </Popover>
