@@ -18,7 +18,7 @@ const Page = () => {
     loading,
     setLoading,
     search,
-    // filters,
+    filters,
     dateRange,
     singleDate,
   } = useRecordStore();
@@ -29,10 +29,10 @@ const Page = () => {
     getReports();
   }, [
     debouncedSearch,
-    // filters[0].values.length,
-    // filters[1].values.length,
-    // filters[2].values.length,
-    // filters[3].values.length,
+    filters[0].values.length,
+    filters[1].values.length,
+    filters[2].values.length,
+    filters[3].values.length,
     dateRange,
     singleDate,
   ]);

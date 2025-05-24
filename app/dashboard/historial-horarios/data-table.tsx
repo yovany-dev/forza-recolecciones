@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from "react";
 import { Controls } from "@/components/historial-horarios/controls";
 import { Separator } from "@/components/ui/separator";
-// import { Filters } from "@/components/report/filters";
+import { Filters } from "@/components/historial-horarios/filters";
 import { TableSkeleton } from "@/components/historial-horarios/table-skeleton";
 
 interface DataTableProps<TData, TValue> {
@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
     <div>
       <Controls table={table} />
       <Separator className="mt-4" />
-      {/* <Filters /> */}
+      <Filters />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

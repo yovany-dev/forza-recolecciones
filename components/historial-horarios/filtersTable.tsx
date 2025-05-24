@@ -7,10 +7,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { ListFilter } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useReportStore } from "@/lib/store/useReportStore";
+import { useRecordStore } from "@/lib/store/useRecordStore";
 
 const FiltersTable = () => {
-  const { filters, setFilters } = useReportStore();
+  const { filters, setFilters } = useRecordStore();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
