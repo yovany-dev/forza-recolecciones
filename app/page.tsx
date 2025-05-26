@@ -1,16 +1,11 @@
-"use client";
+import { LoginHome } from "@/components/home/loginHome"
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { signOut } from "next-auth/react";
 export default function Home() {
   return (
-    <div className="flex gap-5 flex-col p-5 w-min">
-      <h1>Hola next.js</h1>
-      <Button asChild>
-        <Link href={"/dashboard"}>Dashboard</Link>
-      </Button>
-      <Button onClick={() => signOut()}>Logout</Button>
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-black p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <LoginHome />
+      </div>
     </div>
-  );
+  )
 }
