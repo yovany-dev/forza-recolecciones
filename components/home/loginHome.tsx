@@ -1,55 +1,107 @@
 "use client";
 
 import Image from "next/image";
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { loginClockInSchema, loginClockInSchemaType } from "@/lib/zod/auth";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import LogoForzaDeliveryWhite from "@/public/logo-forza-delivery-white.svg";
-import LogoForzaDeliveryBlack from "@/public/logo-forza-delivery-black.svg";
 
 export function LoginHome() {
-  const { theme } = useTheme();
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
+  const form = useForm<loginClockInSchemaType>({
+    resolver: zodResolver(loginClockInSchema),
+    defaultValues: {
+      identity: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<loginClockInSchemaType> = async (data) => {
+    const res = await fetch("/api/auth/clockIn", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+
+    if (result.status === 200) {
+      router.refresh();
+    } else if (result.status === 401) {
+      setError(result.error);
+    }
+  };
   return (
-    <div className="flex flex-col gap-6">
-      <form>
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-col gap-5 items-center">
-            <Image
-              src={
-                theme == "light"
-                  ? LogoForzaDeliveryBlack
-                  : LogoForzaDeliveryWhite
-              }
-              alt="Logo Forza Delivery Express"
-              width={250}
-            />
-            <span className="text-xl font-semibold text-[#ea5d1d]">
-              Control Horario Recos
-            </span>
-          </div>
-          <div className="flex flex-col gap-5">
-            <div className="grid gap-2">
-              <Label htmlFor="text">Número de gafete o (DPI)</Label>
-              <Input
-                id="text"
-                type="text"
-                className="text-sm"
-                placeholder="Ingrese su número de gafete o DPI"
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Ingresar
-            </Button>
-          </div>
-        </div>
-      </form>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        Al hacer clic en continuar, aceptas nuestros{" "}
-        <a href="#">Términos de Servicio</a> y{" "}
-        <a href="#">Política de Privacidad</a>.
+    <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-4 items-center">
+        <Image
+          src={LogoForzaDeliveryWhite}
+          alt="Logo Forza Delivery Express"
+          width={250}
+        />
+        <span className="text-xl font-semibold text-[#ea5d1d]">
+          Control Horario Recos
+        </span>
+      </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-2"
+        >
+          <FormField
+            control={form.control}
+            name="identity"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Número de gafete o (DPI)</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm"
+                    placeholder="Ingrese su número de gafete o DPI"
+                    {...field}
+                  />
+                </FormControl>
+                <div className="h-10">
+                  <FormMessage />
+                  {error && (
+                    <div className="px-3 py-2 text-sm rounded-md border border-[#dc2626] text-[#dc2626]">
+                      <p>{error}</p>
+                    </div>
+                  )}
+                </div>
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader className="animate-spin" />
+            ) : (
+              "Ingresar"
+            )}
+          </Button>
+        </form>
+      </Form>
+      <div className="text-balance text-center text-xs text-muted-foreground">
+        Esta aplicación requiere que tenga activada su ubicación para poder
+        funcionar correctamente.
       </div>
     </div>
   );
