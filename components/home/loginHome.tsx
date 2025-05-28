@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,7 +17,7 @@ import {
 import { Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import LogoForzaDeliveryWhite from "@/public/logo-forza-delivery-white.svg";
+import { LogoFD } from "@/components/home/logoFD";
 
 export function LoginHome() {
   const router = useRouter();
@@ -47,20 +46,11 @@ export function LoginHome() {
   };
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-4 items-center">
-        <Image
-          src={LogoForzaDeliveryWhite}
-          alt="Logo Forza Delivery Express"
-          width={250}
-        />
-        <span className="text-xl font-semibold text-[#ea5d1d]">
-          Control Horario Recos
-        </span>
-      </div>
+      <LogoFD />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-4"
         >
           <FormField
             control={form.control}
@@ -75,14 +65,12 @@ export function LoginHome() {
                     {...field}
                   />
                 </FormControl>
-                <div className="h-10">
                   <FormMessage />
                   {error && (
                     <div className="px-3 py-2 text-sm rounded-md border border-[#dc2626] text-[#dc2626]">
                       <p>{error}</p>
                     </div>
                   )}
-                </div>
               </FormItem>
             )}
           />
