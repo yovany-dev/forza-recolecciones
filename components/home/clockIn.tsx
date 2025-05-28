@@ -2,18 +2,21 @@
 
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useClock } from "@/lib/hooks/useClock";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Calendar, IdCard, MapPinX } from "lucide-react";
 import LogoForzaDeliveryWhite from "@/public/logo-forza-delivery-white.svg";
 import LogoForzaDeliveryBlack from "@/public/logo-forza-delivery-black.svg";
 
-import { Calendar } from "lucide-react";
-import { IdCard } from "lucide-react";
-import { MapPinX } from "lucide-react";
-
-export function ClockIn() {
+interface Prop {
+  fullname: string;
+}
+export function ClockIn({ fullname }: Prop) {
   const { theme } = useTheme();
+  const currentTime = useClock();
 
   return (
     <div className="flex flex-col gap-10">
@@ -32,11 +35,11 @@ export function ClockIn() {
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2 h-10 px-4 py-2 rounded-md font-medium border border-input bg-background">
           <Calendar className="w-5 h-5" />
-          <span>25/05/2025 - 20:50 PM</span>
+          <span>{currentTime}</span>
         </div>
         <div className="flex items-center gap-2 h-10 px-4 py-2 rounded-md font-medium border border-input bg-background">
           <IdCard className="w-5 h-5" />
-          <span>Denilson Yovany Morales</span>
+          <span>{fullname}</span>
         </div>
         <div className="flex items-center gap-2 h-10 px-4 py-2 rounded-md font-medium text-[#7f1d1d] border border-[#7f1d1d] bg-background">
           <MapPinX className="w-5 h-5" />
