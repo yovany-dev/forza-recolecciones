@@ -10,7 +10,7 @@ interface Prop {
   fullname: string;
 }
 export function ClockIn({ fullname }: Prop) {
-  const { coordinates, getLocation } = useClockInStore();
+  const { getLocation } = useClockInStore();
 
   useEffect(() => {
     getLocation();
@@ -20,10 +20,6 @@ export function ClockIn({ fullname }: Prop) {
       <LogoFD />
       <ClockInHeader fullname={fullname} />
       <ClockInForm />
-      <div>
-        <p>{coordinates?.latitude}</p>
-        <p>{coordinates?.longitude}</p>
-      </div>
     </div>
   );
 }
