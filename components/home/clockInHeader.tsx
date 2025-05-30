@@ -32,7 +32,7 @@ const LocationStates = () => {
       {status === null ? (
         <span>Detectando ubicación...</span>
       ) : (
-        <span>{message}</span>
+        <span className="text-sm">{message}</span>
       )}
     </div>
   );
@@ -48,7 +48,7 @@ const ClockInHeader: React.FC<Prop> = ({ fullname }) => {
       </div>
       <div className="flex items-center gap-2 h-10 px-4 py-2 rounded-md font-medium border border-input bg-background">
         <IdCard className="w-5 h-5" />
-        <span>{fullname}</span>
+        <span className="truncate">{fullname}</span>
       </div>
       <LocationStates />
     </div>

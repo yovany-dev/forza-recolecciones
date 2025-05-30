@@ -11,7 +11,7 @@ const ToggleLocation = () => {
       </Label>
       <p className="text-[12px] text-muted-foreground">
         Para poder registrar su horario, habilita los permisos de ubicación
-        desde la configuración de tu navegador o vuelva a recargar la página.
+        desde la configuración de su navegador y vuelve a intentarlo.
       </p>
       {/* <Button variant="secondary">Activar la ubicación</Button> */}
     </div>
