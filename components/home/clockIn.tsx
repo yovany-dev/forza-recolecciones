@@ -8,8 +8,9 @@ import { useClockInStore } from "@/lib/store/useClockInStore";
 
 interface Prop {
   fullname: string;
+  uuid: string;
 }
-export function ClockIn({ fullname }: Prop) {
+export function ClockIn({ fullname, uuid }: Prop) {
   const { getLocation } = useClockInStore();
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export function ClockIn({ fullname }: Prop) {
     <div className="flex flex-col gap-10">
       <LogoFD />
       <ClockInHeader fullname={fullname} />
-      <ClockInForm />
+      <ClockInForm uuid={uuid} />
     </div>
   );
 }
