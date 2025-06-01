@@ -169,8 +169,9 @@ export const columns: ColumnDef<reportSchemaType>[] = [
     cell: ({ row }) => {
       const photo = row.original.photo;
       const badgeTheme = {
-        true: "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
-        false: "border-[#f21600] bg-[#f216001e] text-[#f21600]",
+        ADMIN: "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
+        CARGADA: "border-[#37b400] bg-[#37b4001e] text-[#37b400]",
+        NO_CARGADA: "border-[#f21600] bg-[#f216001e] text-[#f21600]",
       };
       const states: Record<string, string> = {
         ADMIN: "ADMIN",
@@ -178,16 +179,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
         NO_CARGADA: "NO CARGADA",
       };
       return (
-        <Badge
-          variant="outline"
-          className={cn(
-            photo == "ADMIN"
-              ? badgeTheme.true
-              : badgeTheme.false || photo == "CARGADA"
-              ? badgeTheme.true
-              : badgeTheme.false
-          )}
-        >
+        <Badge variant="outline" className={badgeTheme[photo]}>
           {states[photo]}
         </Badge>
       );
