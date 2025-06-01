@@ -4,6 +4,7 @@ import { formatDate } from '@/lib/utils';
 interface LocalReport {
   uuid: string;
   fullname: string;
+  dpi: string;
   date: string;
   checkIn: string;
 }

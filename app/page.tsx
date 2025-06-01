@@ -11,7 +11,11 @@ export default async function Home() {
         {!session ? (
           <LoginHome />
         ) : (
-          <ClockInHome fullname={session.fullname} uuid={session.uuid} />
+          <ClockInHome
+            fullname={session.fullname}
+            uuid={session.uuid}
+            dpi={session.dpi}
+          />
         )}
       </div>
     </div>

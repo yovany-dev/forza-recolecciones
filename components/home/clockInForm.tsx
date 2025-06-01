@@ -30,8 +30,9 @@ const ToggleLocation = () => {
 
 interface Prop {
   uuid: string;
+  dpi: string;
 }
-const ClockInForm: React.FC<Prop> = ({ uuid }) => {
+const ClockInForm: React.FC<Prop> = ({ uuid, dpi }) => {
   const {
     coordinates,
     coordinatesStates,
@@ -52,9 +53,10 @@ const ClockInForm: React.FC<Prop> = ({ uuid }) => {
     }
     const photo = inputFileRef.current.files[0];
     const compressedPhoto = await imageCompressionUtils(photo);
-    const downloadURL = await uploadPhotoUtils(compressedPhoto.image, uuid);
+    const downloadURL = await uploadPhotoUtils(compressedPhoto.image, dpi);
     const data: clockInSchemaType = {
       employeeUUID: uuid,
+      dpi: dpi,
       latitude: coordinates?.latitude,
       longitude: coordinates?.longitude,
       photoURL: downloadURL.url,
@@ -66,6 +68,7 @@ const ClockInForm: React.FC<Prop> = ({ uuid }) => {
       setLocalReport({
         uuid: res.report.uuid,
         fullname: res.report.fullname,
+        dpi: res.report.dpi,
         checkIn: res.report.checkIn,
         date: formatDate(new Date()),
       });

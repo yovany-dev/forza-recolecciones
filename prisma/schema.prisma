@@ -91,6 +91,7 @@ enum State {
 model ClockIn {
   uuid         String @id @default(uuid())
   employeeUuid String
+  dpi          String
   latitude     String
   longitude    String
   photoUrl     String

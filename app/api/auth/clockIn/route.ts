@@ -47,6 +47,7 @@ export async function POST(req: Request) {
       {
         uuid: employee.uuid,
         fullname: employee.fullname,
+        dpi: employee.dpi,
         position: employee.position,
       },
       JWT_SECRET,

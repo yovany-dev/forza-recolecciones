@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 type EmployeeSession = {
   uuid: string;
   fullname: string;
+  dpi: string,
   position: string;
   iat: number;
   exp: number;

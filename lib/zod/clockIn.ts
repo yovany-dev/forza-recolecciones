@@ -9,6 +9,7 @@ export type stateEnumType = z.infer<typeof stateEnum>;
 export const clockInSchema = z.object({
   uuid: z.string().uuid().optional(),
   employeeUUID: z.string().uuid(),
+  dpi: z.string(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   photoURL: z.string().optional(),

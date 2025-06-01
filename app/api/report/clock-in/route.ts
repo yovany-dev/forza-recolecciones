@@ -21,19 +21,19 @@ export async function POST(req: Request) {
   try {
     const driver = await prisma.drivers.findMany({
       where: {
-        uuid: data.employeeUUID,
+        dpi: data.dpi,
       },
     });
     const copilot = await prisma.copilot.findMany({
       where: {
-        uuid: data.employeeUUID,
+        dpi: data.dpi,
       },
     });
     const employee = driver.concat(copilot)[0];
     if (!employee) {
       return NextResponse.json({
         status: 404,
-        message: 'uuid does not exist',
+        message: 'employee does not exist',
       });
     }
 
@@ -55,14 +55,37 @@ export async function POST(req: Request) {
       });
     }
 
-    const clockIn = await prisma.clockIn.create({
-      data: {
-        employeeUuid: data.employeeUUID,
-        latitude: String(data.latitude),
-        longitude: String(data.longitude),
-        photoUrl: data.photoURL ? data.photoURL : '',
+    let clockIn;
+    const currentClockIn = await prisma.clockIn.findFirst({
+      where: {
+        dpi: data.dpi,
       },
     });
+    if (currentClockIn) {
+      const res = await prisma.clockIn.update({
+        where: {
+          uuid: currentClockIn.uuid,
+        },
+        data: {
+          latitude: String(data.latitude),
+          longitude: String(data.longitude),
+          photoUrl: data.photoURL ? data.photoURL : '',
+        },
+      });
+      clockIn = res;
+    } else {
+      const res = await prisma.clockIn.create({
+        data: {
+          employeeUuid: data.employeeUUID,
+          dpi: data.dpi,
+          latitude: String(data.latitude),
+          longitude: String(data.longitude),
+          photoUrl: data.photoURL ? data.photoURL : '',
+        },
+      });
+      clockIn = res;
+    }
+
     const result = await prisma.$queryRawUnsafe<{ current_time: string }[]>(`
       SELECT to_char(CURRENT_TIME(0)::time, 'HH24:MI') as current_time
     `);
