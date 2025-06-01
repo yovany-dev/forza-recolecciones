@@ -3,7 +3,7 @@ import { reportStateSchema } from '@/lib/zod/report';
 
 export const uuidSchema = z.string().uuid();
 
-const stateEnum = reportStateSchema.shape.state;
+export const stateEnum = reportStateSchema.shape.state;
 export type stateEnumType = z.infer<typeof stateEnum>;
 
 export const clockInSchema = z.object({
