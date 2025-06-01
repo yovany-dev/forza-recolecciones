@@ -3,11 +3,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+import { setLocalReport } from "@/lib/localStorage";
 import { useState, useRef, FormEvent } from "react";
 import { clockInSchemaType } from "@/lib/zod/clockIn";
 import { useClockInStore } from "@/lib/store/useClockInStore";
 import { createClockInService } from "@/services/clockInService";
-import { imageCompressionUtils, uploadPhotoUtils } from "@/lib/utils";
+import {
+  imageCompressionUtils,
+  uploadPhotoUtils,
+  formatDate,
+} from "@/lib/utils";
 
 const ToggleLocation = () => {
   return (
@@ -27,8 +32,14 @@ interface Prop {
   uuid: string;
 }
 const ClockInForm: React.FC<Prop> = ({ uuid }) => {
-  const { coordinates, coordinatesStates, loading, setLoading, setMessage } =
-    useClockInStore();
+  const {
+    coordinates,
+    coordinatesStates,
+    loading,
+    setLoading,
+    setMessage,
+    setJoined,
+  } = useClockInStore();
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [photoSelected, setPhotoSelected] = useState(false);
 
@@ -52,7 +63,13 @@ const ClockInForm: React.FC<Prop> = ({ uuid }) => {
     setLoading(false);
 
     if (res.status === 201) {
-      // Guardar datos en local storage
+      setLocalReport({
+        uuid: res.report.uuid,
+        fullname: res.report.fullname,
+        checkIn: res.report.checkIn,
+        date: formatDate(new Date()),
+      });
+      setJoined(true);
       return;
     } else if (res.status === 409) {
       setMessage("Su horario ya fue marcado.");

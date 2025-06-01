@@ -3,6 +3,7 @@ import { getLocationUtils } from '@/lib/utils';
 import { CoordinatesType } from '@/types/clockInType';
 
 interface ClockInStore {
+  joined: boolean;
   coordinates: CoordinatesType | null;
   coordinatesStates: {
     status: boolean | null;
@@ -10,11 +11,13 @@ interface ClockInStore {
   };
   loading: boolean;
   message: string;
+  setJoined: (value: boolean) => void;
   setLoading: (value: boolean) => void;
   setMessage: (value: string) => void;
   getLocation: () => void;
 }
 export const useClockInStore = create<ClockInStore>((set) => ({
+  joined: false,
   coordinates: null,
   coordinatesStates: {
     status: null,
@@ -22,6 +25,9 @@ export const useClockInStore = create<ClockInStore>((set) => ({
   },
   loading: false,
   message: '',
+  setJoined: (value) => {
+    set({ joined: value });
+  },
   setLoading: (value) => {
     set({ loading: value });
   },
