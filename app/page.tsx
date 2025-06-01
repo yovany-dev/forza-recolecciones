@@ -1,6 +1,6 @@
-import { ClockIn } from "@/components/home/clockIn";
 import { LoginHome } from "@/components/home/loginHome";
 import { getEmployeeSession } from "@/lib/auth/getEmployeeSession";
+import { ClockInHome } from "@/components/home/clockInHome";
 
 export default async function Home() {
   const session = await getEmployeeSession();
@@ -11,7 +11,7 @@ export default async function Home() {
         {!session ? (
           <LoginHome />
         ) : (
-          <ClockIn fullname={session.fullname} uuid={session.uuid} />
+          <ClockInHome fullname={session.fullname} uuid={session.uuid} />
         )}
       </div>
     </div>

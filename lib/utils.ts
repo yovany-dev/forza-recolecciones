@@ -114,3 +114,20 @@ export const scheduleValidation = (
     return states.INGRESO_TARDE;
   }
 };
+
+export const formatDate = (date: Date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+export const formatTime = (time: string) => {
+  const [hour, minute] = time.split(':').map(Number);
+  const isPM = hour >= 12;
+  const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+  const formattedHour = String(displayHour).padStart(2, '0');
+  return `${formattedHour}:${minute.toString().padStart(2, '0')} ${
+    isPM ? 'PM' : 'AM'
+  }`;
+};

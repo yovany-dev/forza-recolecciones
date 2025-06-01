@@ -8,6 +8,10 @@ interface ClockInStore {
     status: boolean | null;
     message: string | null;
   };
+  loading: boolean;
+  message: string;
+  setLoading: (value: boolean) => void;
+  setMessage: (value: string) => void;
   getLocation: () => void;
 }
 export const useClockInStore = create<ClockInStore>((set) => ({
@@ -15,6 +19,14 @@ export const useClockInStore = create<ClockInStore>((set) => ({
   coordinatesStates: {
     status: null,
     message: null,
+  },
+  loading: false,
+  message: '',
+  setLoading: (value) => {
+    set({ loading: value });
+  },
+  setMessage: (value) => {
+    set({ message: value });
   },
   getLocation: async () => {
     const res = await getLocationUtils();
