@@ -4,6 +4,9 @@ import { PrismaClient } from '@prisma/client';
 import { clockInSchema } from '@/lib/zod/clockIn';
 import { scheduleValidation } from '@/lib/utils';
 
+import { authOptions } from '@/lib/authOptions';
+import { getServerSession } from 'next-auth';
+
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
@@ -109,6 +112,47 @@ export async function POST(req: Request) {
     return NextResponse.json({
       errorMessage: 'error creating report',
       errorServer: error,
+      status: 500,
+    });
+  }
+}
+
+export async function GET(req: Request) {
+  const session = await getServerSession(authOptions);
+  const prisma = new PrismaClient();
+  const { searchParams } = new URL(req.url);
+  const dpi = searchParams.get('dpi');
+
+  if (!session || !session.user) {
+    return NextResponse.json({ error: 'unauthorized', status: 401 });
+  }
+  if (!dpi) {
+    return NextResponse.json({
+      errorMessage: "parameter 'dpi' is required.",
+      status: 400,
+    });
+  }
+  try {
+    const clockIn = await prisma.clockIn.findFirst({
+      where: {
+        dpi: dpi,
+      },
+    });
+
+    if (!clockIn) {
+      return NextResponse.json({
+        errorMessage: 'clock in not found',
+        status: 404,
+      });
+    }
+    return NextResponse.json({
+      status: 200,
+      clockIn,
+    });
+  } catch (error) {
+    return NextResponse.json({
+      error,
+      errorMessage: 'error getting clock in',
       status: 500,
     });
   }

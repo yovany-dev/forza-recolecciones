@@ -20,6 +20,7 @@ import {
 import { reportSchemaType } from "@/lib/zod/report";
 import { SheetEditReport } from "@/components/report/sheet-edit-report";
 import { DialogDeleteReport } from "@/components/report/dialog-delete-report";
+import { ReportTest } from "@/components/report/reportTest";
 
 export const columns: ColumnDef<reportSchemaType>[] = [
   {
@@ -258,6 +259,15 @@ export const columns: ColumnDef<reportSchemaType>[] = [
                 Eliminar reporte
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              {report.location === "DETECTADA" || report.photo === "CARGADA" ? (
+                <ReportTest
+                  dpi={report.dpi}
+                  location={report.location}
+                  photo={report.photo}
+                />
+              ) : (
+                ""
+              )}
               <DropdownMenuItem
                 onClick={() =>
                   navigator.clipboard.writeText(String(report.dpi))
