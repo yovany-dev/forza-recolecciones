@@ -1,5 +1,5 @@
 import { Calendar, IdCard, Clock } from "lucide-react";
-import { formatDate, formatTime } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 const Report = () => {
   return (

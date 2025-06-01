@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-import { useState, useRef } from "react";
+import { useState, useRef, FormEvent } from "react";
 import { clockInSchemaType } from "@/lib/zod/clockIn";
 import { useClockInStore } from "@/lib/store/useClockInStore";
 import { createClockInService } from "@/services/clockInService";
@@ -32,7 +32,7 @@ const ClockInForm: React.FC<Prop> = ({ uuid }) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [photoSelected, setPhotoSelected] = useState(false);
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
