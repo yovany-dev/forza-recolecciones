@@ -59,7 +59,7 @@ model Report {
   position       String
   createdAt      DateTime @default(now()) @db.Timestamptz(3)
   updatedAt      DateTime @updatedAt @db.Timestamptz(3)
-  user           Users?    @relation(fields: [userId], references: [id])
+  user           Users?   @relation(fields: [userId], references: [id])
   userId         Int?
   checkIn        String
   location       Location @default(NO_DETECTADA)
@@ -86,4 +86,14 @@ enum State {
   INGRESADO
   PENDIENTE
   INGRESO_TARDE @map("INGRESO TARDE")
+}
+
+model ClockIn {
+  uuid         String @id @default(uuid())
+  employeeUuid String
+  latitude     String
+  longitude    String
+  photoUrl     String
+
+  @@map("clock-in")
 }
