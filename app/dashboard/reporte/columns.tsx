@@ -213,6 +213,7 @@ export const columns: ColumnDef<reportSchemaType>[] = [
     id: "actions",
     cell: function Cell({ row }) {
       const report = row.original;
+      delete report.userId;
       const [isDialogOpen, setIsDialogOpen] = useState(false);
       const [isSheetOpen, setIsSheetOpen] = useState(false);
       const [isMenuOpen, setIsMenuOpen] = useState(false);
