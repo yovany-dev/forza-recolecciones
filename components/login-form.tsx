@@ -62,10 +62,8 @@ export function LoginForm({
             width={250}
           />
           <p className="tracking-tight text-base sm:text-xl">
-            {/* Ingresar a{" "} */}
-            <span className="font-semibold text-[#ea5d1d]">
-              Control Horario Recos
-            </span>
+            Ingresar a{" "}
+            <span className="font-semibold text-[#ea5d1d]">Recolecciones</span>
           </p>
         </CardHeader>
         <CardContent>
