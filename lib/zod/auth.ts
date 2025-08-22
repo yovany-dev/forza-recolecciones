@@ -21,3 +21,12 @@ export const loginClockInSchema = z.object({
     .max(13, { message: 'Debe tener 13 o menos caracteres.' }),
 });
 export type loginClockInSchemaType = z.infer<typeof loginClockInSchema>;
+
+export const loginUnitsReportSchema = z.object({
+  identity: z
+    .string()
+    .nonempty({ message: 'El campo es obligatorio' })
+    .min(6, { message: 'Digite los 6 números.' })
+    .max(6, { message: 'Digite los 6 números.' }),
+});
+export type loginUnitsReportSchemaType = z.infer<typeof loginUnitsReportSchema>;
