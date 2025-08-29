@@ -6,7 +6,7 @@ export default async function Home() {
   const session = await getDriverSession();
 
   return (
-    <div className="flex min-h-svh flex-col items-center bg-black p-6 md:p-10">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-black p-6 md:p-10">
       <div className="w-full max-w-xs">
         {!session ? (
           <Login />
