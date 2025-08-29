@@ -6,7 +6,7 @@ interface Prop {
 }
 const Welcome: React.FC<Prop> = ({ fullname }) => {
   return (
-    <Alert className="flex flex-col gap-3 p-0 overflow-hidden">
+    <Alert className="p-0 overflow-hidden">
       <div className="w-full h-[5px] bg-[#ea5d1d]"></div>
       <div className="p-4 flex gap-3">
         <div>
